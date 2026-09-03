@@ -15,13 +15,16 @@ Designed for seamless deployment to **GitHub Pages** and direct embedding as a *
 ```
 .
 ├── index.html                   # Main Course Portal & Week Selector
+├── contact.html                 # Tutor & Academic Support Contact Page
 ├── README.md                    # This deployment & usage guide
 ├── shared/                      # Shared Presentation Design System & Engine
 │   ├── css/
 │   │   ├── presentation.css     # Dark engineering UI theme (Arduino teal / electric cyan)
 │   │   └── form-drawer.css      # Microsoft Forms side-drawer & modal styling
 │   └── js/
+│       ├── accessibility-engine.js # Neurodiversity, Dyslexia, TTS & high contrast engine
 │       ├── presentation-engine.js # Slide controls, keyboard shortcuts, swipe, progress bar
+│       ├── self-check.js        # Formative diagnostic self-check widgets
 │       ├── timer.js             # Countdown widgets (Start / Pause / Reset)
 │       └── form-drawer.js       # MS Forms drawer toggle & quick-jump handler
 └── week1/                       # Week 1: Engineering Baseline
@@ -29,6 +32,20 @@ Designed for seamless deployment to **GitHub Pages** and direct embedding as a *
     ├── forms-guide.md           # Copy-paste Microsoft Forms setup template (5 sections)
     └── wokwi-diagram.json       # Wokwi 5V + 330Ω + LED circuit simulation file
 ```
+
+---
+
+## 👨‍🏫 Course Tutor & Academic Contact
+
+| Detail | Information |
+|---|---|
+| **Name** | Tayo Oyedokun |
+| **Role** | Engineering Lecturer & Unit 6 Lead |
+| **Email** | [temitayo.oyedokun@gloscol.ac.uk](mailto:temitayo.oyedokun@gloscol.ac.uk) |
+| **Microsoft Teams** | Unit 6 Microcontrollers Channel / Direct Chat |
+| **Department** | Engineering & Technology Department, Gloscol |
+| **Drop-in Office Hours** | Tuesdays 15:00–16:30 (Lab E204) & Thursdays 12:30–13:30 (Teams) |
+| **Dedicated Contact Page** | [`contact.html`](file:///home/tayo/projects/work/unit6_v2/contact.html) / [Online Contact Page](https://ty742.github.io/unit-6-microcontrollers/contact.html) |
 
 ---
 

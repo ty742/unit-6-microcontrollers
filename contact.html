@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutor & Academic Contact — Unit 6: Microcontrollers</title>
+  <link rel="stylesheet" href="shared/css/presentation.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      height: auto !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    .hub-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      height: auto;
+    }
+
+    /* Top Global Navigation Bar */
+    .top-nav {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(17, 24, 39, 0.75);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      border-radius: 14px;
+      padding: 12px 22px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      transition: var(--transition-smooth);
+    }
+
+    .top-nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: #ffffff;
+      font-size: 1.1rem;
+    }
+
+    .top-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      transition: var(--transition-smooth);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav-btn-link:hover {
+      background: rgba(37, 51, 72, 0.9);
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.25);
+    }
+
+    .nav-btn-link.active-link {
+      background: rgba(0, 151, 157, 0.25);
+      border-color: var(--accent-arduino);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+
+    /* Hero Banner */
+    .contact-hero {
+      background: radial-gradient(circle at 85% 15%, rgba(0, 151, 157, 0.22) 0%, transparent 65%), rgba(17, 24, 39, 0.75);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      border-radius: 16px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .contact-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent-arduino), var(--accent-cyan), #3b82f6);
+    }
+
+    .hero-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 850px;
+    }
+
+    /* Tutor Profile Card */
+    .tutor-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .tutor-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hub-container {
+        padding: 20px 14px 60px;
+      }
+    }
+
+    .tutor-card-main {
+      background: rgba(17, 24, 39, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      border-top: 4px solid var(--accent-cyan);
+    }
+
+    .avatar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .tutor-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-arduino), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: 0 0 20px var(--accent-glow);
+      border: 2px solid #ffffff;
+      flex-shrink: 0;
+    }
+
+    .tutor-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .tutor-role {
+      font-size: 0.88rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .contact-item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-link-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      border-radius: 10px;
+      color: var(--text-primary);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .contact-link-row:hover {
+      background: rgba(37, 51, 72, 0.9);
+      border-color: var(--accent-cyan);
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.2);
+    }
+
+    .contact-icon-box {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      flex-shrink: 0;
+    }
+
+    .contact-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .contact-value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      word-break: break-all;
+    }
+
+    /* Details Panel */
+    .details-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .info-card {
+      background: rgba(17, 24, 39, 0.75);
+      border: 1px solid rgba(51, 65, 85, 0.65);
+      border-radius: 14px;
+      padding: 22px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .info-card-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .info-card p,
+    .info-card ul {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .info-card ul {
+      padding-left: 20px;
+      margin: 8px 0;
+    }
+
+    .info-card li {
+      margin-bottom: 6px;
+    }
+
+    .office-hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .hours-chip {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .hours-chip strong {
+      display: block;
+      color: #ffffff;
+      font-size: 0.88rem;
+    }
+
+    .hours-chip span {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-grid"></div>
+
+  <div class="hub-container">
+
+    <!-- Top Global Nav Header -->
+    <nav class="top-nav">
+      <div class="top-nav-brand">
+        <span class="pill"
+          style="background: linear-gradient(135deg, var(--accent-arduino), var(--accent-cyan)); color: #000; font-weight: 800; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase;">UNIT
+          6</span>
+        <span>Microcontrollers Hub</span>
+      </div>
+      <div class="top-nav-links">
+        <a href="index.html" class="nav-btn-link">🏠 Hub Home</a>
+        <a href="week1/index.html" class="nav-btn-link">⚡ Week 1 (Live)</a>
+        <a href="contact.html" class="nav-btn-link active-link">👨‍🏫 Tutor Contact</a>
+        <button id="open-a11y-drawer" class="nav-btn-link" style="cursor: pointer;">⚙️ Accessibility</button>
+      </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="contact-hero">
+      <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+        <span class="pill"
+          style="background: rgba(0, 151, 157, 0.2); color: var(--accent-cyan); border: 1px solid var(--accent-arduino); font-weight: 800; padding: 4px 12px; border-radius: 6px; font-size: 0.78rem; text-transform: uppercase;">
+          Academic Support &amp; Office Hours
+        </span>
+        <span class="pill"
+          style="background: rgba(16, 185, 129, 0.18); color: var(--color-success); border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 800; padding: 4px 12px; border-radius: 6px; font-size: 0.78rem; text-transform: uppercase;">
+          Pearson BTEC Level 3 Engineering
+        </span>
+      </div>
+
+      <h1 class="hero-title">Course Tutor &amp; Academic Contact</h1>
+      <p class="hero-subtitle">
+        Get in touch with your course tutor for technical queries, circuit troubleshooting, coursework feedback,
+        special educational needs support, or 1-on-1 lab supervision sessions.
+      </p>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="tutor-grid">
+
+      <!-- Left Column: Tutor Profile & Direct Links -->
+      <section class="tutor-card-main">
+        <div class="avatar-wrapper">
+          <div class="tutor-avatar">👨‍🏫</div>
+          <div>
+            <div class="tutor-name">Tayo Oyedokun</div>
+            <div class="tutor-role">Lecturer in Electronics Engineering</div>
+          </div>
+        </div>
+
+        <div class="contact-item-list">
+          <!-- Email Contact -->
+          <a href="mailto:temitayo.oyedokun@gloscol.ac.uk" class="contact-link-row">
+            <div class="contact-icon-box">📧</div>
+            <div>
+              <div class="contact-label">College Email</div>
+              <div class="contact-value">tayo.oyedokun@gloscol.ac.uk</div>
+            </div>
+          </a>
+
+          <!-- Microsoft Teams Contact -->
+          <a href="https://teams.microsoft.com" target="_blank" rel="noopener noreferrer" class="contact-link-row">
+            <div class="contact-icon-box">💬</div>
+            <div>
+              <div class="contact-label">Microsoft Teams</div>
+              <div class="contact-value">Chat via MS Teams / Unit 6 Channel</div>
+            </div>
+          </a>
+
+          <!-- Department / Campus -->
+          <div class="contact-link-row" style="cursor: default;">
+            <div class="contact-icon-box">🏛️</div>
+            <div>
+              <div class="contact-label">Department &amp; Campus</div>
+              <div class="contact-value">Engineering &amp; Technology, Gloscol</div>
+            </div>
+          </div>
+
+          <!-- Course Portal -->
+          <a href="https://ty742.github.io/unit-6-microcontrollers/" target="_blank" rel="noopener noreferrer"
+            class="contact-link-row">
+            <div class="contact-icon-box">🌐</div>
+            <div>
+              <div class="contact-label">Online Course Portal</div>
+              <div class="contact-value">ty742.github.io/unit-6-microcontrollers</div>
+            </div>
+          </a>
+        </div>
+
+        <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(51, 65, 85, 0.6);">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">
+            ⚡ <em>Tip: For rapid feedback during practical sessions, raise your hand in the lab..</em>
+          </span>
+        </div>
+      </section>
+
+      <!-- Right Column: Office Hours, Guidance & Protocols -->
+      <section class="details-panel">
+
+        <!-- Office Hours & Drop-In Sessions -->
+        <div class="info-card">
+          <div class="info-card-title">
+            <span>⏰</span> Office Hours &amp; Drop-in Clinics
+          </div>
+          <p>
+            Drop-in sessions for circuit diagnostics, firmware review, and exam prep are available weekly:
+          </p>
+          <div class="office-hours-grid">
+            <div class="hours-chip">
+              <strong>Monday Workshop Drop-in</strong>
+              <span>12:15 – 12:45 (Lab C025)</span>
+            </div>
+            <div class="hours-chip">
+              <strong>Thursday 1-on-1 Teams Clinic</strong>
+              <span>12:15 – 13:15 (Online / Teams)</span>
+            </div>
+            <p>Ensure to book your slot in advance</p>
+          </div>
+        </div>
+
+        <!-- How to Request Help Efficiently -->
+        <div class="info-card">
+          <div class="info-card-title">
+            <span>🛠️</span> How to Submit a Technical Query
+          </div>
+          <p>When reporting circuit issues or code bugs via Teams or Email, please include:</p>
+          <ul>
+            <li><strong>Wokwi Simulator Link:</strong> If simulating, share your project share link.</li>
+            <li><strong>Schematic / Photo:</strong> Clear image of breadboard wiring and multimeter probe points.</li>
+            <li><strong>Source Code:</strong> C/C++ sketch file or code block formatted with Markdown backticks.</li>
+            <li><strong>Expected vs Actual Result:</strong> What happened vs what you anticipated.</li>
+          </ul>
+        </div>
+
+        <!-- Assessment Support & Policies -->
+        <div class="info-card">
+          <div class="info-card-title">
+            <span>📋</span> Unit 6 Assessment Support &amp; Exam Timeline
+          </div>
+          <p>
+            Unit 6 is a <strong>12-hour supervised set task</strong> across 4 consecutive days (<strong>4th – 7th May
+              2027</strong>).
+          </p>
+          <ul>
+            <li><strong>Authentication Sheets:</strong> Must be signed and uploaded alongside your final PDF booklet.
+            </li>
+            <li><strong>Video Evidence:</strong> Maximum 3 minutes demonstrating physical embedded prototype operations.
+            </li>
+            <li><strong>Accessibility &amp; Special Considerations:</strong> Contact the tutor or Student Services well
+              ahead of the set task window.</li>
+          </ul>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Accessibility & Neurodiversity Drawer Backdrop -->
+  <div id="a11y-backdrop"></div>
+
+  <!-- Accessibility & Neurodiversity Side-Drawer -->
+  <aside id="a11y-drawer">
+    <div class="a11y-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.2rem;">⚙️</span>
+        <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+      </div>
+      <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+    </div>
+
+    <div class="a11y-body">
+      <!-- Bionic Reading Mode -->
+      <div class="a11y-switch-row">
+        <div>
+          <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+          <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+        </div>
+        <input type="checkbox" id="a11y-bionic-toggle"
+          style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+      </div>
+
+      <!-- Typography & Dyslexia Toolbar -->
+      <div class="a11y-group">
+        <div class="a11y-label">
+          <span>📖 Font Family</span>
+        </div>
+        <select id="a11y-font-select" class="a11y-select">
+          <option value="default">Inter (Default Crisp)</option>
+          <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+          <option value="system">System UI (Clean Sans-Serif)</option>
+        </select>
+      </div>
+
+      <div class="a11y-group">
+        <div class="a11y-label">
+          <span>🔠 Font Size</span>
+          <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+        </div>
+        <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+      </div>
+
+      <div class="a11y-group">
+        <div class="a11y-label">
+          <span>↕️ Line Spacing</span>
+          <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+        </div>
+        <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+      </div>
+
+      <div class="a11y-group">
+        <div class="a11y-label">
+          <span>↔️ Letter Spacing</span>
+          <span id="a11y-letter-spacing-val"
+            style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+        </div>
+        <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+      </div>
+
+      <!-- Contrast & Colorblind Themes -->
+      <div class="a11y-group">
+        <div class="a11y-label">
+          <span>🎨 Contrast &amp; Colorblind Themes</span>
+        </div>
+        <select id="a11y-theme-select" class="a11y-select">
+          <option value="default">Dark Engineering (Default)</option>
+          <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+          <option value="clean-light">Clean Light Mode</option>
+          <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+        </select>
+      </div>
+
+      <button id="a11y-reset-prefs" class="btn btn-secondary"
+        style="padding: 8px; font-size: 0.82rem; margin-top: 10px;">
+        🔄 Reset to Default Theme
+      </button>
+    </div>
+  </aside>
+
+  <script src="shared/js/accessibility-engine.js"></script>
+</body>
+
+</html>
