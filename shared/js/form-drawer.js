@@ -1,6 +1,7 @@
 /**
- * MICROSOFT FORMS DRAWER CONTROLLER
- * Manages opening, closing, section switching, and popout behavior
+ * MICROSOFT FORMS DRAWER CONTROLLER (PERFORMANCE OPTIMIZED)
+ * Manages opening, closing, section switching, popout behavior,
+ * and LAZY IFRAME LOADING to eliminate initial page load latency.
  */
 
 class FormsDrawerController {
@@ -15,6 +16,7 @@ class FormsDrawerController {
     
     // Default MS Form URL placeholder - easily configurable
     this.defaultFormUrl = "https://forms.office.com/Pages/ResponsePage.aspx?id=your-org-form-id";
+    this.isIframeLoaded = false;
     
     this.init();
   }
@@ -41,7 +43,9 @@ class FormsDrawerController {
 
     if (this.popoutBtn) {
       this.popoutBtn.addEventListener('click', () => {
-        const url = this.iframe ? this.iframe.src : this.defaultFormUrl;
+        const url = (this.iframe && this.iframe.getAttribute('data-src')) 
+          ? this.iframe.getAttribute('data-src') 
+          : this.defaultFormUrl;
         window.open(url, '_blank');
       });
     }
@@ -58,6 +62,14 @@ class FormsDrawerController {
     if (this.sectionNotice) {
       this.sectionNotice.textContent = sectionName;
     }
+
+    // Lazy load the iframe only when first opened
+    if (this.iframe && !this.isIframeLoaded) {
+      const targetSrc = this.iframe.getAttribute('data-src') || this.defaultFormUrl;
+      this.iframe.src = targetSrc;
+      this.isIframeLoaded = true;
+    }
+
     this.drawer.classList.add('open');
     if (this.backdrop) {
       this.backdrop.classList.add('active');
@@ -77,7 +89,10 @@ class FormsDrawerController {
 
   setFormUrl(url) {
     if (this.iframe) {
-      this.iframe.src = url;
+      this.iframe.setAttribute('data-src', url);
+      if (this.isOpen()) {
+        this.iframe.src = url;
+      }
     }
     this.defaultFormUrl = url;
   }

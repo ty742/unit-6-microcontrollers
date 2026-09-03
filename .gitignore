@@ -53,7 +53,9 @@ wheels/
 *.log
 /tmp/
 temp/
-*.tmp
+*.tmp   
 
 
 /resource pack/
+# Ignore all png files in the root directory
+/*.png

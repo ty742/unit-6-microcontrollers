@@ -318,22 +318,33 @@
 
       <!-- Top Header -->
       <header class="deck-header">
-        <div class="brand-badge">
-          <span class="pill">UNIT 6</span>
-          <span>Microcontrollers</span>
-          <span style="color: var(--text-muted);">|</span>
-          <span style="color: var(--accent-cyan); font-weight: 500;">Week 1: Engineering Baseline</span>
+        <div class="header-top-row">
+          <a href="../index.html" class="nav-hub-link" title="Return to Course Homepage Hub">
+            🏠 Course Hub
+          </a>
+          <div class="brand-badge">
+            <span class="pill">UNIT 6</span>
+            <span>Microcontrollers</span>
+            <span style="color: var(--text-muted);">|</span>
+            <span id="header-slide-topic" style="color: var(--accent-cyan); font-weight: 600;">Week 1: Baseline</span>
+          </div>
         </div>
         <div class="header-actions">
+          <button class="btn btn-secondary" id="open-a11y-drawer" title="Accessibility & Neurodiversity (Key: A)">
+            ⚙️ A11y
+          </button>
+          <button class="btn btn-secondary" id="open-slide-matrix" title="View all slides overview (Key: M)">
+            🗺️ Slide Map
+          </button>
           <button class="btn btn-form-action open-forms-trigger" data-form-section="Deliverables Form">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
               <line x1="16" y1="13" x2="8" y2="13" />
               <line x1="16" y1="17" x2="8" y2="17" />
               <polyline points="10 9 9 9 8 9" />
             </svg>
-            📝 Open Deliverables Form
+            📝 Deliverables Form
           </button>
         </div>
       </header>
@@ -494,85 +505,87 @@
               reflection</p>
           </div>
           <div class="slide-body">
-            <div class="card" style="padding: 16px 22px;">
-              <table class="timeline-table">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Activity</th>
-                    <th>Purpose</th>
-                    <th>Action / Evidence</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>0–10 min</td>
-                    <td>Engineering Team Brief</td>
-                    <td>Scenario introduction & expectations</td>
-                    <td>Form Section 1</td>
-                  </tr>
-                  <tr>
-                    <td>10–30 min</td>
-                    <td>Toolbox Diagnostic</td>
-                    <td>Electronics & mathematics diagnostic</td>
-                    <td>Form Section 2</td>
-                  </tr>
-                  <tr>
-                    <td>30–45 min</td>
-                    <td>Digital Systems Baseline</td>
-                    <td>Binary & logic voltage diagnostic</td>
-                    <td>Form Section 3</td>
-                  </tr>
-                  <tr>
-                    <td>45–65 min</td>
-                    <td>Programming Code Tracing</td>
-                    <td>Read, trace, and predict C++ output</td>
-                    <td>Form Section 4A</td>
-                  </tr>
-                  <tr>
-                    <td>65–80 min</td>
-                    <td>Programming Modification</td>
-                    <td>Diagnose program alteration skills</td>
-                    <td>Form Section 4B</td>
-                  </tr>
-                  <tr>
-                    <td>80–100 min</td>
-                    <td>Practical Briefing & Safety</td>
-                    <td>Schematic, equipment & 5-point check</td>
-                    <td>Pre-Power Check</td>
-                  </tr>
-                  <tr class="break-row">
-                    <td>100–120 min</td>
-                    <td>☕ Intermission / Break</td>
-                    <td>Rest, recharge, and workbench prep</td>
-                    <td>20 Min Break</td>
-                  </tr>
-                  <tr>
-                    <td>120–130 min</td>
-                    <td>Wokwi Circuit Simulation</td>
-                    <td>Simulate 5V LED circuit virtually first</td>
-                    <td>Sim Screenshot</td>
-                  </tr>
-                  <tr>
-                    <td>130–155 min</td>
-                    <td>Breadboard Practical Challenge</td>
-                    <td>Build LED circuit, take DMM readings</td>
-                    <td>Form Section 5 + Photo</td>
-                  </tr>
-                  <tr>
-                    <td>155–170 min</td>
-                    <td>Practical Reflection</td>
-                    <td>Compare measured vs theoretical values</td>
-                    <td>Reflection</td>
-                  </tr>
-                  <tr>
-                    <td>170–180 min</td>
-                    <td>Individual Profile & Exit Ticket</td>
-                    <td>Identify priorities & finalize submission</td>
-                    <td>Submit Form</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="card" style="padding: 14px 16px;">
+              <div class="timeline-table-container">
+                <table class="timeline-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Activity</th>
+                      <th>Purpose</th>
+                      <th>Action / Evidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0–10 min</td>
+                      <td>Engineering Team Brief</td>
+                      <td>Scenario introduction & expectations</td>
+                      <td>Form Section 1</td>
+                    </tr>
+                    <tr>
+                      <td>10–30 min</td>
+                      <td>Toolbox Diagnostic</td>
+                      <td>Electronics & mathematics diagnostic</td>
+                      <td>Form Section 2</td>
+                    </tr>
+                    <tr>
+                      <td>30–45 min</td>
+                      <td>Digital Systems Baseline</td>
+                      <td>Binary & logic voltage diagnostic</td>
+                      <td>Form Section 3</td>
+                    </tr>
+                    <tr>
+                      <td>45–65 min</td>
+                      <td>Programming Code Tracing</td>
+                      <td>Read, trace, and predict C++ output</td>
+                      <td>Form Section 4A</td>
+                    </tr>
+                    <tr>
+                      <td>65–80 min</td>
+                      <td>Programming Modification</td>
+                      <td>Diagnose program alteration skills</td>
+                      <td>Form Section 4B</td>
+                    </tr>
+                    <tr>
+                      <td>80–100 min</td>
+                      <td>Practical Briefing & Safety</td>
+                      <td>Schematic, equipment & 5-point check</td>
+                      <td>Pre-Power Check</td>
+                    </tr>
+                    <tr class="break-row">
+                      <td>100–120 min</td>
+                      <td>☕ Intermission / Break</td>
+                      <td>Rest, recharge, and workbench prep</td>
+                      <td>20 Min Break</td>
+                    </tr>
+                    <tr>
+                      <td>120–130 min</td>
+                      <td>Wokwi Circuit Simulation</td>
+                      <td>Simulate 5V LED circuit virtually first</td>
+                      <td>Sim Screenshot</td>
+                    </tr>
+                    <tr>
+                      <td>130–155 min</td>
+                      <td>Breadboard Practical Challenge</td>
+                      <td>Build LED circuit, take DMM readings</td>
+                      <td>Form Section 5 + Photo</td>
+                    </tr>
+                    <tr>
+                      <td>155–170 min</td>
+                      <td>Practical Reflection</td>
+                      <td>Compare measured vs theoretical values</td>
+                      <td>Reflection</td>
+                    </tr>
+                    <tr>
+                      <td>170–180 min</td>
+                      <td>Individual Profile & Exit Ticket</td>
+                      <td>Identify priorities & finalize submission</td>
+                      <td>Submit Form</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
@@ -614,7 +627,7 @@
         <!-- Slide 7: Activity 2 — Engineering Toolbox Diagnostic -->
         <section class="slide" id="slide-7">
           <div class="slide-header">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="slide-header-flex" style="display: flex; justify-content: space-between; align-items: center;">
               <div>
                 <span class="slide-tag">10–30 min • Activity 2</span>
                 <h2 class="slide-title">Activity 2: Engineering Toolbox Diagnostic</h2>
@@ -649,9 +662,22 @@
                     Complete questions 7 through 11 in Section 2 of your Microsoft Form. Work steadily and record your
                     calculation steps.
                   </p>
+
+                  <!-- Formative Self-Check Widget -->
+                  <div class="self-check-card" data-expected="0.05" data-type="numeric" data-tolerance="0.005" data-hint="I = V / R = 12 V / 240 Ω = 0.05 A (or 50 mA)">
+                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--accent-cyan);">⚡ Quick Calculation Self-Check:</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Calculate circuit current for 12V across 240 Ω (in Amps):</div>
+                    <div class="self-check-input-row">
+                      <input type="text" class="self-check-input" placeholder="e.g. 0.05" />
+                      <button class="btn btn-primary self-check-btn" style="padding: 6px 12px; font-size: 0.82rem;">Check</button>
+                      <button class="btn btn-secondary self-check-reset-btn" style="padding: 6px 10px; font-size: 0.82rem;">Reset</button>
+                    </div>
+                    <div class="self-check-feedback"></div>
+                  </div>
+
                 </div>
                 <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 2: Toolbox Diagnostic"
-                  style="margin-top: 20px;">
+                  style="margin-top: 16px;">
                   📝 Complete Section 2 in Form →
                 </button>
               </div>
@@ -662,7 +688,7 @@
         <!-- Slide 8: Activity 3 — Digital Systems Baseline -->
         <section class="slide" id="slide-8">
           <div class="slide-header">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="slide-header-flex" style="display: flex; justify-content: space-between; align-items: center;">
               <div>
                 <span class="slide-tag">30–45 min • Activity 3</span>
                 <h2 class="slide-title">Activity 3: Digital Systems Baseline</h2>
@@ -696,9 +722,22 @@
                     Answer the binary conversion, logic levels, and logic gate questions in Section 3 of your Microsoft
                     Form.
                   </p>
+
+                  <!-- Formative Self-Check Widget -->
+                  <div class="self-check-card" data-expected="10" data-type="exact" data-hint="00001010 = (8 × 1) + (2 × 1) = 10 in decimal">
+                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--accent-cyan);">🔢 Binary Conversion Self-Check:</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Convert 8-bit binary <code>00001010</code> to decimal:</div>
+                    <div class="self-check-input-row">
+                      <input type="text" class="self-check-input" placeholder="e.g. 10" />
+                      <button class="btn btn-primary self-check-btn" style="padding: 6px 12px; font-size: 0.82rem;">Check</button>
+                      <button class="btn btn-secondary self-check-reset-btn" style="padding: 6px 10px; font-size: 0.82rem;">Reset</button>
+                    </div>
+                    <div class="self-check-feedback"></div>
+                  </div>
+
                 </div>
                 <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 3: Digital Systems"
-                  style="margin-top: 20px;">
+                  style="margin-top: 16px;">
                   📝 Complete Section 3 in Form →
                 </button>
               </div>
@@ -1443,23 +1482,139 @@ int main()
         </div>
       </div>
 
-      <div class="drawer-notice">
-        <span>Active Focus: <strong id="drawer-active-section">Section 1: Student Information</strong></span>
-        <span>Auto-sync with MS Teams</span>
-      </div>
-
       <div class="drawer-body">
-        <!-- Replace src with your active Microsoft Forms Embed URL -->
-        <iframe id="forms-iframe" class="drawer-iframe" src="https://forms.office.com" allowfullscreen
+        <!-- Lazy-loaded Microsoft Forms Embed Iframe -->
+        <iframe id="forms-iframe" class="drawer-iframe" src="about:blank" data-src="https://forms.office.com" allowfullscreen
           webkitallowfullscreen mozallowfullscreen msallowfullscreen>
         </iframe>
+      </div>
+    </aside>
+
+    <!-- Slide Matrix / Map Modal -->
+    <div id="slide-matrix-modal" class="modal-overlay">
+      <div class="slide-matrix-card">
+        <div class="slide-matrix-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🗺️</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff; margin: 0;">Session Slide Matrix</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Click any slide card to jump directly (or press 'M')</p>
+            </div>
+          </div>
+          <button id="close-slide-matrix" class="drawer-close-btn" style="padding: 6px 12px;">✕ Close</button>
+        </div>
+        <div id="slide-matrix-grid" class="slide-matrix-grid">
+          <!-- Populated dynamically by PresentationEngine -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility & Neurodiversity Drawer Backdrop -->
+    <div id="a11y-backdrop" id="drawer-backdrop"></div>
+
+    <!-- Accessibility & Neurodiversity Side-Drawer -->
+    <aside id="a11y-drawer">
+      <div class="a11y-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">⚙️</span>
+          <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+        </div>
+        <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+      </div>
+
+      <div class="a11y-body">
+        
+        <!-- Speech Synthesis (TTS) -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔊 Web Speech Slide Narration</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="a11y-speak-active-slide" class="btn btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 0.86rem;">
+              🔊 Read Slide Aloud
+            </button>
+            <button id="a11y-stop-speech" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.86rem;">
+              ⏹️ Stop
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Narration Speed:</span>
+            <span id="a11y-speech-rate-val" style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">1.0x</span>
+          </div>
+          <input type="range" id="a11y-speech-rate" min="0.75" max="1.5" step="0.05" value="1.0" class="a11y-slider" />
+        </div>
+
+        <!-- Bionic Reading Mode -->
+        <div class="a11y-switch-row">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+          </div>
+          <input type="checkbox" id="a11y-bionic-toggle" style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+        </div>
+
+        <!-- Typography & Dyslexia Toolbar -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>📖 Font Family</span>
+          </div>
+          <select id="a11y-font-select" class="a11y-select">
+            <option value="default">Inter (Default Crisp)</option>
+            <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+            <option value="system">System UI (Clean Sans-Serif)</option>
+          </select>
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔠 Font Size</span>
+            <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+          </div>
+          <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↕️ Line Spacing</span>
+            <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+          </div>
+          <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↔️ Letter Spacing</span>
+            <span id="a11y-letter-spacing-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+          </div>
+          <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+        </div>
+
+        <!-- Contrast & Colorblind Themes -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🎨 Contrast &amp; Colorblind Themes</span>
+          </div>
+          <select id="a11y-theme-select" class="a11y-select">
+            <option value="default">Dark Engineering (Default)</option>
+            <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+            <option value="clean-light">Clean Light Mode</option>
+            <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+          </select>
+        </div>
+
+        <button id="a11y-reset-prefs" class="btn btn-secondary" style="padding: 8px; font-size: 0.82rem; margin-top: 10px;">
+          🔄 Reset to Default Theme
+        </button>
+
       </div>
     </aside>
 
   </div>
 
   <!-- Scripts -->
+  <script src="../shared/js/accessibility-engine.js"></script>
   <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/self-check.js"></script>
   <script src="../shared/js/timer.js"></script>
   <script src="../shared/js/form-drawer.js"></script>
 </body>

@@ -13,12 +13,20 @@ class PresentationEngine {
     this.nextBtn = document.getElementById('next-slide');
     this.slideCounter = document.getElementById('slide-counter');
     this.progressBar = document.getElementById('progress-bar-fill');
-    
+    this.slideMatrixBtn = document.getElementById('open-slide-matrix');
+    this.slideMatrixModal = document.getElementById('slide-matrix-modal');
+    this.slideMatrixClose = document.getElementById('close-slide-matrix');
+    this.slideMatrixGrid = document.getElementById('slide-matrix-grid');
+    this.headerSubtitle = document.getElementById('header-slide-topic');
+
     this.init();
   }
 
   init() {
     if (this.totalSlides === 0) return;
+
+    // Build Slide Matrix / Map
+    this.buildSlideMatrix();
 
     // Set initial slide from hash if present (#slide-3)
     const hash = window.location.hash;
@@ -33,9 +41,51 @@ class PresentationEngine {
     this.attachEventListeners();
   }
 
+  buildSlideMatrix() {
+    if (!this.slideMatrixGrid) return;
+    this.slideMatrixGrid.innerHTML = '';
+    
+    this.slides.forEach((slide, idx) => {
+      const titleEl = slide.querySelector('.slide-title') || slide.querySelector('.hero-title') || slide.querySelector('h1, h2');
+      const tagEl = slide.querySelector('.slide-tag') || slide.querySelector('.badge-pill');
+      const titleText = titleEl ? titleEl.textContent.trim() : `Slide ${idx + 1}`;
+      const tagText = tagEl ? tagEl.textContent.trim() : `Slide ${idx + 1}`;
+
+      const item = document.createElement('div');
+      item.className = `slide-matrix-item ${idx === this.currentSlideIndex ? 'active' : ''}`;
+      item.innerHTML = `
+        <span class="slide-matrix-num">${idx + 1}. ${tagText.slice(0, 24)}</span>
+        <span class="slide-matrix-title">${titleText}</span>
+      `;
+      item.addEventListener('click', () => {
+        this.goToSlide(idx);
+        this.closeSlideMatrix();
+      });
+      this.slideMatrixGrid.appendChild(item);
+    });
+  }
+
+  openSlideMatrix() {
+    if (!this.slideMatrixModal) return;
+    this.buildSlideMatrix();
+    this.slideMatrixModal.classList.add('active');
+  }
+
+  closeSlideMatrix() {
+    if (!this.slideMatrixModal) return;
+    this.slideMatrixModal.classList.remove('active');
+  }
+
   attachEventListeners() {
     if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.prevSlide());
     if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.nextSlide());
+    if (this.slideMatrixBtn) this.slideMatrixBtn.addEventListener('click', () => this.openSlideMatrix());
+    if (this.slideMatrixClose) this.slideMatrixClose.addEventListener('click', () => this.closeSlideMatrix());
+    if (this.slideMatrixModal) {
+      this.slideMatrixModal.addEventListener('click', (e) => {
+        if (e.target === this.slideMatrixModal) this.closeSlideMatrix();
+      });
+    }
 
     // Keyboard controls
     document.addEventListener('keydown', (e) => {
@@ -56,6 +106,14 @@ class PresentationEngine {
         this.goToSlide(this.totalSlides - 1);
       } else if (e.key.toLowerCase() === 'f') {
         this.toggleFullScreen();
+      } else if (e.key.toLowerCase() === 'm') {
+        if (this.slideMatrixModal && this.slideMatrixModal.classList.contains('active')) {
+          this.closeSlideMatrix();
+        } else {
+          this.openSlideMatrix();
+        }
+      } else if (e.key === 'Escape' && this.slideMatrixModal && this.slideMatrixModal.classList.contains('active')) {
+        this.closeSlideMatrix();
       }
     });
 
@@ -130,12 +188,36 @@ class PresentationEngine {
       this.progressBar.style.width = `${progressPercent}%`;
     }
 
+    // Update Top Header Slide Topic / Tag
+    if (this.headerSubtitle && this.slides[this.currentSlideIndex]) {
+      const activeSlide = this.slides[this.currentSlideIndex];
+      const tagEl = activeSlide.querySelector('.slide-tag') || activeSlide.querySelector('.badge-pill');
+      if (tagEl) {
+        this.headerSubtitle.textContent = tagEl.textContent.trim();
+      }
+    }
+
+    // Update Slide Matrix Active Item
+    if (this.slideMatrixGrid) {
+      const matrixItems = this.slideMatrixGrid.querySelectorAll('.slide-matrix-item');
+      matrixItems.forEach((item, idx) => {
+        if (idx === this.currentSlideIndex) item.classList.add('active');
+        else item.classList.remove('active');
+      });
+    }
+
     // Update Button Disabled States
     if (this.prevBtn) this.prevBtn.disabled = this.currentSlideIndex === 0;
     if (this.nextBtn) this.nextBtn.disabled = this.currentSlideIndex === this.totalSlides - 1;
 
     // Update URL hash without scroll jumping
     window.history.replaceState(null, null, `#slide-${this.currentSlideIndex + 1}`);
+
+    // Trigger A11y updates (e.g. Bionic reading on the active slide) & stop previous TTS
+    if (window.a11yEngine) {
+      window.a11yEngine.stopSpeech();
+      window.a11yEngine.updateBionicReading();
+    }
   }
 
   toggleFullScreen() {
