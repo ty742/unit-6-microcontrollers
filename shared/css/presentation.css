@@ -43,15 +43,60 @@
   padding: 0;
 }
 
-html, body {
+html {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Custom Glassmorphic Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 14, 23, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 151, 157, 0.4), rgba(6, 182, 212, 0.5));
+  border-radius: 999px;
+  border: 2px solid rgba(17, 24, 39, 0.8);
+  box-shadow: 0 0 10px rgba(0, 151, 157, 0.3);
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(0, 151, 157, 0.8), rgba(6, 182, 212, 0.9));
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.6);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 182, 212, 0.4) rgba(10, 14, 23, 0.6);
 }
 
 /* Background Engineering Grid Texture */
@@ -74,6 +119,7 @@ html, body {
   display: flex;
   width: 100vw;
   height: 100vh;
+  max-height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -81,12 +127,15 @@ html, body {
 /* Main Deck Viewport */
 #deck-viewport {
   flex: 1;
+  width: 100%;
   height: 100%;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
   transition: var(--transition-smooth);
   z-index: 1;
+  overflow: hidden;
 }
 
 /* Header Bar */
@@ -248,6 +297,7 @@ header.deck-header {
   flex: 1;
   position: relative;
   overflow: hidden;
+  perspective: 1000px;
 }
 
 .slide {
@@ -262,18 +312,35 @@ header.deck-header {
   opacity: 0;
   pointer-events: none;
   overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
 
 .slide.active {
   display: flex;
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(0);
+  transform: translateX(0) scale(1);
+  animation: slideFadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .slide.previous {
   display: none;
-  transform: translateX(-40px);
+  transform: translateX(-30px) scale(0.98);
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Slide Typography & Structure */
@@ -784,18 +851,28 @@ body.theme-colorblind-safe {
 }
 
 .card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.65);
   border-radius: 14px;
   padding: 24px 28px;
   position: relative;
   font-size: 1.06rem;
   line-height: 1.65;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.28s ease;
+}
+
+.card:hover {
+  border-color: rgba(6, 182, 212, 0.45);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 151, 157, 0.15);
 }
 
 .card.highlight {
   border-color: var(--accent-arduino);
-  box-shadow: 0 0 28px var(--accent-glow);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 28px var(--accent-glow);
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.85), rgba(0, 151, 157, 0.08));
 }
 
 .card-title {

@@ -169,6 +169,7 @@ class PresentationEngine {
       if (i === this.currentSlideIndex) {
         slide.classList.add('active');
         slide.classList.remove('previous');
+        slide.scrollTop = 0;
       } else if (i < this.currentSlideIndex) {
         slide.classList.add('previous');
         slide.classList.remove('active');
