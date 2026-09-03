@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: Microcontrollers — Week 1 Engineering Baseline</title>
+  <link rel="stylesheet" href="../shared/css/presentation.css">
+  <link rel="stylesheet" href="../shared/css/form-drawer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Week 1 Specific Component Styling */
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .badge-pill {
+      background: rgba(0, 151, 157, 0.2);
+      border: 1px solid var(--accent-arduino);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .ksb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .ksb-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .ksb-card.k {
+      border-top: 5px solid var(--accent-cyan);
+    }
+
+    .ksb-card.s {
+      border-top: 5px solid var(--color-success);
+    }
+
+    .ksb-card.b {
+      border-top: 5px solid var(--color-warning);
+    }
+
+    .ksb-card h4 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    .ksb-card ul {
+      padding-left: 20px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .timeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1.05rem;
+    }
+
+    .timeline-table th {
+      background: var(--bg-surface-elevated);
+      color: var(--accent-cyan);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 1.08rem;
+    }
+
+    .timeline-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .timeline-table tr.break-row td {
+      background: rgba(245, 158, 11, 0.12);
+      font-weight: 700;
+      color: var(--color-warning);
+    }
+
+    .schematic-box {
+      background: #070c18;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 480px;
+      box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.6);
+    }
+
+    .schematic-caption {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-top: 14px;
+      text-align: center;
+      background: rgba(6, 182, 212, 0.12);
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      width: 100%;
+    }
+
+    .schematic-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .schematic-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 0.96rem;
+      font-weight: 700;
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .schematic-tab-btn:hover {
+      background: #2d3f59;
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+    }
+
+    .schematic-tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-arduino), #00797e);
+      color: #ffffff;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    /* Syntax Highlighting in Code Editor */
+    .editor-wrapper {
+      position: relative;
+      background: #080c14;
+      min-height: 240px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .editor-highlight-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px 20px;
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      line-height: 1.65;
+      margin: 0;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-sizing: border-box;
+      color: #cbd5e1;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .editor-highlight-layer .keyword {
+      color: #f472b6;
+      font-weight: 700;
+    }
+
+    .editor-highlight-layer .type {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .editor-highlight-layer .var {
+      color: #fbbf24;
+    }
+
+    .editor-highlight-layer .string {
+      color: #4ade80;
+    }
+
+    .editor-highlight-layer .number {
+      color: #a78bfa;
+      font-weight: 600;
+    }
+
+    .editor-highlight-layer .comment {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .editor-highlight-layer .preproc {
+      color: #ec4899;
+      font-weight: 700;
+    }
+
+    .editor-highlight-layer .func {
+      color: #60a5fa;
+      font-weight: 700;
+    }
+
+    .code-editor-textarea.syntax-active {
+      position: relative;
+      background: transparent !important;
+      color: transparent !important;
+      caret-color: #38bdf8;
+      z-index: 2;
+    }
+
+    .checklist-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 1.08rem;
+      color: var(--text-primary);
+      transition: var(--transition-smooth);
+    }
+
+    .checklist-item:hover {
+      border-color: var(--accent-arduino);
+      background: var(--bg-surface-elevated);
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--accent-arduino);
+      cursor: pointer;
+    }
+
+    .wokwi-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #2b1d3d;
+      color: #c084fc;
+      border: 1px solid #a855f7;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .interactive-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 10px;
+    }
+
+    .interactive-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--accent-cyan);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid"></div>
+
+  <div id="app-container">
+    <div id="deck-viewport">
+
+      <!-- Top Header -->
+      <header class="deck-header">
+        <div class="brand-badge">
+          <span class="pill">UNIT 6</span>
+          <span>Microcontrollers</span>
+          <span style="color: var(--text-muted);">|</span>
+          <span style="color: var(--accent-cyan); font-weight: 500;">Week 1: Engineering Baseline</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-form-action open-forms-trigger" data-form-section="Deliverables Form">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            📝 Open Deliverables Form
+          </button>
+        </div>
+      </header>
+
+      <!-- Slides Wrapper -->
+      <main id="slides-wrapper">
+
+        <!-- Slide 1: Welcome & Title -->
+        <section class="slide active" id="slide-1">
+          <div class="slide-body" style="justify-content: center; align-items: flex-start;">
+            <div class="badge-bar">
+              <span class="badge-pill">Session: Week 1</span>
+              <span class="badge-pill">Duration: 3 Hours</span>
+              <span class="badge-pill">Diagnostic Baseline</span>
+            </div>
+            <h1 class="hero-title">Unit 6: Microcontrollers</h1>
+            <h2 class="slide-subtitle" style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 24px;">
+              Engineering Baseline — <em>What Can You Already Do?</em>
+            </h2>
+            <div class="card highlight" style="max-width: 840px;">
+              <p style="font-size: 1.15rem; line-height: 1.7; color: var(--text-secondary);">
+                Welcome to your microcontroller engineering journey. Today you step into the role of a junior
+                development engineer to calibrate your practical skills, electronic theory, coding ability, and lab
+                safety before we allocate engineering projects.
+              </p>
+            </div>
+            <div style="margin-top: 28px; display: flex; gap: 16px;">
+              <button class="btn btn-primary" onclick="deckEngine.nextSlide()">Begin Briefing →</button>
+              <button class="btn btn-secondary open-forms-trigger" data-form-section="Section 1: Student Information">📝
+                View Microsoft Form</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 2: Workplace Context -->
+        <section class="slide" id="slide-2">
+          <div class="slide-header">
+            <span class="slide-tag">Part 1 • Workplace Context</span>
+            <h2 class="slide-title">You Are Joining an Engineering Development Team</h2>
+            <p class="slide-subtitle">Calibrating technician & engineer capabilities for product development</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🏢 The Workplace Scenario</div>
+                <p style="font-size: 1.08rem; line-height: 1.7; color: var(--text-secondary);">
+                  You have joined an electronics engineering team developing a new microcontroller-based product.
+                </p>
+                <p style="font-size: 1.08rem; line-height: 1.7; color: var(--text-secondary); margin-top: 14px;">
+                  Before the engineering team leader allocates development tasks, the team needs to establish what each
+                  technician and engineer can already do safely, confidently, and independently.
+                </p>
+              </div>
+              <div class="card highlight">
+                <div class="card-title">🎯 Baseline Philosophy (No Pressure)</div>
+                <div class="callout success">
+                  <strong>“We need an accurate starting point so you and your team know where to go next.”</strong>
+                </div>
+                <ul
+                  style="margin-top: 16px; padding-left: 22px; font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary);">
+                  <li>This is a diagnostic calibration, <strong>not a graded pass/fail test</strong>.</li>
+                  <li>Work independently so we can accurately support your growth.</li>
+                  <li>Record when you are unsure — mistakes are valuable engineering data.</li>
+                  <li>Always ask immediately whenever lab safety is involved.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 3: Learning Aim & Professional KSBs -->
+        <section class="slide" id="slide-3">
+          <div class="slide-header">
+            <span class="slide-tag">The Hook • Professional Growth</span>
+            <h2 class="slide-title">Learning Aim & Your Professional KSBs</h2>
+            <p class="slide-subtitle">The knowledge, skills, and behaviours expected of practicing junior engineers</p>
+          </div>
+          <div class="slide-body">
+            <div class="callout" style="margin-bottom: 8px;">
+              <strong>Learning Aim:</strong> Establish your current knowledge and practical ability in electronics,
+              digital systems, programming and mathematics. Identify your individual strengths and development
+              priorities.
+            </div>
+            <div class="ksb-grid">
+              <div class="ksb-card k">
+                <h4>🧠 Knowledge (K)</h4>
+                <ul>
+                  <li>Basic electronic circuits & components</li>
+                  <li>Circuit schematic symbols</li>
+                  <li>Voltage, current, and Ohm's Law (<em>V = I × R</em>)</li>
+                  <li>Binary number systems & digital logic</li>
+                  <li>C++ programming constructs</li>
+                </ul>
+              </div>
+              <div class="ksb-card s">
+                <h4>🛠️ Skills (S)</h4>
+                <ul>
+                  <li>Safe digital multimeter (DMM) operation</li>
+                  <li>Low-voltage DC power supply setup</li>
+                  <li>Breadboard circuit construction</li>
+                  <li>Electrical quantity prediction & measurement</li>
+                  <li>Static code tracing and logic modification</li>
+                </ul>
+              </div>
+              <div class="ksb-card b">
+                <h4>🤝 Behaviours (B)</h4>
+                <ul>
+                  <li>Strict adherence to laboratory safety protocols</li>
+                  <li>Methodological engineering troubleshooting</li>
+                  <li>Intellectual honesty & self-reflection</li>
+                  <li>Treating errors as calibration data</li>
+                  <li>Setting proactive personal growth priorities</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 4: Learning Outcomes -->
+        <section class="slide" id="slide-4">
+          <div class="slide-header">
+            <span class="slide-tag">Session Deliverables</span>
+            <h2 class="slide-title">What You Will Achieve Today</h2>
+            <p class="slide-subtitle">By the end of this 3-hour session, you will be able to:</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <ol style="padding-left: 24px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li>Demonstrate your current knowledge of basic electronic circuits and components.</li>
+                  <li>Recognise and interpret common circuit symbols.</li>
+                  <li>Demonstrate understanding of voltage, current and resistance.</li>
+                  <li>Use a multimeter and low-voltage power supply safely.</li>
+                  <li>Interpret a simple circuit schematic and construct the circuit on a breadboard.</li>
+                  <li>Predict and measure electrical quantities in a simple circuit.</li>
+                </ol>
+              </div>
+              <div class="card">
+                <ol start="7"
+                  style="padding-left: 24px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li>Demonstrate baseline understanding of binary and digital systems.</li>
+                  <li>Trace a short section of program code and predict its output.</li>
+                  <li>Modify a simple program to meet a stated requirement.</li>
+                  <li>Identify your current strengths and areas requiring development.</li>
+                  <li>Set an appropriate personal development priority for Unit 6.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 5: Session Sequence & Timings -->
+        <section class="slide" id="slide-5">
+          <div class="slide-header">
+            <span class="slide-tag">Roadmap • 3 Hours (180 Minutes)</span>
+            <h2 class="slide-title">Today's Session Sequence</h2>
+            <p class="slide-subtitle">Structured diagnostics, safe practical circuit construction, and profile
+              reflection</p>
+          </div>
+          <div class="slide-body">
+            <div class="card" style="padding: 16px 22px;">
+              <table class="timeline-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Activity</th>
+                    <th>Purpose</th>
+                    <th>Action / Evidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>0–10 min</td>
+                    <td>Engineering Team Brief</td>
+                    <td>Scenario introduction & expectations</td>
+                    <td>Form Section 1</td>
+                  </tr>
+                  <tr>
+                    <td>10–30 min</td>
+                    <td>Toolbox Diagnostic</td>
+                    <td>Electronics & mathematics diagnostic</td>
+                    <td>Form Section 2</td>
+                  </tr>
+                  <tr>
+                    <td>30–45 min</td>
+                    <td>Digital Systems Baseline</td>
+                    <td>Binary & logic voltage diagnostic</td>
+                    <td>Form Section 3</td>
+                  </tr>
+                  <tr>
+                    <td>45–65 min</td>
+                    <td>Programming Code Tracing</td>
+                    <td>Read, trace, and predict C++ output</td>
+                    <td>Form Section 4A</td>
+                  </tr>
+                  <tr>
+                    <td>65–80 min</td>
+                    <td>Programming Modification</td>
+                    <td>Diagnose program alteration skills</td>
+                    <td>Form Section 4B</td>
+                  </tr>
+                  <tr>
+                    <td>80–100 min</td>
+                    <td>Practical Briefing & Safety</td>
+                    <td>Schematic, equipment & 5-point check</td>
+                    <td>Pre-Power Check</td>
+                  </tr>
+                  <tr class="break-row">
+                    <td>100–120 min</td>
+                    <td>☕ Intermission / Break</td>
+                    <td>Rest, recharge, and workbench prep</td>
+                    <td>20 Min Break</td>
+                  </tr>
+                  <tr>
+                    <td>120–130 min</td>
+                    <td>Wokwi Circuit Simulation</td>
+                    <td>Simulate 5V LED circuit virtually first</td>
+                    <td>Sim Screenshot</td>
+                  </tr>
+                  <tr>
+                    <td>130–155 min</td>
+                    <td>Breadboard Practical Challenge</td>
+                    <td>Build LED circuit, take DMM readings</td>
+                    <td>Form Section 5 + Photo</td>
+                  </tr>
+                  <tr>
+                    <td>155–170 min</td>
+                    <td>Practical Reflection</td>
+                    <td>Compare measured vs theoretical values</td>
+                    <td>Reflection</td>
+                  </tr>
+                  <tr>
+                    <td>170–180 min</td>
+                    <td>Individual Profile & Exit Ticket</td>
+                    <td>Identify priorities & finalize submission</td>
+                    <td>Submit Form</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 6: Activity 1 — Brief & Expectations -->
+        <section class="slide" id="slide-6">
+          <div class="slide-header">
+            <span class="slide-tag">0–10 min • Activity 1</span>
+            <h2 class="slide-title">Activity 1: Team Brief & Registration</h2>
+            <p class="slide-subtitle">Setting up your profile and understanding diagnostic expectations</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">📋 Technician Guidelines</div>
+                <ul style="padding-left: 22px; font-size: 1.08rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li>Work independently on diagnostic questions.</li>
+                  <li>Attempt every task — don't leave blanks.</li>
+                  <li>Avoid guessing what you think the tutor wants to see.</li>
+                  <li>Record when you are unsure.</li>
+                  <li>Always ask questions when physical safety is involved.</li>
+                </ul>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+                <div class="card-title">📝 Action: Complete Section 1</div>
+                <p style="font-size: 1.08rem; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">
+                  Open the Deliverables Form and complete Section 1 (Your Name, ID, and Prior Background).
+                </p>
+                <button class="btn btn-form-action open-forms-trigger"
+                  data-form-section="Section 1: Student Information">
+                  📝 Complete Section 1 in Microsoft Form →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 7: Activity 2 — Engineering Toolbox Diagnostic -->
+        <section class="slide" id="slide-7">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">10–30 min • Activity 2</span>
+                <h2 class="slide-title">Activity 2: Engineering Toolbox Diagnostic</h2>
+              </div>
+              <div class="timer-widget" data-duration="20">
+                <span class="timer-display">20:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Diagnosing electronics, circuit symbols, Ohm's law, and unit conversions</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">⚡ Electronics & Measurement Scope</div>
+                <ul style="padding-left: 22px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li><strong>Component Identification:</strong> Resistors, LEDs, Capacitors, Switches.</li>
+                  <li><strong>Component Symbols:</strong> Schematic representations & wiring connections.</li>
+                  <li><strong>Polarity:</strong> Identifying polarized devices (+ / -).</li>
+                  <li><strong>Ohm's Law:</strong> <span class="formula-chip">V = I × R</span> (rearranged: <em>I = V /
+                      R</em>, <em>R = V / I</em>).</li>
+                  <li><strong>Metric Prefixes:</strong> Conversions (kΩ → Ω, mA → A; e.g., 4.7 kΩ = 4,700 Ω, 25 mA =
+                    0.025 A).</li>
+                </ul>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">📝 Form Section 2</div>
+                  <p style="font-size: 1.06rem; color: var(--text-secondary); line-height: 1.7;">
+                    Complete questions 7 through 11 in Section 2 of your Microsoft Form. Work steadily and record your
+                    calculation steps.
+                  </p>
+                </div>
+                <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 2: Toolbox Diagnostic"
+                  style="margin-top: 20px;">
+                  📝 Complete Section 2 in Form →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 8: Activity 3 — Digital Systems Baseline -->
+        <section class="slide" id="slide-8">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">30–45 min • Activity 3</span>
+                <h2 class="slide-title">Activity 3: Digital Systems Baseline</h2>
+              </div>
+              <div class="timer-widget" data-duration="15">
+                <span class="timer-display">15:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Binary number representation, logic voltage levels, and fundamental logic gates
+            </p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🔢 Digital Systems Core Topics</div>
+                <ul style="padding-left: 22px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li><strong>Analogue vs. Digital:</strong> Continuous voltage vs discrete logic states.</li>
+                  <li><strong>8-Bit Binary Bytes:</strong> Positional weights (128, 64, 32, 16, 8, 4, 2, 1).</li>
+                  <li><strong>Microcontroller Logic Levels:</strong> 5V DC systems (Logic 1 = HIGH ≈ 5.0 V, Logic 0 =
+                    LOW ≈ 0.0 V).</li>
+                  <li><strong>Logic Gates:</strong> AND, OR, NOT gates and truth tables.</li>
+                </ul>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">📝 Form Section 3</div>
+                  <p style="font-size: 1.06rem; color: var(--text-secondary); line-height: 1.7;">
+                    Answer the binary conversion, logic levels, and logic gate questions in Section 3 of your Microsoft
+                    Form.
+                  </p>
+                </div>
+                <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 3: Digital Systems"
+                  style="margin-top: 20px;">
+                  📝 Complete Section 3 in Form →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 9: Activity 4 — Programming Baseline (Code Tracing) -->
+        <section class="slide" id="slide-9">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">45–65 min • Activity 4</span>
+                <h2 class="slide-title">Activity 4: Programming Baseline — Code Tracing</h2>
+              </div>
+              <div class="timer-widget" data-duration="20">
+                <span class="timer-display">20:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Trace code on paper without executing it — predict output and variable states</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div>
+                <pre class="code-block"><span class="comment">// C++ Code Tracing Challenge</span>
+<span class="type">int</span> <span class="var">temperature</span> = <span class="string">25</span>;
+<span class="type">int</span> <span class="var">limit</span> = <span class="string">30</span>;
+
+<span class="keyword">if</span> (<span class="var">temperature</span> > <span class="var">limit</span>)
+{
+    <span class="var">cout</span> << <span class="string">"WARNING"</span>;
+}
+<span class="keyword">else</span>
+{
+    <span class="var">cout</span> << <span class="string">"NORMAL"</span>;
+}</pre>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">🔍 Code Analysis Questions</div>
+                  <ul style="padding-left: 22px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                    <li>What value is stored in <code>temperature</code>?</li>
+                    <li>Is <code>temperature > limit</code> true or false?</li>
+                    <li>What exact message will be displayed?</li>
+                    <li>Trace variable reassignments: <code>count = count + 2</code>.</li>
+                  </ul>
+                </div>
+                <button class="btn btn-form-action open-forms-trigger"
+                  data-form-section="Section 4: Programming Baseline" style="margin-top: 18px;">
+                  📝 Complete Section 4A in Form →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 10: Activity 5 — Programming Modification (Interactive Code Editor) -->
+        <section class="slide" id="slide-10">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">65–80 min • Activity 5 • Live Code Sandbox</span>
+                <h2 class="slide-title">Activity 5: Programming Modification</h2>
+              </div>
+              <div class="timer-widget" data-duration="15">
+                <span class="timer-display">15:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Interactively edit and adapt code logic in the editor below, then copy your
+              solution directly into the form</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+
+              <!-- Left Column: Interactive Code Editor -->
+              <div class="code-editor-container">
+                <div class="code-editor-header">
+                  <div class="code-editor-title">
+                    <div class="code-editor-dots">
+                      <span class="code-editor-dot red"></span>
+                      <span class="code-editor-dot yellow"></span>
+                      <span class="code-editor-dot green"></span>
+                    </div>
+                    <span>💻 main.cpp (Interactive C++ Editor)</span>
+                  </div>
+                  <button class="btn btn-secondary" onclick="copyEditorCode()"
+                    style="padding: 4px 10px; font-size: 0.85rem;" title="Copy to clipboard">
+                    📋 Copy Code
+                  </button>
+                </div>
+
+                <div class="editor-wrapper">
+                  <pre id="code-highlight-layer" class="editor-highlight-layer" aria-hidden="true"></pre>
+                  <textarea id="code-editor-input" class="code-editor-textarea syntax-active" spellcheck="false">#include <iostream>
+using namespace std;
+
+int main()
+{
+    // Activity 5: Temperature Monitoring Program
+    int temperature = 25;
+    int limit = 30; // Task 1: Change threshold to 20
+
+    // Task 2: Update loop to scan 8 sensor channels instead of 4
+    for (int channel = 0; channel < 4; channel++)
+    {
+        if (temperature > limit)
+        {
+            cout << "WARNING on Channel " << channel << endl;
+        }
+        else
+        {
+            cout << "NORMAL on Channel " << channel << endl;
+        }
+    }
+
+    return 0;
+}</textarea>
+                </div>
+
+                <div class="code-editor-footer">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <button class="timer-btn" onclick="resetEditorCode()"
+                      style="padding: 4px 10px; font-size: 0.82rem;">
+                      🔄 Reset Template
+                    </button>
+                    <span id="copy-feedback-msg" class="copy-feedback">
+                      ✅ Copied to clipboard! Ready to paste.
+                    </span>
+                  </div>
+                  <span style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.82rem;">Editable
+                    Sandbox</span>
+                </div>
+              </div>
+
+              <!-- Right Column: Instructions & Submission Actions -->
+              <div style="display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+                <div class="card">
+                  <div class="card-title">⚙️ Modification Requirements</div>
+                  <p style="font-size: 1.05rem; line-height: 1.6; color: var(--text-secondary);">
+                    Adapt the temperature monitoring program in the editor:
+                  </p>
+                  <ul
+                    style="padding-left: 22px; font-size: 1.02rem; line-height: 1.7; color: var(--text-secondary); margin-top: 10px;">
+                    <li><strong>Task 1 (Threshold):</strong> Change the warning limit from <code>30</code> to
+                      <strong><code>20 degrees</code></strong>.
+                    </li>
+                    <li><strong>Task 2 (Channel Scan):</strong> Change the loop condition from scanning <code>4</code>
+                      channels to <strong><code>8 channels</code></strong> (<code>channel &lt; 8</code>).</li>
+                  </ul>
+                </div>
+
+                <div class="card highlight">
+                  <div class="card-title">🚀 Fast Submission Flow</div>
+                  <ol style="padding-left: 22px; font-size: 1.02rem; line-height: 1.65; color: var(--text-secondary);">
+                    <li>Type your edits in the editor on the left.</li>
+                    <li>Click <strong>Copy &amp; Open Section 4B</strong> below.</li>
+                    <li>Paste (<kbd
+                        style="background:#1e293b; padding:2px 6px; border-radius:4px; border:1px solid #334155;">Ctrl+V</kbd>
+                      or <kbd
+                        style="background:#1e293b; padding:2px 6px; border-radius:4px; border:1px solid #334155;">Cmd+V</kbd>)
+                      directly into Question 19.</li>
+                  </ol>
+                  <div style="margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="copyEditorCode()">
+                      📋 Copy Code
+                    </button>
+                    <button class="btn btn-form-action open-forms-trigger" onclick="copyEditorCode()"
+                      data-form-section="Section 4: Programming Baseline">
+                      📝 Copy &amp; Open Section 4B Form →
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 11: Activity 6 — Baseline Practical Briefing & Schematic Interpretation -->
+        <section class="slide" id="slide-11">
+          <div class="slide-header">
+            <span class="slide-tag">80–100 min • Activity 6 • Core Engineering Skills</span>
+            <h2 class="slide-title">Activity 6: Circuit Schematic Interpretation</h2>
+            <p class="slide-subtitle">Interpreting circuit schematics, exploring alternative circuit drawings, and
+              understanding current flow</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+
+              <!-- Left Column: Interactive Schematic Explorer -->
+              <div class="schematic-box">
+                <div class="schematic-tabs">
+                  <button type="button" class="schematic-tab-btn active" id="tab-btn-1"
+                    onclick="switchSchematicView(1)">⚡ Standard Schematic</button>
+                  <button type="button" class="schematic-tab-btn" id="tab-btn-2" onclick="switchSchematicView(2)">🔌
+                    Breadboard Wiring</button>
+                  <button type="button" class="schematic-tab-btn" id="tab-btn-3" onclick="switchSchematicView(3)">🔄
+                    Equivalent Series Order</button>
+                </div>
+
+                <!-- View 1: Standard Rail Schematic (Publication-Grade Schemdraw SVG) -->
+                <div id="schematic-view-1"
+                  style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                  <div
+                    style="width: 100%; max-height: 290px; height: 290px; background: #070c18; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; box-sizing: border-box;">
+                    <img src="images/circuit-schematic-standard.svg"
+                      alt="Standard Circuit Schematic (+5V to LED to 330 Ohm to Ground)"
+                      style="max-height: 100%; max-width: 100%; object-fit: contain; display: block;" />
+                  </div>
+                  <div class="schematic-caption">Drawing A: Standard Top-Down Circuit Schematic (+5V → LED₁ → R₁ → 0V)
+                  </div>
+                </div>
+
+                <!-- View 2: Step-by-Step Accurate Breadboard Wiring with Actual Wokwi Images -->
+                <div id="schematic-view-2"
+                  style="display: none; flex-direction: column; align-items: center; width: 100%;">
+                  <!-- Interactive Power State Controls -->
+                  <div
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 8px; padding: 0 8px;">
+                    <span id="bb-status-badge"
+                      style="font-size: 0.82rem; font-weight: 800; font-family: var(--font-mono); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.1); padding: 3px 10px; border-radius: 9999px;">⚡
+                      POWER ON (5.00 V • 9.16 mA • LED Lit)</span>
+                    <div style="display: flex; gap: 6px;">
+                      <button type="button" id="btn-power-on" class="btn btn-primary active"
+                        onclick="toggleBreadboardPower('on')"
+                        style="padding: 4px 12px; font-size: 0.8rem; font-weight: 800;">⚡ Power ON (5V)</button>
+                      <button type="button" id="btn-power-off" class="btn btn-secondary"
+                        onclick="toggleBreadboardPower('off')"
+                        style="padding: 4px 12px; font-size: 0.8rem; font-weight: 800;">⚪ Power OFF (0V)</button>
+                    </div>
+                  </div>
+
+                  <!-- Actual Circuit Images Container (Dark Theme / Reduced Visual Strain) -->
+                  <div
+                    style="width: 100%; max-height: 290px; height: 290px; background: #080c14; border: 1px solid var(--border-subtle); border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 10px; box-sizing: border-box; box-shadow: 0 4px 20px rgba(0,0,0,0.35);">
+                    <img id="bb-img-on" src="images/breadboard-led-on.png"
+                      alt="Breadboard circuit simulated with LED ON at 5V"
+                      style="max-height: 100%; max-width: 100%; object-fit: contain; display: block; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));" />
+                    <img id="bb-img-off" src="images/breadboard-led-off.png" alt="Breadboard circuit with Power OFF"
+                      style="max-height: 100%; max-width: 100%; object-fit: contain; display: none; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));" />
+                  </div>
+                  <div class="schematic-caption">Drawing B: Wokwi Breadboard Wiring Guide (Actual Simulation • Column
+                    21)</div>
+                </div>
+
+                <div id="schematic-view-3"
+                  style="display: none; flex-direction: column; align-items: center; width: 100%;">
+                  <svg width="100%" height="310" viewBox="0 0 440 310" style="max-height: 310px;">
+                    <!-- Top Rail +5V -->
+                    <line x1="30" y1="25" x2="410" y2="25" stroke="#06b6d4" stroke-width="3.5" />
+                    <text x="145" y="18" fill="#06b6d4" font-weight="800" font-size="13"
+                      font-family="var(--font-mono)">+5.00 V DC Supply Rail</text>
+
+                    <!-- Left Branch: Option A (Resistor First) -->
+                    <line x1="120" y1="25" x2="120" y2="55" stroke="#06b6d4" stroke-width="2.5" />
+                    <text x="55" y="45" fill="#cbd5e1" font-weight="700" font-size="11"
+                      font-family="var(--font-mono)">Option A</text>
+
+                    <!-- Resistor on Left -->
+                    <rect x="100" y="55" width="40" height="45" fill="#1e293b" stroke="#38bdf8" stroke-width="2"
+                      rx="4" />
+                    <text x="106" y="82" fill="#38bdf8" font-weight="800" font-size="11"
+                      font-family="var(--font-mono)">330 Ω</text>
+
+                    <line x1="120" y1="100" x2="120" y2="125" stroke="#f8fafc" stroke-width="2" />
+                    <text x="128" y="118" fill="#4ade80" font-weight="700" font-size="10"
+                      font-family="var(--font-mono)">Anode (+)</text>
+
+                    <!-- LED on Left -->
+                    <polygon points="102,125 138,125 120,155" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+                    <line x1="102" y1="155" x2="138" y2="155" stroke="#ffffff" stroke-width="2" />
+                    <text x="145" y="145" fill="#ef4444" font-weight="700" font-size="11"
+                      font-family="var(--font-mono)">LED₁</text>
+
+                    <line x1="120" y1="155" x2="120" y2="215" stroke="#64748b" stroke-width="2.5" />
+                    <text x="65" y="195" fill="#38bdf8" font-weight="800" font-size="11"
+                      font-family="var(--font-mono)">I = 9.1 mA</text>
+
+
+                    <!-- Right Branch: Option B (LED First) -->
+                    <line x1="320" y1="25" x2="320" y2="55" stroke="#06b6d4" stroke-width="2.5" />
+                    <text x="255" y="45" fill="#cbd5e1" font-weight="700" font-size="11"
+                      font-family="var(--font-mono)">Option B</text>
+                    <text x="328" y="48" fill="#4ade80" font-weight="700" font-size="10"
+                      font-family="var(--font-mono)">Anode (+)</text>
+
+                    <!-- LED on Right -->
+                    <polygon points="302,55 338,55 320,85" fill="#ef4444" stroke="#ffffff" stroke-width="2" />
+                    <line x1="302" y1="85" x2="338" y2="85" stroke="#ffffff" stroke-width="2" />
+                    <text x="345" y="75" fill="#ef4444" font-weight="700" font-size="11"
+                      font-family="var(--font-mono)">LED₁</text>
+
+                    <line x1="320" y1="85" x2="320" y2="110" stroke="#f8fafc" stroke-width="2" />
+                    <text x="328" y="102" fill="#f87171" font-weight="700" font-size="10"
+                      font-family="var(--font-mono)">Cathode (-)</text>
+
+                    <!-- Resistor on Right -->
+                    <rect x="300" y="110" width="40" height="45" fill="#1e293b" stroke="#38bdf8" stroke-width="2"
+                      rx="4" />
+                    <text x="306" y="137" fill="#38bdf8" font-weight="800" font-size="11"
+                      font-family="var(--font-mono)">330 Ω</text>
+
+                    <line x1="320" y1="155" x2="320" y2="215" stroke="#64748b" stroke-width="2.5" />
+                    <text x="265" y="195" fill="#38bdf8" font-weight="800" font-size="11"
+                      font-family="var(--font-mono)">I = 9.1 mA</text>
+
+                    <!-- Bottom Ground Rail (0V GND) -->
+                    <line x1="30" y1="215" x2="410" y2="215" stroke="#64748b" stroke-width="3.5" />
+                    <text x="150" y="235" fill="#94a3b8" font-weight="800" font-size="13"
+                      font-family="var(--font-mono)">0 V Ground Rail (GND)</text>
+
+                    <!-- Takeaway Banner -->
+                    <rect x="35" y="248" width="370" height="48" fill="#1e293b" stroke="#10b981" stroke-width="1.5"
+                      rx="6" />
+                    <text x="50" y="268" fill="#10b981" font-weight="800" font-size="12"
+                      font-family="var(--font-sans)">✅ Kirchhoff's Current Law Invariance:</text>
+                    <text x="50" y="285" fill="#cbd5e1" font-size="11.5" font-family="var(--font-sans)">Series current
+                      is 9.1 mA everywhere. Both circuits function 100% identically!</text>
+                  </svg>
+                  <div class="schematic-caption">Drawing C: Proving Series Order Invariance (Kirchhoff's Law)</div>
+                </div>
+
+              </div>
+
+              <!-- Right Column: Engineering Interpretation Breakdown -->
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+
+                <!-- Insight 1: What is the circuit doing? -->
+                <div class="card" style="padding: 18px 22px;">
+                  <div class="card-title" style="margin-bottom: 8px;">💡 What is this circuit doing?</div>
+                  <ul style="padding-left: 20px; font-size: 1.05rem; line-height: 1.65; color: var(--text-secondary);">
+                    <li><strong>Energy Conversion:</strong> Converts electrical energy into radiant light output.</li>
+                    <li><strong>Current Limiting (Crucial Protection):</strong> An LED forward diode has near-zero
+                      resistance once turned on. Without resistor R₁, it would draw excessive current from the 5V supply
+                      and burn out instantly!</li>
+                    <li><strong>Voltage Division:</strong> R₁ safely drops the remaining <strong>≈ 3.0 V</strong> (5.0 V
+                      supply – 2.0 V LED), holding current safely at <span class="formula-chip">I = 3.0 V / 330 Ω ≈ 9.1
+                        mA</span>.</li>
+                  </ul>
+                </div>
+
+                <!-- Insight 2: How else can we draw / wire the circuit? -->
+                <div class="card highlight" style="padding: 18px 22px;">
+                  <div class="card-title" style="margin-bottom: 8px;">🔄 How else can we draw & wire this circuit?</div>
+                  <ul style="padding-left: 20px; font-size: 1.05rem; line-height: 1.65; color: var(--text-secondary);">
+                    <li><strong>Component Order in Series:</strong> Does R₁ go before or after the LED? <em>In a series
+                        loop, current is identical at every point</em> (Kirchhoff's Current Law). The circuit behaves
+                      100% identically either way!</li>
+                    <li><strong>Breadboard Wiring Columns:</strong> Holes in the same numbered vertical column half
+                      (e.g. <code>21j–21f</code> or <code>21e–21a</code>) are connected by internal spring clips across
+                      the central divider trough.</li>
+                  </ul>
+                </div>
+
+                <!-- Insight 3: Component Identification & Polarity Rules -->
+                <div class="callout" style="padding: 14px 18px; font-size: 1.02rem;">
+                  🔍 <strong>Polarity Rules:</strong> Resistor R₁ is <em>non-polarised</em> (works either way). LED₁ is
+                  <em>polarised</em>: Anode (+) [longer lead] connects toward +5V; Cathode (-) [shorter lead / flat rim
+                  edge] connects toward 0V (GND).
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 12: Pre-Power Checklist (Mandatory Safety Gate) -->
+        <section class="slide" id="slide-12">
+          <div class="slide-header">
+            <span class="slide-tag">Safety Protocol • W1-08</span>
+            <h2 class="slide-title">Mandatory Pre-Power Safety Gate</h2>
+            <p class="slide-subtitle">You must verify all 5 checks before energizing the circuit</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div>
+                <ul class="checklist-list">
+                  <li class="checklist-item">
+                    <input type="checkbox" id="check-1">
+                    <label for="check-1"><strong>1. Circuit Layout:</strong> Breadboard connections match the
+                      schematic.</label>
+                  </li>
+                  <li class="checklist-item">
+                    <input type="checkbox" id="check-2">
+                    <label for="check-2"><strong>2. Resistor Value:</strong> Verified 330 Ω (via color bands:
+                      Orange-Orange-Brown-Gold or DMM).</label>
+                  </li>
+                  <li class="checklist-item">
+                    <input type="checkbox" id="check-3">
+                    <label for="check-3"><strong>3. LED Polarity:</strong> Anode (+) connected to resistor / +5V,
+                      Cathode (-) to 0V ground.</label>
+                  </li>
+                  <li class="checklist-item">
+                    <input type="checkbox" id="check-4">
+                    <label for="check-4"><strong>4. Power Supply Setup:</strong> Supply set to 5.0 V DC before
+                      connecting leads.</label>
+                  </li>
+                  <li class="checklist-item">
+                    <input type="checkbox" id="check-5">
+                    <label for="check-5"><strong>5. Multimeter Setup:</strong> Meter configured correctly for voltage /
+                      current measurement.</label>
+                  </li>
+                </ul>
+              </div>
+              <div class="card highlight" style="display: flex; flex-direction: column; justify-content: center;">
+                <div class="callout warning" style="margin-bottom: 20px;">
+                  ⚠️ <strong>Industrial Engineering Rule:</strong> Never power a circuit until pre-power safety checks
+                  are verified. This prevents short circuits and component burnout.
+                </div>
+                <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.7;">
+                  Confirm these 5 verification items in <strong>Section 5</strong> of your Microsoft Form during the
+                  practical challenge.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 13: Scheduled Break -->
+        <section class="slide" id="slide-13">
+          <div class="slide-body" style="justify-content: center; align-items: center; text-align: center;">
+            <div class="slide-tag">100–120 min • Intermission</div>
+            <h2 class="slide-title" style="font-size: 2.8rem; margin: 16px 0;">☕ 20-Minute Engineering Break</h2>
+            <p class="slide-subtitle" style="margin-bottom: 28px; font-size: 1.3rem;">Rest, step away from screens, and
+              prepare your workbench for practical testing.</p>
+
+            <div class="timer-widget" data-duration="20"
+              style="padding: 12px 28px; transform: scale(1.35); margin-bottom: 32px;">
+              <span class="timer-display" style="font-size: 2rem;">20:00</span>
+              <button class="timer-btn timer-toggle">Start</button>
+              <button class="timer-btn timer-reset">Reset</button>
+            </div>
+
+            <div class="callout" style="max-width: 600px; text-align: left; font-size: 1.1rem;">
+              💡 <strong>Upcoming Next:</strong> Wokwi Virtual Circuit Simulation followed by breadboard circuit
+              construction and multimeter measurements.
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 14: Practical Step 1 — Wokwi Simulation -->
+        <section class="slide" id="slide-14">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">120–130 min • Practical Step 1</span>
+                <h2 class="slide-title">Wokwi Virtual Circuit Simulation</h2>
+              </div>
+              <span class="wokwi-badge">⚡ Virtual Simulation First</span>
+            </div>
+            <p class="slide-subtitle">Simulate the 5V LED circuit virtually before touching physical breadboard
+              components</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🖥️ Simulation Objectives</div>
+                <ol style="padding-left: 24px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li>Open Wokwi simulator in your browser.</li>
+                  <li>Add a <strong>5V DC Supply</strong>, <strong>330 Ω Resistor</strong>, and <strong>LED</strong>.
+                  </li>
+                  <li>Wire the components according to the schematic.</li>
+                  <li>Start the simulation: Verify LED illuminates and current flows properly.</li>
+                  <li>📸 <strong>Take a screenshot</strong> of your working Wokwi simulation.</li>
+                </ol>
+                <div style="margin-top: 20px;">
+                  <a href="https://wokwi.com/projects/474137555975113729" target="_blank" class="btn btn-secondary"
+                    style="font-size: 1rem;">
+                    🌐 Open Wokwi Simulator (wokwi.com) ↗
+                  </a>
+                </div>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">📸 Evidence Requirement</div>
+                  <p style="font-size: 1.06rem; color: var(--text-secondary); line-height: 1.7;">
+                    Save your Wokwi screenshot. You will upload this in <strong>Section 5</strong> of your Microsoft
+                    Form along with your physical breadboard circuit photo.
+                  </p>
+                </div>
+                <div class="callout success">
+                  ✅ <strong>Safe Practice:</strong> Simulating circuits in software validates connections and
+                  calculations before hardware assembly.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 15: Practical Step 2 — Breadboard Practical Challenge -->
+        <section class="slide" id="slide-15">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">130–155 min • Practical Step 2</span>
+                <h2 class="slide-title">Baseline Practical Challenge: Build & Measure</h2>
+              </div>
+              <div class="timer-widget" data-duration="25">
+                <span class="timer-display">25:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Construct the physical circuit, measure electrical quantities, and record evidence
+            </p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">📊 Measurements to Record</div>
+                <table class="eng-table">
+                  <tr>
+                    <th>Quantity</th>
+                    <th>Symbol</th>
+                    <th>Expected Theoretical Range</th>
+                  </tr>
+                  <tr>
+                    <td>Supply Voltage</td>
+                    <td><span class="math-chip">V<sub>S</sub></span></td>
+                    <td><strong>5.00 V ± 0.25 V</strong> (4.75 V – 5.25 V)</td>
+                  </tr>
+                  <tr>
+                    <td>Resistor Voltage</td>
+                    <td><span class="math-chip">V<sub>R</sub></span></td>
+                    <td><strong>≈ 2.80 V – 3.20 V</strong></td>
+                  </tr>
+                  <tr>
+                    <td>LED Forward Voltage</td>
+                    <td><span class="math-chip">V<sub>F</sub></span></td>
+                    <td><strong>≈ 1.80 V – 2.20 V</strong> (Red LED)</td>
+                  </tr>
+                  <tr>
+                    <td>Circuit Current</td>
+                    <td><span class="math-chip">I</span></td>
+                    <td><strong>≈ 8.0 mA – 10.0 mA</strong></td>
+                  </tr>
+                </table>
+                <div class="callout" style="margin-top: 12px; font-size: 1.02rem; padding: 12px 18px;">
+                  📐 <strong>Verify Kirchhoff's Voltage Law:</strong> <em>V<sub>S</sub> = V<sub>R</sub> +
+                    V<sub>F</sub></em> &nbsp;|&nbsp; <strong>Ohm's Law:</strong> <em>I = V<sub>R</sub> /
+                    R<sub>1</sub></em>
+                </div>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">📸 Photo & Evidence Upload</div>
+                  <p style="font-size: 1.05rem; color: var(--text-secondary); line-height: 1.6;">
+                    Upload the following evidence items in your form:
+                  </p>
+                  <ul
+                    style="padding-left: 22px; font-size: 1.02rem; color: var(--text-secondary); line-height: 1.7; margin-top: 8px;">
+                    <li>1. Wokwi simulation screenshot</li>
+                    <li>2. Photo of your physical breadboard circuit</li>
+                    <li>3. Photo of your digital multimeter reading</li>
+                  </ul>
+                </div>
+                <button class="btn btn-form-action open-forms-trigger"
+                  data-form-section="Section 5: Practical Measurements" style="margin-top: 18px;">
+                  📝 Complete Section 5 & Upload Evidence →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 16: Activity 8 — Practical Reflection -->
+        <section class="slide" id="slide-16">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">155–170 min • Activity 8</span>
+                <h2 class="slide-title">Activity 8: Practical Reflection</h2>
+              </div>
+              <div class="timer-widget" data-duration="15">
+                <span class="timer-display">15:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Analyzing discrepancies between theoretical predictions and measured physical data
+            </p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🔬 Engineering Reflection Prompts</div>
+                <ul style="padding-left: 22px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li>Did your measured supply voltage equal <em>V<sub>S</sub> = V<sub>R</sub> + V<sub>F</sub></em>?
+                  </li>
+                  <li>How did component tolerance (±5% resistor tolerance) affect your readings?</li>
+                  <li>What difficulties did you encounter when placing multimeter probes in circuit?</li>
+                  <li>How did the physical measurement compare with your Wokwi simulation?</li>
+                </ul>
+              </div>
+              <div class="card highlight">
+                <div class="card-title">💡 Engineering Principle</div>
+                <p style="font-size: 1.06rem; line-height: 1.7; color: var(--text-secondary);">
+                  In physical engineering, real-world measurements rarely match theoretical calculations down to the
+                  last decimal place due to meter burden voltage, lead resistance, and component manufacturing
+                  tolerances. Explaining <em>why</em> discrepancies occur is a core diagnostic engineering skill.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 17: Activity 9 — Individual Baseline Profile -->
+        <section class="slide" id="slide-17">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">170–180 min • Activity 9</span>
+                <h2 class="slide-title">Activity 9: Individual Baseline Profile</h2>
+              </div>
+              <div class="timer-widget" data-duration="10">
+                <span class="timer-display">10:00</span>
+                <button class="timer-btn timer-toggle">Start</button>
+                <button class="timer-btn timer-reset">Reset</button>
+              </div>
+            </div>
+            <p class="slide-subtitle">Calibrating your starting baseline across the 5 core engineering domains</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">📈 5 Core Baseline Domains</div>
+                <ol style="padding-left: 24px; font-size: 1.05rem; line-height: 1.75; color: var(--text-secondary);">
+                  <li><strong>Electronics:</strong> Components, symbols, Ohm's law.</li>
+                  <li><strong>Digital Systems:</strong> Binary, logic levels, logic gates.</li>
+                  <li><strong>Microcontroller Programming:</strong> Code tracing, C++ syntax.</li>
+                  <li><strong>Electrical Measurement:</strong> Multimeters, safety, precision.</li>
+                  <li><strong>Circuit Construction:</strong> Breadboards, wiring, schematics.</li>
+                </ol>
+              </div>
+              <div class="card highlight"
+                style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">🎯 Set Your Development Priority</div>
+                  <p style="font-size: 1.06rem; color: var(--text-secondary); line-height: 1.7;">
+                    Rate your confidence (1–5) and state your #1 personal development priority for Unit 6 in your form.
+                  </p>
+                </div>
+                <button class="btn btn-form-action open-forms-trigger"
+                  data-form-section="Section 5: Individual Baseline Profile" style="margin-top: 18px;">
+                  📝 Complete Profile in Form →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 18: Activity 10 — Exit Ticket & Session Close -->
+        <section class="slide" id="slide-18">
+          <div class="slide-header">
+            <span class="slide-tag">180 min • Activity 10</span>
+            <h2 class="slide-title">Activity 10: Exit Ticket & Next Steps</h2>
+            <p class="slide-subtitle">Submitting your responses and previewing Week 2</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🎫 Final Exit Reflection</div>
+                <p style="font-size: 1.05rem; line-height: 1.7; color: var(--text-secondary);">
+                  In the final questions of Section 5:
+                </p>
+                <ul
+                  style="padding-left: 22px; font-size: 1.02rem; line-height: 1.7; color: var(--text-secondary); margin-top: 10px;">
+                  <li>List <strong>three things</strong> you can do confidently.</li>
+                  <li>List <strong>one thing</strong> you found challenging today.</li>
+                  <li>Click <strong>Submit</strong> on your Microsoft Form.</li>
+                </ul>
+                <div class="callout success" style="margin-top: 18px;">
+                  ✅ Make sure to check "Send me an email receipt of my responses".
+                </div>
+              </div>
+              <div class="card highlight">
+                <div class="card-title">🚀 Preview: Week 2</div>
+                <p style="font-size: 1.1rem; font-weight: 700; color: #ffffff;">
+                  Microcontroller Architecture & GPIO Programming
+                </p>
+                <p style="font-size: 1.02rem; line-height: 1.7; color: var(--text-secondary); margin-top: 10px;">
+                  Next week we unpack the Arduino Uno internal registers, memory architecture, and start writing
+                  real-time GPIO control firmware.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Deck Footer -->
+      <footer class="deck-footer">
+        <div class="nav-controls">
+          <button class="nav-btn" id="prev-slide" title="Previous Slide (Left Arrow)">◀</button>
+          <button class="nav-btn" id="next-slide" title="Next Slide (Right Arrow)">▶</button>
+          <span class="slide-counter" id="slide-counter">1 / 18</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-secondary open-forms-trigger" data-form-section="Deliverables Form"
+            style="padding: 6px 12px; font-size: 0.8rem;">
+            📝 Form
+          </button>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Backdrop for Drawer -->
+    <div id="drawer-backdrop"></div>
+
+    <!-- Microsoft Forms Side-Drawer -->
+    <aside id="forms-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>📝</span>
+          <span>Week 1 Deliverables Form</span>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-popout-btn" id="drawer-popout-btn" title="Open in new tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Pop out
+          </button>
+          <button class="drawer-close-btn" id="drawer-close-btn" title="Close drawer">✕</button>
+        </div>
+      </div>
+
+      <div class="drawer-notice">
+        <span>Active Focus: <strong id="drawer-active-section">Section 1: Student Information</strong></span>
+        <span>Auto-sync with MS Teams</span>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Replace src with your active Microsoft Forms Embed URL -->
+        <iframe id="forms-iframe" class="drawer-iframe" src="https://forms.office.com" allowfullscreen
+          webkitallowfullscreen mozallowfullscreen msallowfullscreen>
+        </iframe>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/timer.js"></script>
+  <script src="../shared/js/form-drawer.js"></script>
+</body>
+
+</html>
