@@ -1,5 +1,9 @@
 # Unit 6: Microcontrollers — Interactive Presentation & Delivery System
 
+[![Live Demo](https://img.shields.io/badge/Live%20Portal-GitHub%20Pages-00979d?style=for-the-badge&logo=github)](https://ty742.github.io/unit-6-microcontrollers/)
+
+🌐 **Live Portal**: [https://ty742.github.io/unit-6-microcontrollers/](https://ty742.github.io/unit-6-microcontrollers/)
+
 A modern, responsive, dark-mode engineering presentation deck and interactive delivery system for **Unit 6: Microcontrollers**.
 
 Designed for seamless deployment to **GitHub Pages** and direct embedding as a **Microsoft Teams Channel Tab**.
@@ -9,7 +13,7 @@ Designed for seamless deployment to **GitHub Pages** and direct embedding as a *
 ## 📁 Repository Structure
 
 ```
-presentation/
+.
 ├── index.html                   # Main Course Portal & Week Selector
 ├── README.md                    # This deployment & usage guide
 ├── shared/                      # Shared Presentation Design System & Engine
@@ -79,14 +83,14 @@ python3 -m http.server 8000
 1. Push your repository to **GitHub**.
 2. Navigate to your repository **Settings** → **Pages**.
 3. Under **Branch**, select `main` (or your default branch) and `/ (root)` folder (or configure GitHub Actions).
-4. Click **Save**. Your site will be published at:
-   `https://<your-username-or-org>.github.io/<repo-name>/presentation/`
+4. Click **Save**. Your site is published at:
+   [https://ty742.github.io/unit-6-microcontrollers/](https://ty742.github.io/unit-6-microcontrollers/)
 
 ### 2. Embedding into Microsoft Teams
 1. In your **Microsoft Teams** class/team channel, click the **`+` (Add a tab)** icon in the top tab bar.
 2. Select **Website**.
 3. Tab Name: `Unit 6 Presentation` (or `Week 1 Baseline`).
-4. URL: Paste your GitHub Pages link (e.g. `https://<org>.github.io/<repo-name>/presentation/week1/index.html`).
+4. URL: Paste your GitHub Pages link (`https://ty742.github.io/unit-6-microcontrollers/` or `https://ty742.github.io/unit-6-microcontrollers/week1/index.html`).
 5. Click **Save**. Students can now view the slides, use interactive countdown timers, and fill out their Microsoft Form directly within Microsoft Teams.
 
 ---
@@ -94,9 +98,9 @@ python3 -m http.server 8000
 ## 🧩 Adding Future Weeks (Week 2, Week 3, etc.)
 
 To add a new week:
-1. Duplicate the `presentation/week1/` folder to `presentation/week2/`.
-2. Update the slide content in `presentation/week2/index.html` (all shared styles and scripts in `presentation/shared/` are reused automatically).
-3. Add a new card link in [`presentation/index.html`](file:///home/tayo/projects/agy2/unit6%20v2/presentation/index.html).
+1. Duplicate the `week1/` folder to `week2/`.
+2. Update the slide content in `week2/index.html` (all shared styles and scripts in `shared/` are reused automatically).
+3. Add a new card link in [`index.html`](file:///home/tayo/projects/work/unit6_v2/index.html).
 
 ---
 
@@ -104,7 +108,7 @@ To add a new week:
 
 We welcome contributions to expand weekly modules, improve interactive laboratory simulations, and enhance curriculum alignment.
 
-Please read our full [**Contribution Guide (CONTRIBUTING.md)**](file:///home/tayo/projects/agy2/unit6%20v2/presentation/CONTRIBUTING.md) for detailed guidelines on:
+Please read our full [**Contribution Guide (CONTRIBUTING.md)**](file:///home/tayo/projects/work/unit6_v2/CONTRIBUTING.md) for detailed guidelines on:
 - Resource pack alignment & pedagogical principles.
 - Reusing the shared engineering design system.
 - Testing keyboard navigation, timers, and Microsoft Forms drawer integration.
