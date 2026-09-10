@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Unit 6: Microcontrollers — Week 2 Assessment & Portfolio Template</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm 15mm 15mm 15mm;
+  }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    line-height: 1.5;
+    font-size: 10.5pt;
+    margin: 0;
+    padding: 20px;
+    background: #ffffff;
+  }
+  .header-box {
+    border-bottom: 2px solid #00979d;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  h1 {
+    font-size: 16pt;
+    color: #008184;
+    margin: 0 0 4px 0;
+    font-weight: 800;
+  }
+  .sub-title {
+    font-size: 11pt;
+    color: #475569;
+    font-weight: 600;
+  }
+  .student-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    font-size: 10pt;
+  }
+  h2 {
+    font-size: 12pt;
+    color: #0f172a;
+    background: #e6f6f7;
+    border-left: 4px solid #00979d;
+    padding: 6px 10px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    page-break-after: avoid;
+  }
+  .question {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+  .q-title {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #1e293b;
+  }
+  .options {
+    list-style: none;
+    padding-left: 4px;
+    margin: 6px 0;
+  }
+  .options li {
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+  }
+  .box {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #475569;
+    margin-right: 8px;
+    border-radius: 2px;
+  }
+  .answer-line {
+    border-bottom: 1px dotted #94a3b8;
+    height: 22px;
+    margin-top: 4px;
+    width: 100%;
+  }
+  .answer-box {
+    border: 1px solid #cbd5e1;
+    background: #fafafa;
+    min-height: 48px;
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 9.5pt;
+  }
+  table.data-table th, table.data-table td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 8px;
+    text-align: left;
+  }
+  table.data-table th {
+    background: #f1f5f9;
+    color: #0f172a;
+    font-weight: 700;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #e0f2fe;
+    color: #0369a1;
+    margin-left: 6px;
+  }
+  @media print {
+    body { padding: 0; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+  <div>
+    <h1>Unit 6: Microcontroller Systems for Engineers</h1>
+    <div class="sub-title">Week 2 Portfolio: From PC to Embedded Controller (Architecture & Hardware)</div>
+  </div>
+  <div style="text-align: right; font-size: 9pt; color: #64748b;">
+    BTEC Engineering Criteria: <strong>A1, B1</strong>
+  </div>
+</div>
+
+<div class="student-meta">
+  <div><strong>Student Name:</strong> ______________________</div>
+  <div><strong>Date:</strong> ______________________</div>
+  <div><strong>Assessor:</strong> ______________________</div>
+</div>
+
+<h2>Section 1: Engineering Retrieval Diagnostic (A1)</h2>
+
+<div class="question">
+  <div class="q-title">1. Define the fundamental electrical and signal parameters:</div>
+  <table class="data-table">
+    <tr>
+      <th style="width: 25%;">Parameter / Concept</th>
+      <th>Technical Definition & Unit / Key Characteristic</th>
+    </tr>
+    <tr>
+      <td><strong>Voltage (V)</strong></td>
+      <td>Electrical potential difference (driving force for current), measured in Volts (V).</td>
+    </tr>
+    <tr>
+      <td><strong>Current (I)</strong></td>
+      <td>Rate of electrical charge flow through a conductor, measured in Amperes (A).</td>
+    </tr>
+    <tr>
+      <td><strong>Digital Signal</strong></td>
+      <td>Discrete, two-state signal representing binary logic states (HIGH = 5V / LOW = 0V).</td>
+    </tr>
+    <tr>
+      <td><strong>Analogue Signal</strong></td>
+      <td>Continuous, variable voltage range (0V to 5V) converted via 10-bit ADC (0 to 1023).</td>
+    </tr>
+  </table>
+</div>
+
+<div class="question">
+  <div class="q-title">2. Complete the Input-Processing-Output (IPO) control model:</div>
+  <div style="font-weight: bold; margin: 8px 0; padding: 6px 12px; background: #f8fafc; border-left: 3px solid #00979d;">
+    [ SENSORS / INPUTS ] &nbsp;→&nbsp; [ _______________________________ ] &nbsp;→&nbsp; [ ACTUATORS / OUTPUTS ]
+  </div>
+</div>
+
+<h2>Section 2: PC vs Embedded Microcontroller Architecture (A1)</h2>
+
+<div class="question">
+  <div class="q-title">3. Compare the architectural differences between a standard PC and the Arduino Uno Rev3:</div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Subsystem / Characteristic</th>
+        <th>Personal Computer (PC)</th>
+        <th>Arduino Uno Rev3 (ATmega328P)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Primary Processor</strong></td>
+        <td>x86_64 / ARM multi-core @ 2.5 - 4.5 GHz</td>
+        <td>8-bit AVR RISC @ 16 MHz</td>
+      </tr>
+      <tr>
+        <td><strong>Software Execution Layer</strong></td>
+        <td>Operating System (Windows, macOS, Linux)</td>
+        <td>Bare-metal firmware (Continuous loop)</td>
+      </tr>
+      <tr>
+        <td><strong>Program Storage</strong></td>
+        <td>Secondary SSD / NVMe (512 GB – 2 TB)</td>
+        <td>Internal Flash (32 KB total, 0.5 KB bootloader)</td>
+      </tr>
+      <tr>
+        <td><strong>Volatile Memory (RAM)</strong></td>
+        <td>8 GB – 32 GB DDR4/DDR5</td>
+        <td>2 KB internal SRAM</td>
+      </tr>
+      <tr>
+        <td><strong>Non-Volatile Data</strong></td>
+        <td>OS Filesystem</td>
+        <td>1 KB internal EEPROM</td>
+      </tr>
+      <tr>
+        <td><strong>Hardware Interface Pinout</strong></td>
+        <td>Standardized ports (USB, PCIe, HDMI)</td>
+        <td>14 Digital I/O pins, 6 Analogue Input pins</td>
+      </tr>
+      <tr>
+        <td><strong>Power Consumption</strong></td>
+        <td>65 W – 350 W</td>
+        <td>~0.25 W (approx 50 mA @ 5V)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>Section 3: Arduino Uno Rev3 Technical Specs Scavenger Hunt (B1)</h2>
+<div class="section-desc">Data sourced from official Arduino documentation (<a href="https://docs.arduino.cc/hardware/uno-rev3/#tech-specs" target="_blank">docs.arduino.cc/hardware/uno-rev3</a>) and Arduino Store.</div>
+
+<div class="question">
+  <div class="q-title">4. Verify the official hardware ratings and limits:</div>
+  <table class="data-table">
+    <tr>
+      <td style="width: 45%;"><strong>Microcontroller IC</strong></td>
+      <td><span class="box"></span> ATmega328P (28-pin DIP / 32-pin TQFP)</td>
+    </tr>
+    <tr>
+      <td><strong>Operating Voltage</strong></td>
+      <td><span class="box"></span> 5.0 V DC</td>
+    </tr>
+    <tr>
+      <td><strong>Recommended Input Voltage (VIN / Barrel Jack)</strong></td>
+      <td><span class="box"></span> 7 V to 12 V DC (Onboard regulator converts to 5V)</td>
+    </tr>
+    <tr>
+      <td><strong>Absolute Input Voltage Limits</strong></td>
+      <td><span class="box"></span> 6 V to 20 V DC</td>
+    </tr>
+    <tr>
+      <td><strong>Total Digital I/O Pins</strong></td>
+      <td><span class="box"></span> 14 pins (D0 to D13)</td>
+    </tr>
+    <tr>
+      <td><strong>PWM Enabled Digital Pins</strong></td>
+      <td><span class="box"></span> 6 pins (marked with ~: D3, D5, D6, D9, D10, D11)</td>
+    </tr>
+    <tr>
+      <td><strong>Analogue Input Pins</strong></td>
+      <td><span class="box"></span> 6 channels (A0 to A5, 10-bit resolution)</td>
+    </tr>
+    <tr>
+      <td><strong>DC Current per I/O Pin (Recommended Max)</strong></td>
+      <td><span class="box"></span> 20 mA (Absolute maximum: 40 mA)</td>
+    </tr>
+    <tr>
+      <td><strong>DC Current for 3.3V Output Pin</strong></td>
+      <td><span class="box"></span> 50 mA maximum</td>
+    </tr>
+    <tr>
+      <td><strong>Clock Frequency</strong></td>
+      <td><span class="box"></span> 16 MHz Ceramic Resonator / Crystal</td>
+    </tr>
+  </table>
+</div>
+
+<h2>Section 4: The PC to MCU Development Chain (B1)</h2>
+
+<div class="question">
+  <div class="q-title">5. Trace the toolchain stages from code creation to standalone execution:</div>
+  <div class="answer-box" style="padding: 8px; font-size: 9pt;">
+    <strong>Stage 1: Source Code Creation (PC)</strong> → Engineer writes C/C++ sketch in Arduino IDE.<br>
+    <strong>Stage 2: Compilation & Assembly (PC)</strong> → <code>avr-gcc</code> compiles high-level code into machine instructions (<code>.hex</code> binary).<br>
+    <strong>Stage 3: USB Transmission (PC → Uno)</strong> → <code>avrdude</code> transmits binary over USB via ATmega16U2 USB-to-serial converter.<br>
+    <strong>Stage 4: Bootloader Flashing (Uno)</strong> → 0.5 KB Optiboot bootloader receives bytes and writes them directly into ATmega328P Flash memory.<br>
+    <strong>Stage 5: Autonomous Execution (Uno)</strong> → Microcontroller resets and executes <code>setup()</code> once, then loops <code>loop()</code> indefinitely.
+  </div>
+</div>
+
+<div class="question">
+  <div class="q-title">6. Engineering Reflection Question:</div>
+  <div style="font-size: 9.5pt; color: #475569; margin-bottom: 4px;">
+    Why does an embedded microcontroller not require an active PC connection once the program has been uploaded?
+  </div>
+  <div class="answer-box"></div>
+</div>
+
+<h2>Section 5: Practical Programming &amp; Circuit Design Evidence (A1, B1)</h2>
+
+<div class="question">
+  <div class="q-title">7. [Evidence Upload 1] Tinkercad Circuit Simulation:</div>
+  <div style="font-size: 9.5pt; color: #475569; margin-bottom: 6px;">
+    Upload a clear screenshot of your circuit simulation running in Tinkercad (showing schematic wiring, resistor values, and serial/code editor):
+  </div>
+  <div class="answer-box" style="display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 9pt; border: 2px dashed #cbd5e1; min-height: 60px;">
+    📁 [ Attachment / File Upload: Tinkercad_Simulation_Screenshot.png / .jpg ]
+  </div>
+</div>
+
+<div class="question">
+  <div class="q-title">8. [Evidence Upload 2] Physical Hardware Build &amp; Breadboard:</div>
+  <div style="font-size: 9.5pt; color: #475569; margin-bottom: 6px;">
+    Upload a clear photograph of your physical breadboard and Arduino Uno build (showing wiring to LEDs, switches, current-limiting resistors, and USB connection):
+  </div>
+  <div class="answer-box" style="display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 9pt; border: 2px dashed #cbd5e1; min-height: 60px;">
+    📷 [ Attachment / File Upload: Physical_Hardware_Build_Photo.png / .jpg ]
+  </div>
+</div>
+
+<div class="question">
+  <div class="q-title">9. Practical Competency Demonstration Matrix:</div>
+  <table class="data-table">
+    <tr>
+      <th style="width: 60%;">Practical Competency Demonstrated</th>
+      <th style="width: 20%;">Student Check</th>
+      <th style="width: 20%;">Assessor Initial</th>
+    </tr>
+    <tr>
+      <td><strong>Phase 1:</strong> Configured <code>setup()</code> &amp; <code>loop()</code>, coded LED ON, OFF &amp; 1Hz Blink</td>
+      <td>[ &nbsp; ] Complete</td>
+      <td>__________</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 2:</strong> Wired Pushbutton on Pin 2 with <code>INPUT_PULLUP</code> to toggle LED Pin 13</td>
+      <td>[ &nbsp; ] Complete</td>
+      <td>__________</td>
+    </tr>
+    <tr>
+      <td><strong>Phase 3 (Stretch):</strong> Implemented Dual-Button &amp; Dual-LED Start/Stop Station (Pins 2,3,12,13)</td>
+      <td>[ &nbsp; ] Complete</td>
+      <td>__________</td>
+    </tr>
+    <tr>
+      <td><strong>Datasheet Skills:</strong> Retrieved verified technical specifications from official Arduino docs</td>
+      <td>[ &nbsp; ] Complete</td>
+      <td>__________</td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin-top: 20px; border-top: 1px solid #cbd5e1; padding-top: 8px; font-size: 9pt; color: #64748b; display: flex; justify-content: space-between;">
+  <span>Unit 6 — Microcontroller Systems for Engineers</span>
+  <span>Pearson BTEC Level 3 Engineering Qualification Framework</span>
+</div>
+
+</body>
+</html>

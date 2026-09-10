@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: Microcontrollers — Week 2: From PC to Embedded Controller</title>
+  <link rel="stylesheet" href="../shared/css/presentation.css">
+  <link rel="stylesheet" href="../shared/css/form-drawer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Slide Layout & Typography System */
+    .slide {
+      padding: 28px 56px 84px !important;
+    }
+
+    .slide-header {
+      margin-bottom: 16px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .slide-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-arduino));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(0, 151, 157, 0.2);
+      border: 1px solid var(--accent-arduino);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    .badge-pill.gold {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--color-warning);
+      color: #fbbf24;
+    }
+
+    .badge-pill.form-link {
+      background: rgba(14, 165, 233, 0.22);
+      border: 1px solid #0ea5e9;
+      color: #38bdf8;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .badge-pill.form-link:hover {
+      background: rgba(14, 165, 233, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
+    }
+
+    .card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    /* KSB Clean Grid Layout */
+    .ksb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .ksb-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ksb-card.k {
+      border-top: 5px solid var(--accent-cyan);
+    }
+
+    .ksb-card.s {
+      border-top: 5px solid var(--accent-arduino);
+    }
+
+    .ksb-card.b {
+      border-top: 5px solid #34d399;
+    }
+
+    .takeaway-banner {
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      color: #f1f5f9;
+      margin-top: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .takeaway-banner strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.96rem;
+    }
+
+    .compare-table th {
+      background: rgba(30, 41, 59, 0.98);
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 1rem;
+      border-bottom: 2px solid var(--accent-arduino);
+    }
+
+    .compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Hotspot Board Anatomy (Calibrated & High-Visibility) */
+    .board-anatomy-container {
+      position: relative;
+      background: #090e17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      min-height: 440px;
+    }
+
+    .board-image-wrap {
+      position: relative;
+      flex: 1.1;
+      min-height: 420px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+
+    .board-image-wrap img {
+      width: 100%;
+      height: 100%;
+      max-height: 410px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hotspot-btn {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-arduino);
+      color: #ffffff;
+      border: 2.5px solid #ffffff;
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0, 151, 157, 0.9);
+      animation: pulse-hotspot 2s infinite;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s ease;
+      z-index: 10;
+    }
+
+    .hotspot-btn:hover,
+    .hotspot-btn.active {
+      transform: translate(-50%, -50%) scale(1.25);
+      background: #38bdf8;
+      box-shadow: 0 0 20px #38bdf8;
+    }
+
+    @keyframes pulse-hotspot {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 151, 157, 0.7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 12px rgba(0, 151, 157, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 151, 157, 0);
+      }
+    }
+
+    .hotspot-details-panel {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--accent-arduino);
+      border-radius: 12px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 300px;
+    }
+
+    /* Video Embed Container */
+    .video-frame-wrap {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: #000;
+    }
+
+    .video-frame-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .switch-toggle-btn {
+      background: #334155;
+      color: #ffffff;
+      border: 2px solid #64748b;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .switch-toggle-btn.closed {
+      background: #059669;
+      border-color: #34d399;
+      box-shadow: 0 0 18px rgba(52, 211, 153, 0.6);
+    }
+
+    .led-indicator {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      margin: 10px auto;
+      background: #334155;
+      border: 3px solid #1e293b;
+      transition: all 0.3s ease;
+    }
+
+    .led-indicator.on {
+      background: #10b981;
+      box-shadow: 0 0 24px #10b981, inset 0 0 8px #ffffff;
+    }
+
+    .led-indicator.off {
+      background: #ef4444;
+      box-shadow: 0 0 14px #ef4444;
+    }
+
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(0, 151, 157, 0.14);
+      border: 1px solid var(--accent-arduino);
+      border-radius: 10px;
+      padding: 14px 18px;
+      text-decoration: none;
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    .link-card:hover {
+      background: rgba(0, 151, 157, 0.28);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid"></div>
+
+  <div id="app-container">
+    <div id="deck-viewport">
+
+      <!-- Top Header -->
+      <header class="deck-header">
+        <div class="header-top-row">
+          <a href="../index.html" class="nav-hub-link" title="Return to Course Homepage Hub">
+            🏠 Course Hub
+          </a>
+          <div class="brand-badge">
+            <span class="pill">UNIT 6</span>
+            <span>Microcontrollers</span>
+            <span style="color: var(--text-muted);">|</span>
+            <span id="header-slide-topic" style="color: var(--accent-cyan); font-weight: 600;">Week 2: Architecture
+              &amp; Hardware</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <a href="../contact.html" class="btn btn-secondary" title="Tutor &amp; Academic Support">
+            👨‍🏫 Tutor
+          </a>
+          <button class="btn btn-secondary" id="open-a11y-drawer" title="Accessibility &amp; Neurodiversity (Key: A)">
+            ⚙️ Accessibility
+          </button>
+          <button class="btn btn-secondary" id="open-slide-matrix" title="View all slides overview (Key: M)">
+            🗺️ Slide Map
+          </button>
+          <button class="btn btn-form-action open-forms-trigger" data-form-section="Deliverables Form">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 4px;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            📝 Microsoft Form
+          </button>
+        </div>
+      </header>
+
+      <!-- Slides Wrapper -->
+      <main id="slides-wrapper">
+
+        <!-- ==========================================
+             SLIDE 1: Welcome & Briefing
+             ========================================== -->
+        <section class="slide active" id="slide-1">
+          <div class="slide-body" style="justify-content: center; align-items: flex-start;">
+            <div class="badge-bar">
+              <span class="badge-pill">Session: Week 2</span>
+              <span class="badge-pill">Duration: 3 Hours</span>
+              <span class="badge-pill gold">BTEC Level 3</span>
+            </div>
+            <h1 class="hero-title">From PC to Embedded Controller</h1>
+            <h2 class="slide-subtitle" style="font-size: 1.35rem; color: var(--text-primary); margin-bottom: 20px;">
+              Computer Architecture, the ATmega328P, and the Physical Development Chain
+            </h2>
+            <div class="card highlight" style="max-width: 860px;">
+              <p style="font-size: 1.1rem; line-height: 1.6; color: var(--text-secondary);">
+                Welcome to Week 2! Today you step into the role of a junior electronics technician. You will discover
+                how a massive desktop computer shrinks into a single silicon chip, dissect the physical Arduino Uno
+                board, and build interactive control circuits.
+              </p>
+            </div>
+            <div style="margin-top: 24px; display: flex; gap: 14px;">
+              <button class="btn btn-primary" onclick="window.deckEngine.nextSlide()">Begin Investigation →</button>
+              <button class="btn btn-secondary open-forms-trigger" data-form-section="Section 1: Student Information">📝
+                Open Microsoft Form</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2: Week's Learning Outcomes
+             ========================================== -->
+        <section class="slide" id="slide-2">
+          <div class="slide-header">
+            <span class="slide-tag">Learning Outcomes • Session Goals</span>
+            <h2 class="slide-title">What You Will Master Today</h2>
+          </div>
+          <div class="slide-body">
+            <div class="grid-3col">
+              <div class="card" style="border-top: 4px solid #38bdf8;">
+                <div class="card-title" style="color: #38bdf8;">Hardware Subsystems</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Identify all main elements of the Arduino Uno system: ATmega328P MCU, 16MHz clock, power regulation,
+                  digital GPIO, PWM pins, and analogue inputs.
+                </p>
+              </div>
+
+              <div class="card" style="border-top: 4px solid var(--accent-arduino);">
+                <div class="card-title" style="color: var(--accent-arduino);">Architecture &amp; Memory</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Explain the precise functions of the processor, internal Flash memory (32KB), SRAM (2KB), EEPROM
+                  (1KB), and the PC-to-MCU toolchain.
+                </p>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #34d399;">
+                <div class="card-title" style="color: #34d399;">Circuit Design &amp; Control</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Design circuits before coding, program digital outputs (LEDs) and digital inputs (pushbuttons with
+                  <code>INPUT_PULLUP</code>), and solve industrial control challenges.
+                </p>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Something to Remember:</strong> By the end of this session, you will be able to trace any
+              automated system from sensor input → microcontroller decision → actuator output!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3: Professional KSBs
+             ========================================== -->
+        <section class="slide" id="slide-3">
+          <div class="slide-header">
+            <span class="slide-tag">Professional Standards • Engineering KSBs</span>
+            <h2 class="slide-title">Knowledge, Skills &amp; Behaviours</h2>
+            <p class="slide-subtitle">Industry standards expected of practicing electronics &amp; embedded technicians
+            </p>
+          </div>
+          <div class="slide-body">
+            <div class="ksb-grid">
+              <div class="ksb-card k">
+                <div class="card-title" style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 12px;">🧠
+                  Knowledge (K)</div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li>PC vs Microcontroller architecture differences</li>
+                  <li>ATmega328P memory layout (Flash, SRAM, EEPROM)</li>
+                  <li>Input → Processing → Output (IPO) model</li>
+                  <li>Electrical limits (5V logic, 20mA per pin)</li>
+                </ul>
+              </div>
+              <div class="ksb-card s">
+                <div class="card-title" style="color: var(--accent-arduino); font-size: 1.1rem; margin-bottom: 12px;">
+                  🛠️ Skills (S)</div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li>Locate physical subsystems on the Arduino Uno PCB</li>
+                  <li>Extract parameters from official manufacturer datasheets</li>
+                  <li>Design circuit schematics prior to programming</li>
+                  <li>Write structured C++ sketches with <code>setup()</code> &amp; <code>loop()</code></li>
+                </ul>
+              </div>
+              <div class="ksb-card b">
+                <div class="card-title" style="color: #34d399; font-size: 1.1rem; margin-bottom: 12px;">🎯 Behaviors (B)
+                </div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li>Adhere strictly to electrical safety before applying power</li>
+                  <li>Verify manufacturer documentation before wiring</li>
+                  <li>Follow the Predict → Run → Observe → Explain cycle</li>
+                  <li>Record engineering evidence diligently</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Something to Remember:</strong> Professional engineers always verify hardware ratings before
+              applying power to avoid permanent silicon damage!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4: Diagnostic Engineering Toolbox
+             ========================================== -->
+        <section class="slide" id="slide-4">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 1 • Retrieval Warm-Up</span>
+            <h2 class="slide-title">Diagnostic Engineering Toolbox</h2>
+            <p class="slide-subtitle">Let's check your foundational electronics &amp; digital concepts through verbal
+              discussion</p>
+          </div>
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 2: Diagnostic Engineering Toolbox">
+                📝 ACTION: Open Microsoft Form &rarr; Answer in Section 2
+              </span>
+            </div>
+
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🗣️ Question 1: Digital vs Analogue Signals</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Can you describe the core difference?</strong><br>
+                  Think about a light switch (ON/OFF) versus a dimmer knob (smooth continuous fading). How do these map
+                  to computer voltages?
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🗣️ Question 2: Why do LEDs Need Resistors?</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>What happens if you connect an LED directly to 5V?</strong><br>
+                  Recall Ohm's Law (V = I × R). Without resistance, what happens to the current flowing through the
+                  diode?
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🗣️ Question 3: Input, Processing, or Output?</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Classify these devices:</strong> Pushbutton switch, ATmega328P chip, Piezo buzzer, Temperature
+                  sensor, Relay.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🗣️ Question 4: Maximum Pin Current Rating</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>How much current can an Arduino pin safely deliver?</strong><br>
+                  Is it 20mA, 500mA, or 2 Amperes? Why can't an Arduino pin drive a heavy DC motor directly?
+                </p>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Takeaway to Remember:</strong> Voltage (V) is the electrical driving pressure, Current (I) is
+              the rate of charge flow, and Resistance (R) limits that flow to keep components safe.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5: Investigating PC Architecture
+             ========================================== -->
+        <section class="slide" id="slide-5">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 2 • Computer Architecture</span>
+            <h2 class="slide-title">Can You Think of Your PC or Laptop at Home?</h2>
+            <p class="slide-subtitle">What parts do you think it consists of inside the case?</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col" style="align-items: center;">
+              <div class="card" style="padding: 6px; text-align: center;">
+                <img src="pc_annotated_parts.jpg" alt="Annotated PC Architecture Diagram"
+                  style="width: 100%; max-height: 310px; object-fit: contain; border-radius: 6px;">
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">🖥️ Core PC Subsystems</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Just like your desktop or laptop at home, a computer system coordinates distinct subsystems:
+                </p>
+                <ul style="padding-left: 18px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li><strong>CPU (Central Processing Unit):</strong> The brain executing instructions.</li>
+                  <li><strong>RAM (Random Access Memory):</strong> Ultra-fast volatile temporary workspace.</li>
+                  <li><strong>SSD / NVMe Storage:</strong> Permanent non-volatile storage for files &amp; OS.</li>
+                  <li><strong>Motherboard &amp; Bus:</strong> High-speed data highways connecting all parts.</li>
+                  <li><strong>I/O Ports:</strong> USB, HDMI, and audio ports for human communication.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> The CPU executes calculations, RAM holds active data temporarily,
+              while the SSD stores your programs permanently even when power is off!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6: Video Exploration: Inside the Computer
+             ========================================== -->
+        <section class="slide" id="slide-6">
+          <div class="slide-header">
+            <span class="slide-tag">Video Investigation • 3 Minutes</span>
+            <h2 class="slide-title">Inside the Machine: How Computers Process Data</h2>
+            <p class="slide-subtitle">Watch how the CPU, Clock, and Memory interact during the Fetch-Decode-Execute
+              cycle</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col" style="align-items: center;">
+              <div class="video-frame-wrap">
+                <iframe src="https://www.youtube-nocookie.com/embed/AkFi90lZmXA?rel=0"
+                  title="Computer Architecture Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">🤔 Video Discussion Questions</div>
+                <ol style="padding-left: 18px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li><strong>What is the Clock Pulse?</strong> Why does the CPU need a rhythmic clock beat to step
+                    through instructions?</li>
+                  <li><strong>What is the Fetch-Decode-Execute cycle?</strong> Where does the CPU fetch instructions
+                    from?</li>
+                  <li><strong>Why does the CPU need Registers?</strong> How are they different from main RAM?</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Every single computer instruction—from a supercomputer to an
+              Arduino—moves in rhythm with a quartz crystal clock pulse!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7: The Universal IPO Model & Block Diagram
+             ========================================== -->
+        <section class="slide" id="slide-7">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 3 • Control System Architecture</span>
+            <h2 class="slide-title">Input → Processing → Output (IPO) Model</h2>
+            <p class="slide-subtitle">The foundational architecture behind all automated engineering control systems</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col" style="align-items: center;">
+              <div>
+                <div
+                  style="display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <div class="card" style="flex: 1; text-align: center; padding: 10px; border-top: 3px solid #38bdf8;">
+                    <div style="font-size: 1.4rem;">🎛️</div>
+                    <strong style="color: #38bdf8; font-size: 0.85rem;">INPUT</strong>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Sensors &amp; Switches</div>
+                  </div>
+                  <span style="font-size: 1.2rem; color: var(--text-muted);">&rarr;</span>
+                  <div class="card"
+                    style="flex: 1.2; text-align: center; padding: 10px; border-top: 3px solid var(--accent-arduino);">
+                    <div style="font-size: 1.4rem;">🧠</div>
+                    <strong style="color: var(--accent-arduino); font-size: 0.85rem;">PROCESSING</strong>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">CPU &amp; Firmware</div>
+                  </div>
+                  <span style="font-size: 1.2rem; color: var(--text-muted);">&rarr;</span>
+                  <div class="card" style="flex: 1; text-align: center; padding: 10px; border-top: 3px solid #34d399;">
+                    <div style="font-size: 1.4rem;">💡</div>
+                    <strong style="color: #34d399; font-size: 0.85rem;">OUTPUT</strong>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">LEDs, Relays, Motors</div>
+                  </div>
+                </div>
+
+                <div class="card highlight">
+                  <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                    <strong>Industrial Example:</strong> Safety Interlock Gate<br>
+                    <strong>Input:</strong> Switch on Pin 2 detects if safety cage is closed (5V = SAFE).<br>
+                    <strong>Processing:</strong> ATmega328P evaluates safety logic.<br>
+                    <strong>Output:</strong> Sets Pin 13 HIGH to energize motor contactor relay.
+                  </p>
+                </div>
+              </div>
+
+              <div class="card" style="padding: 6px; text-align: center;">
+                <img src="pc_block_diagram.jpg" alt="Computer Architecture Block Diagram"
+                  style="width: 100%; max-height: 290px; object-fit: contain; border-radius: 6px;">
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> The Input-Processing-Output loop is the universal blueprint for
+              every embedded system in robotics, aerospace, and manufacturing.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8: "Shrink the Computer" - Discovery
+             ========================================== -->
+        <section class="slide" id="slide-8">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 4 • Architecture Discovery</span>
+            <h2 class="slide-title">"Shrinking the Computer": PC vs Microcontroller</h2>
+            <p class="slide-subtitle">What is a microcontroller, and why don't we use desktop PCs inside microwaves or
+              cars?</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">💡 Core Engineering Definition</div>
+                <p style="font-size: 1.05rem; color: #ffffff; line-height: 1.6;">
+                  <strong>Microcontrollers are special-purpose computers</strong> designed to control a physical
+                  process, machine, or electronic circuit directly.
+                </p>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; margin-top: 10px;">
+                  Instead of multiple separate circuit boards for CPU, RAM, and Storage, an entire computer system is
+                  integrated into a <strong>single silicon chip</strong>.
+                </p>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🤔 Think-Pair-Share Challenge</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Before we reveal the technical comparison matrix, discuss with your partner:
+                </p>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li>How does processor speed compare (Gigahertz vs Megahertz)?</li>
+                  <li>How does memory scale (Gigabytes vs Kilobytes)?</li>
+                  <li>Why would a full Windows OS be bad for an emergency brake controller?</li>
+                  <li>How does power consumption compare (300 Watts vs 0.25 Watts)?</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Takeaway to Remember:</strong> Microcontrollers trade raw computing speed for ultra-low power,
+              low cost, and microsecond deterministic timing.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9: PC vs Microcontroller Comparison Table
+             ========================================== -->
+        <section class="slide" id="slide-9">
+          <div class="slide-header">
+            <span class="slide-tag">Comparative Matrix • Technical Breakdown</span>
+            <h2 class="slide-title">PC vs Microcontroller: Comparison Breakdown</h2>
+            <p class="slide-subtitle">Comparing general-purpose computers with dedicated embedded controllers</p>
+          </div>
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 3: PC vs Microcontroller Architecture">
+                📝 ACTION: Open Microsoft Form &rarr; Complete Matrix in Section 3
+              </span>
+            </div>
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th>Subsystem</th>
+                  <th>Personal Computer (PC)</th>
+                  <th>Arduino Uno (ATmega328P)</th>
+                  <th>Comparison / Why the Difference?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Processor</strong></td>
+                  <td>Multi-core x86/ARM (3+ GHz)</td>
+                  <td>8-bit AVR RISC (16 MHz)</td>
+                  <td>Embedded tasks only require lightweight, real-time control logic.</td>
+                </tr>
+                <tr>
+                  <td><strong>Software Layer</strong></td>
+                  <td>Full OS (Windows, Linux, macOS)</td>
+                  <td>Bare-Metal Firmware (Loop)</td>
+                  <td>Zero OS overhead = instant cycle-accurate, deterministic response.</td>
+                </tr>
+                <tr>
+                  <td><strong>Program Storage</strong></td>
+                  <td>SSD / NVMe (512 GB – 2 TB)</td>
+                  <td>Internal Flash (32 KB total)</td>
+                  <td>Microcontroller code compiles to compact raw machine instructions.</td>
+                </tr>
+                <tr>
+                  <td><strong>Working Memory</strong></td>
+                  <td>RAM (8 GB – 32 GB)</td>
+                  <td>Internal SRAM (2 KB)</td>
+                  <td>Holds runtime variables directly on the MCU die without external buses.</td>
+                </tr>
+                <tr>
+                  <td><strong>Direct I/O Pins</strong></td>
+                  <td>Standardized ports (USB, PCIe)</td>
+                  <td>14 Digital I/O, 6 Analogue In</td>
+                  <td>Direct memory-mapped control of physical voltages (0V / 5V).</td>
+                </tr>
+                <tr>
+                  <td><strong>Power Draw</strong></td>
+                  <td>65 W – 400 W (Mains AC)</td>
+                  <td>~0.25 W (50 mA @ 5V DC)</td>
+                  <td>Enables battery operation and sealed, low-heat industrial enclosures.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Bare-metal firmware means your code has complete, uninterrupted
+              control of the hardware from the instant power is applied.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 10: Interactive Arduino Uno Anatomy
+             ========================================== -->
+        <section class="slide" id="slide-10">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 5 • Hardware Anatomy</span>
+            <h2 class="slide-title">Interactive Arduino Uno Rev3 Board Anatomy</h2>
+            <p class="slide-subtitle">Click the numbered hotspots to inspect each physical subsystem on the board</p>
+          </div>
+          <div class="slide-body">
+            <div class="board-anatomy-container">
+              <div class="board-image-wrap">
+                <img src="Arduino_Uno_-_R3.jpg" alt="Arduino Uno Rev3 Board Photo">
+
+                <!-- Calibrated Hotspot Alignment for 600x600 Board -->
+                <button class="hotspot-btn active" style="top: 72%; left: 66%;" onclick="selectHotspot('mcu')"
+                  title="1: ATmega328P Microcontroller">1</button>
+                <button class="hotspot-btn" style="top: 24%; left: 14%;" onclick="selectHotspot('usb')"
+                  title="2: USB Interface">2</button>
+                <button class="hotspot-btn" style="top: 78%; left: 14%;" onclick="selectHotspot('power')"
+                  title="3: DC Power Jack & Regulator">3</button>
+                <button class="hotspot-btn" style="top: 7%; left: 64%;" onclick="selectHotspot('digital')"
+                  title="4: Digital I/O Header">4</button>
+                <button class="hotspot-btn" style="top: 93%; left: 74%;" onclick="selectHotspot('analog')"
+                  title="5: Analogue In Header">5</button>
+                <button class="hotspot-btn" style="top: 50%; left: 42%;" onclick="selectHotspot('clock')"
+                  title="6: 16MHz Crystal Oscillator">6</button>
+              </div>
+
+              <div class="hotspot-details-panel">
+                <div
+                  style="font-size: 0.82rem; font-weight: 800; color: var(--accent-arduino); text-transform: uppercase;"
+                  id="hotspot-tag">Subsystem 1</div>
+                <h3 style="color: #ffffff; margin: 6px 0 10px 0; font-size: 1.15rem;" id="hotspot-title">ATmega328P
+                  Microcontroller</h3>
+                <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5;" id="hotspot-desc">
+                  The brain of the board: an 8-bit AVR RISC microcontroller executing instructions at 16 MHz. Houses
+                  32KB Flash (program storage), 2KB SRAM (variables), and 1KB EEPROM (non-volatile settings).
+                </p>
+                <div
+                  style="background: rgba(0, 151, 157, 0.15); border-left: 3px solid var(--accent-arduino); padding: 6px 10px; border-radius: 4px; font-size: 0.85rem; color: #7dd3fc; margin-top: 8px;"
+                  id="hotspot-spec">
+                  <strong>Key Spec:</strong> 28-pin Dual In-Line Package (DIP), 16 MIPS throughput at 16 MHz.
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Every electronic subsystem on the PCB exists to supply power, clock
+              signals, and protection to the central ATmega328P chip.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 11: Pinout Mapping & Subsystems
+             ========================================== -->
+        <section class="slide" id="slide-11">
+          <div class="slide-header">
+            <span class="slide-tag">Pinout Reference • Electrical Interface</span>
+            <h2 class="slide-title">Arduino Uno Rev3 Pinout Architecture</h2>
+            <p class="slide-subtitle">Detailed mapping of digital GPIO, PWM channels (~), analogue inputs, and power
+              rails</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col" style="align-items: center;">
+              <div class="card" style="padding: 6px; text-align: center;">
+                <img src="Arduino-uno-pinout.png" alt="Arduino Uno Full Pinout Diagram"
+                  style="width: 100%; max-height: 300px; object-fit: contain; border-radius: 6px; background: #000; padding: 4px;">
+              </div>
+
+              <div class="card">
+                <div class="card-title">📌 Header Pin Categories</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+                  <div
+                    style="background: rgba(30, 41, 59, 0.7); padding: 6px 10px; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                    <strong style="color: #ffffff; font-size: 0.88rem;">Digital I/O (Pins 0 to 13):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Configurable via
+                      <code>pinMode()</code> as INPUT or OUTPUT. Pins 0 (RX) and 1 (TX) handle hardware serial.
+                    </div>
+                  </div>
+                  <div
+                    style="background: rgba(30, 41, 59, 0.7); padding: 6px 10px; border-radius: 6px; border-left: 3px solid #fbbf24;">
+                    <strong style="color: #ffffff; font-size: 0.88rem;">PWM Pins (~3, 5, 6, 9, 10, 11):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Provide 8-bit Pulse Width Modulation
+                      via <code>analogWrite()</code> for motor speed and LED dimming.</div>
+                  </div>
+                  <div
+                    style="background: rgba(30, 41, 59, 0.7); padding: 6px 10px; border-radius: 6px; border-left: 3px solid #34d399;">
+                    <strong style="color: #ffffff; font-size: 0.88rem;">Analogue Inputs (Pins A0 to A5):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Connected to 10-bit ADC (0V–5V mapped
+                      to integer range 0 to 1023).</div>
+                  </div>
+                  <div
+                    style="background: rgba(30, 41, 59, 0.7); padding: 6px 10px; border-radius: 6px; border-left: 3px solid #f43f5e;">
+                    <strong style="color: #ffffff; font-size: 0.88rem;">Power Header (5V, 3.3V, GND, VIN):</strong>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">Power supply pins for sensors. VIN
+                      accepts 7–12V DC input.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner" style="border-left-color: #f59e0b;">
+              <strong>⚠️ Vital Engineering Rule:</strong> Every pin has a dedicated function and strict electrical
+              limits (Maximum 20mA recommended continuous current per I/O pin).
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 12: Datasheet Scavenger Hunt
+             ========================================== -->
+        <section class="slide" id="slide-12">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 6 • Datasheet Investigation</span>
+            <h2 class="slide-title">Official Datasheet &amp; Tech Specs Scavenger Hunt</h2>
+            <p class="slide-subtitle">Use the official manufacturer documentation to verify hardware limits</p>
+          </div>
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 4: Arduino Uno Rev3 Datasheet Scavenger Hunt">
+                📝 ACTION: Open Microsoft Form &rarr; Answer in Section 4
+              </span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <a href="https://docs.arduino.cc/hardware/uno-rev3/#tech-specs" target="_blank" rel="noopener noreferrer"
+                class="link-card">
+                <span style="font-size: 1.4rem;">📖</span>
+                <div>
+                  <div style="font-weight: 700; color: var(--accent-cyan); font-size: 0.95rem;">Arduino Docs — Uno Rev3
+                    Tech Specs ↗</div>
+                  <div style="font-size: 0.82rem; color: var(--text-secondary);">👉 Explore the <strong>Interactive
+                      Board Viewer</strong> &amp; pin maps!</div>
+                </div>
+              </a>
+
+              <a href="https://store.arduino.cc/products/arduino-uno-rev3?srsltid=AfmBOoro-362SC0U3KXdkqwYMcEdel4K0V_-ozKKI_ucMJap4Mh2fbNy"
+                target="_blank" rel="noopener noreferrer" class="link-card">
+                <span style="font-size: 1.4rem;">🛒</span>
+                <div>
+                  <div style="font-weight: 700; color: #fbbf24; font-size: 0.95rem;">Arduino Store — Hardware Overview ↗
+                  </div>
+                  <div style="font-size: 0.82rem; color: var(--text-secondary);">Official technical specifications &amp;
+                    electrical ratings</div>
+                </div>
+              </a>
+            </div>
+
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🔍 Scavenger Targets (Record in Form):</div>
+                <ul style="padding-left: 18px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li>What is the total <strong>Flash memory</strong> on the ATmega328P?</li>
+                  <li>What is the size of <strong>SRAM</strong> working memory?</li>
+                  <li>What is the recommended <strong>input voltage</strong> via the Barrel Jack / VIN?</li>
+                  <li>What is the <strong>clock speed</strong> set by the crystal oscillator?</li>
+                </ul>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">💡 Why Check the Datasheet?</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Applying overvoltage (e.g. 24V into VIN or 12V directly into a 5V pin) will instantly destroy the
+                  microcontroller. Always confirm voltage thresholds before connecting any power supply!
+                </p>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Datasheets are the definitive single source of truth for all
+              electronic engineering designs and component tolerances.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 13: Circuit Design First - LED Circuit
+             ========================================== -->
+        <section class="slide" id="slide-13">
+          <div class="slide-header">
+            <span class="slide-tag">Engineering Rule 1 • Design First</span>
+            <h2 class="slide-title">Design Before Code: LED Output Circuit</h2>
+            <p class="slide-subtitle">Always design and draw the physical circuit schematic before writing firmware</p>
+          </div>
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 5: Practical Programming & Circuit Design Evidence">
+                📝 ACTION: Open Microsoft Form &rarr; Record Circuit Evidence in Section 5
+              </span>
+            </div>
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">📐 Circuit Schematic Requirements</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Before writing <code>digitalWrite()</code>, draw the circuit loop:
+                </p>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li><strong>Anode (+ longer leg):</strong> Connects to Digital Pin 13.</li>
+                  <li><strong>Resistor (220&Omega;):</strong> In series to limit current: I = (5V - 2V) / 220&Omega;
+                    &approx; 13.6 mA.</li>
+                  <li><strong>Cathode (- shorter flat leg):</strong> Returns to Arduino GND.</li>
+                </ul>
+                <div
+                  style="background: rgba(0, 151, 157, 0.15); border-left: 3px solid var(--accent-arduino); padding: 8px 12px; border-radius: 4px; font-size: 0.85rem; color: #a5f3fc; margin-top: 8px;">
+                  Pin 13 also has an onboard surface-mount LED already wired to GND!
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">📝 Student Workbook Task</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  On your paper workbook or in Section 5 of the Microsoft Form, sketch the schematic diagram using
+                  standard symbols:
+                </p>
+                <div
+                  style="font-family: var(--font-mono); font-size: 0.85rem; background: #090e17; padding: 10px; border-radius: 6px; color: #38bdf8; margin-top: 8px;">
+                  [Pin 13 (5V)] &rarr; [Resistor 220&Omega;] &rarr; [LED &rarr;|] &rarr; [GND (0V)]
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Hardware mistakes like short circuits cannot be undone by rewriting
+              code—always verify wiring first!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 14: Core Program Structure - setup() vs loop()
+             ========================================== -->
+        <section class="slide" id="slide-14">
+          <div class="slide-header">
+            <span class="slide-tag">Firmware Architecture • Execution Cycle</span>
+            <h2 class="slide-title">Arduino Execution Model: <code>setup()</code> vs <code>loop()</code></h2>
+            <p class="slide-subtitle">Understanding the microcontroller startup lifecycle and continuous execution
+              engine</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">⚙️ Microcontroller Execution Lifecycle</div>
+                <div
+                  style="background: #090e17; padding: 12px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2); margin-bottom: 10px;">
+                  <div
+                    style="display: flex; flex-direction: column; gap: 8px; font-family: var(--font-mono); font-size: 0.85rem;">
+                    <div style="color: #fbbf24; display: flex; align-items: center; gap: 8px;">
+                      <span>⚡ Power ON / Reset Button</span>
+                    </div>
+                    <div style="color: #64748b; padding-left: 20px;">│ &darr; (Bootloader initializes hardware)</div>
+                    <div
+                      style="background: rgba(56, 189, 248, 0.15); border: 1px solid #38bdf8; padding: 8px 12px; border-radius: 6px; color: #38bdf8;">
+                      <strong>void setup() { ... }</strong>
+                      <div style="font-size: 0.78rem; color: #cbd5e1; font-family: var(--font-sans); margin-top: 2px;">
+                        • Runs <strong>EXACTLY ONCE</strong> at boot/reset<br>
+                        • Configures hardware pin modes (<code>pinMode</code>)<br>
+                        • Initializes Serial communication &amp; sensor calibration
+                      </div>
+                    </div>
+                    <div style="color: #64748b; padding-left: 20px;">│ &darr; (Enters non-terminating control loop)
+                    </div>
+                    <div
+                      style="background: rgba(52, 211, 153, 0.15); border: 1px solid #34d399; padding: 8px 12px; border-radius: 6px; color: #34d399;">
+                      <strong>void loop() { ... }</strong>
+                      <div style="font-size: 0.78rem; color: #cbd5e1; font-family: var(--font-sans); margin-top: 2px;">
+                        • Repeats <strong>FOREVER / CONTINUOUSLY</strong><br>
+                        • Polls input sensors (<code>digitalRead</code>)<br>
+                        • Executes decision logic &amp; drives outputs (<code>digitalWrite</code>)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">🔬 Key Architectural Differences</div>
+                <div
+                  style="display: flex; flex-direction: column; gap: 10px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <div
+                    style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                    <strong style="color: #38bdf8;">void setup()</strong>
+                    <p style="margin: 4px 0 0 0; font-size: 0.84rem;">
+                      If you put pin configuration inside <code>loop()</code>, the MCU needlessly reconfigures hardware
+                      registers millions of times per second. Keep initialization in <code>setup()</code>!
+                    </p>
+                  </div>
+                  <div
+                    style="background: rgba(15, 23, 42, 0.6); padding: 10px; border-radius: 6px; border-left: 3px solid #34d399;">
+                    <strong style="color: #34d399;">void loop()</strong>
+                    <p style="margin: 4px 0 0 0; font-size: 0.84rem;">
+                      Unlike a desktop C++ <code>main()</code> function that returns 0 and exits to the OS, an embedded
+                      microcontroller has no OS to return to. <code>loop()</code> runs continuously until power is
+                      removed.
+                    </p>
+                  </div>
+                  <div
+                    style="background: rgba(15, 23, 42, 0.6); padding: 8px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: #94a3b8;">
+                    // Behind the scenes in Arduino AVR core:<br>
+                    int main(void) { init(); setup(); for(;;) { loop(); } }
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fundamental Law:</strong> <code>setup()</code> prepares and initializes the hardware once;
+              <code>loop()</code> controls the real-time continuous operation forever.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 15: Digital Output - digitalWrite & delay
+             ========================================== -->
+        <section class="slide" id="slide-15">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 7 • Digital Output</span>
+            <h2 class="slide-title">Digital Output: <code>digitalWrite()</code> &amp; <code>delay()</code></h2>
+            <p class="slide-subtitle">Driving voltage levels to actuators and timing microcontroller execution</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">📖 Official Documentation Links</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+                  <a href="https://www.arduino.cc/reference/en/language/functions/digital-io/digitalwrite/"
+                    target="_blank" rel="noopener noreferrer"
+                    style="color: var(--accent-cyan); font-size: 0.88rem; text-decoration: underline;">
+                    📖 <code>digitalWrite(pin, value)</code> Reference ↗
+                  </a>
+                  <div style="font-size: 0.82rem; color: var(--text-secondary);">One-liner: Sets a digital pin to output
+                    either 5.0V (HIGH) or 0.0V (LOW).</div>
+
+                  <a href="https://www.arduino.cc/reference/en/language/functions/time/delay/" target="_blank"
+                    rel="noopener noreferrer" style="color: #fbbf24; font-size: 0.88rem; text-decoration: underline;">
+                    📖 <code>delay(milliseconds)</code> Reference ↗
+                  </a>
+                  <div style="font-size: 0.82rem; color: var(--text-secondary);">One-liner: Pauses program execution for
+                    a specified number of milliseconds (1000ms = 1s).</div>
+                </div>
+
+                <div
+                  style="background: #090e17; padding: 8px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: #e2e8f0; line-height: 1.4;">
+                  <span style="color: #38bdf8;">void</span> setup() { pinMode(13, OUTPUT); }<br>
+                  <span style="color: #38bdf8;">void</span> loop() {<br>
+                  &nbsp;&nbsp;digitalWrite(13, HIGH); delay(1000);<br>
+                  &nbsp;&nbsp;digitalWrite(13, LOW); &nbsp;delay(1000);<br>
+                  }
+                </div>
+              </div>
+
+              <div class="card highlight"
+                style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div class="card-title">💡 Interactive LED State Tester</div>
+                <div class="led-indicator" id="demo-led-12" style="width: 48px; height: 48px; margin: 10px auto;"></div>
+                <div style="font-weight: 700; font-size: 1rem; color: #ffffff;" id="demo-led-status-12">STATE: OFF (0V)
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; justify-content: center;">
+                  <button class="btn btn-secondary" onclick="setDemoLed('on')">ON (HIGH)</button>
+                  <button class="btn btn-secondary" onclick="setDemoLed('off')">OFF (LOW)</button>
+                  <button class="btn btn-primary" onclick="toggleBlinkDemo()" id="blink-btn-12">Start Blink
+                    (1Hz)</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> <code>HIGH</code> applies 5.0V to illuminate the LED, while
+              <code>LOW</code> connects the pin to 0.0V Ground to turn it off.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 16: Circuit Design First - Pushbutton & INPUT_PULLUP
+             ========================================== -->
+        <section class="slide" id="slide-16">
+          <div class="slide-header">
+            <span class="slide-tag">Engineering Rule 2 • Input Circuitry</span>
+            <h2 class="slide-title">Design Before Code: Pushbutton &amp; <code>INPUT_PULLUP</code></h2>
+            <p class="slide-subtitle">Why do floating pins cause random false triggers, and how does internal pull-up
+              solve it?</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">🔌 Why Use <code>INPUT_PULLUP</code>?</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  An unconnected digital input pin is <strong>floating</strong>—it acts like an antenna picking up
+                  electromagnetic noise and flipping randomly between 0V and 5V.
+                </p>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
+                  <code>pinMode(2, INPUT_PULLUP)</code> connects an internal <strong>20k&Omega;–50k&Omega; resistor to
+                    5V</strong>.
+                </p>
+                <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  <li><strong>Button Released:</strong> Internal resistor pulls pin safely to <strong>HIGH
+                      (5V)</strong>.</li>
+                  <li><strong>Button Pressed:</strong> Switch shorts pin to GND &rarr; reads <strong>LOW (0V)</strong>.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div class="card-title">📖 Pin Modes Compared</div>
+                <div style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6;">
+                  <a href="https://www.arduino.cc/reference/en/language/functions/digital-io/pinmode/" target="_blank"
+                    rel="noopener noreferrer" style="color: var(--accent-cyan); text-decoration: underline;">
+                    📖 <code>pinMode(pin, mode)</code> Reference ↗
+                  </a>
+                  <ul style="padding-left: 18px; margin-top: 6px;">
+                    <li><strong><code>INPUT</code>:</strong> High impedance state (for external circuits with pull-down
+                      resistors).</li>
+                    <li><strong><code>INPUT_PULLUP</code>:</strong> Activates internal 5V pull-up (active-LOW
+                      pushbutton).</li>
+                    <li><strong><code>OUTPUT</code>:</strong> Low impedance state (drives 0V or 5V to LEDs/relays).</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> <code>INPUT_PULLUP</code> saves breadboard space and component cost
+              by eliminating the need for an external physical resistor!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 17: Digital Input Control Implementation
+             ========================================== -->
+        <section class="slide" id="slide-17">
+          <div class="slide-header">
+            <span class="slide-tag">Activity 8 • Digital Input</span>
+            <h2 class="slide-title">Digital Input: Controlling LED with a Pushbutton</h2>
+            <p class="slide-subtitle">Reading sensor binary logic states with <code>digitalRead()</code> and conditional
+              branching</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">💻 Complete Button-Control Sketch</div>
+                <div
+                  style="background: #090e17; padding: 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.8rem; color: #e2e8f0; line-height: 1.45;">
+                  <span style="color: #ec4899;">const int</span> BUTTON_PIN = 2;<br>
+                  <span style="color: #ec4899;">const int</span> LED_PIN = 13;<br><br>
+                  <span style="color: #38bdf8;">void</span> setup() {<br>
+                  &nbsp;&nbsp;pinMode(LED_PIN, OUTPUT);<br>
+                  &nbsp;&nbsp;pinMode(BUTTON_PIN, INPUT_PULLUP); <span style="color: #64748b;">// Active-LOW</span><br>
+                  }<br><br>
+                  <span style="color: #38bdf8;">void</span> loop() {<br>
+                  &nbsp;&nbsp;<span style="color: #ec4899;">int</span> state = digitalRead(BUTTON_PIN);<br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">if</span> (state == LOW) { <span style="color: #34d399;">//
+                    Pressed</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_PIN, HIGH);<br>
+                  &nbsp;&nbsp;} <span style="color: #f472b6;">else</span> {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_PIN, LOW);<br>
+                  &nbsp;&nbsp;}<br>
+                  }
+                </div>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">🕹️ Pushbutton Signal Simulator</div>
+                <div style="text-align: center; padding: 10px 0;">
+                  <button class="switch-toggle-btn" id="single-btn-sim" onmousedown="pressSingleBtn(true)"
+                    onmouseup="pressSingleBtn(false)" ontouchstart="pressSingleBtn(true)"
+                    ontouchend="pressSingleBtn(false)" onclick="toggleSingleBtnClick()">
+                    🔴 PUSH BUTTON (Pin 2)
+                  </button>
+                  <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">(Click or hold down button)
+                  </div>
+                </div>
+
+                <div
+                  style="display: flex; justify-content: space-around; align-items: center; background: rgba(15, 23, 42, 0.7); padding: 10px; border-radius: 6px; margin-top: 6px;">
+                  <div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">BUTTON PIN 2:</div>
+                    <div style="font-family: var(--font-mono); font-weight: 700; color: #38bdf8; font-size: 0.9rem;"
+                      id="single-btn-val">HIGH (Released)</div>
+                  </div>
+                  <div style="font-size: 1.3rem; color: var(--text-muted);">➔</div>
+                  <div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted);">LED PIN 13:</div>
+                    <div class="led-indicator off" id="single-btn-led"
+                      style="width: 32px; height: 32px; margin: 4px auto;"></div>
+                    <div style="font-family: var(--font-mono); font-weight: 700; font-size: 0.85rem; color: #f87171;"
+                      id="single-led-val">LOW (OFF)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Active-LOW logic means pressing the button pulls the voltage down to
+              0V (`LOW`).
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 18: Circuit Design First - Dual Station
+             ========================================== -->
+        <section class="slide" id="slide-18">
+          <div class="slide-header">
+            <span class="slide-tag">Engineering Rule 3 • System Design</span>
+            <h2 class="slide-title">Design Before Code: Dual-Button Industrial Station</h2>
+            <p class="slide-subtitle">Planning pin assignments and schematic routing for a machine Start/Stop control
+              console</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">🏭 Industrial Console Specification</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  You are tasked with building a manufacturing Start/Stop station with dual status indicators:
+                </p>
+                <ul style="padding-left: 18px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li><strong>Start Button:</strong> Digital Pin 2 &rarr; Switch to GND (INPUT_PULLUP)</li>
+                  <li><strong>Stop Button:</strong> Digital Pin 3 &rarr; Switch to GND (INPUT_PULLUP)</li>
+                  <li><strong>Green RUN LED:</strong> Digital Pin 12 &rarr; 220&Omega; Resistor &rarr; GND</li>
+                  <li><strong>Red HALT LED:</strong> Digital Pin 13 &rarr; 220&Omega; Resistor &rarr; GND</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div class="card-title">📝 Student Circuit Blueprint Task</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Before writing the code logic on the next slide, verify your circuit schematic has:
+                </p>
+                <ol style="padding-left: 18px; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li>Both pushbuttons sharing the common Arduino GND rail.</li>
+                  <li>Independent series current-limiting resistors on both LEDs.</li>
+                  <li>Zero overlapping pins or short circuits.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> System design maps every physical wire before a single line of
+              software logic is compiled.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 19: Stretch & Challenge - Dual Controls
+             ========================================== -->
+        <section class="slide" id="slide-19">
+          <div class="slide-header">
+            <span class="slide-tag">Stretch &amp; Challenge • Industrial Control</span>
+            <h2 class="slide-title">Stretch &amp; Challenge: Dual-Button &amp; Dual-LED System</h2>
+            <p class="slide-subtitle">Engineering an industrial Start / Stop station: Button 1 &amp; Button 2
+              controlling Green &amp; Red LEDs</p>
+          </div>
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 5: Practical Programming & Circuit Design Evidence">
+                📝 ACTION: Open Microsoft Form &rarr; Paste Sketch & Upload Evidence in Section 5
+              </span>
+            </div>
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🏭 Industrial Station Logic</div>
+                <div
+                  style="background: #090e17; padding: 8px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.76rem; color: #cbd5e1; line-height: 1.4;">
+                  <span style="color: #ec4899;">const int</span> BTN_START = 2; <span style="color: #ec4899;">const
+                    int</span> BTN_STOP = 3;<br>
+                  <span style="color: #ec4899;">const int</span> LED_RUN = 12; &nbsp;<span style="color: #ec4899;">const
+                    int</span> LED_HALT = 13;<br><br>
+                  <span style="color: #38bdf8;">void</span> loop() {<br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">if</span> (digitalRead(BTN_START) == LOW) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_RUN, HIGH); &nbsp;<span style="color: #34d399;">//
+                    RUNNING</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_HALT, LOW);<br>
+                  &nbsp;&nbsp;}<br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">if</span> (digitalRead(BTN_STOP) == LOW) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_RUN, LOW);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;digitalWrite(LED_HALT, HIGH); <span style="color: #ef4444;">//
+                    HALTED</span><br>
+                  &nbsp;&nbsp;}<br>
+                  }
+                </div>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">🕹️ Dual-Control Interactive Workbench</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;">
+                  <!-- Start Channel -->
+                  <div
+                    style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(52, 211, 153, 0.4); border-radius: 8px; padding: 10px; text-align: center;">
+                    <button class="btn btn-primary"
+                      style="background: #059669; border-color: #34d399; width: 100%; font-size: 0.85rem;"
+                      onclick="triggerDualStation('start')">
+                      🟢 START BTN (Pin 2)
+                    </button>
+                    <div class="led-indicator off" id="dual-led-run"
+                      style="width: 34px; height: 34px; margin: 8px auto;"></div>
+                    <div style="font-weight: 700; font-size: 0.82rem; color: #34d399;" id="dual-run-text">RUN (Pin 12):
+                      OFF</div>
+                  </div>
+
+                  <!-- Stop Channel -->
+                  <div
+                    style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px; padding: 10px; text-align: center;">
+                    <button class="btn btn-primary"
+                      style="background: #dc2626; border-color: #f87171; width: 100%; font-size: 0.85rem;"
+                      onclick="triggerDualStation('stop')">
+                      🔴 STOP BTN (Pin 3)
+                    </button>
+                    <div class="led-indicator on" id="dual-led-halt"
+                      style="width: 34px; height: 34px; margin: 8px auto;"></div>
+                    <div style="font-weight: 700; font-size: 0.82rem; color: #f87171;" id="dual-halt-text">HALT (Pin
+                      13): ON</div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 8px; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">
+                  System Status: <strong id="dual-sys-status" style="color: #fbbf24;">STANDBY / READY</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Fact to Remember:</strong> Microcontrollers easily replace complex multi-relay interlocking
+              circuits with just a few lines of clean C++ logic!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 20: Session Exit Ticket & Sign-Off
+             ========================================== -->
+        <section class="slide" id="slide-20">
+          <div class="slide-header">
+            <span class="slide-tag">Closing</span>
+            <h2 class="slide-title">Plenary &amp; Reflection</h2>
+            <p class="slide-subtitle">Ensure all evidence is recorded in your portfolio before concluding the laboratory
+              session</p>
+          </div>
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🎫 Exit Retrieval Questions</div>
+                <ol style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.7; padding-left: 18px;">
+                  <li>What is the exact execution difference between <code>setup()</code> and <code>loop()</code>?</li>
+                  <li>How does <code>digitalWrite(13, HIGH)</code> physically change the pin voltage?</li>
+                  <li>Why is <code>INPUT_PULLUP</code> used when connecting pushbuttons?</li>
+                  <li>State the Flash memory and SRAM capacity of the ATmega328P.</li>
+                </ol>
+              </div>
+
+              <div class="card highlight"
+                style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="font-size: 2.2rem; margin-bottom: 6px;">📑</div>
+                <div class="card-title" style="margin-bottom: 6px;">Complete Week 2 Deliverables</div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 14px;">
+                  Submit your responses directly via the Microsoft Forms drawer or export your evidence portfolio.
+                </p>
+                <button class="btn btn-primary open-forms-trigger"
+                  data-form-section="Section 5: Practical Programming & Circuit Design Evidence"
+                  style="padding: 8px 20px;">
+                  📝 Open Microsoft Form
+                </button>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Final Engineering Principle:</strong> High-quality documentation and verified test evidence are
+              just as important as working code in industry!
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Deck Footer -->
+      <footer class="deck-footer">
+        <div class="nav-controls">
+          <button class="nav-btn" id="prev-slide" title="Previous Slide (Left Arrow)">◀</button>
+          <button class="nav-btn" id="next-slide" title="Next Slide (Right Arrow)">▶</button>
+          <span class="slide-counter" id="slide-counter">1 / 20</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-secondary open-forms-trigger" data-form-section="Deliverables Form"
+            style="padding: 6px 12px; font-size: 0.8rem;">
+            📝 Form
+          </button>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Backdrop for Drawer -->
+    <div id="drawer-backdrop"></div>
+
+    <!-- Microsoft Forms Side-Drawer -->
+    <aside id="forms-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>📝</span>
+          <span>Week 2 Microsoft Forms Assessment</span>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-popout-btn" id="drawer-popout-btn" title="Open in new tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Pop out
+          </button>
+          <button class="drawer-close-btn" id="drawer-close-btn" title="Close drawer">✕</button>
+        </div>
+      </div>
+
+      <div class="drawer-body">
+        <!-- Configurable Microsoft Forms Embed Iframe: Replace data-src with your live MS Forms URL -->
+        <iframe id="forms-iframe" class="drawer-iframe" src="about:blank"
+          data-src="https://forms.office.com/r/YOUR_WEEK2_FORM_ID" data-fallback-src="forms-import-template.html"
+          allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen>
+        </iframe>
+      </div>
+    </aside>
+
+    <!-- Slide Matrix / Map Modal -->
+    <div id="slide-matrix-modal" class="modal-overlay">
+      <div class="slide-matrix-card">
+        <div class="slide-matrix-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🗺️</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff; margin: 0;">Session Slide Matrix</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Click any slide card to jump directly
+                (or press 'M')</p>
+            </div>
+          </div>
+          <button id="close-slide-matrix" class="drawer-close-btn" style="padding: 6px 12px;">✕ Close</button>
+        </div>
+        <div id="slide-matrix-grid" class="slide-matrix-grid">
+          <!-- Populated dynamically by PresentationEngine -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility & Neurodiversity Drawer Backdrop -->
+    <div id="a11y-backdrop"></div>
+
+    <!-- Accessibility & Neurodiversity Side-Drawer -->
+    <aside id="a11y-drawer">
+      <div class="a11y-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">⚙️</span>
+          <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+        </div>
+        <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+      </div>
+
+      <div class="a11y-body">
+        <!-- Speech Synthesis (TTS) -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔊 Web Speech Slide Narration</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="a11y-speak-active-slide" class="btn btn-secondary"
+              style="flex: 1; padding: 8px 12px; font-size: 0.86rem;">
+              🔊 Read Slide Aloud
+            </button>
+            <button id="a11y-stop-speech" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.86rem;">
+              ⏹️ Stop
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Narration Speed:</span>
+            <span id="a11y-speech-rate-val"
+              style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">1.0x</span>
+          </div>
+          <input type="range" id="a11y-speech-rate" min="0.75" max="1.5" step="0.05" value="1.0" class="a11y-slider" />
+        </div>
+
+        <!-- Bionic Reading Mode -->
+        <div class="a11y-switch-row">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+          </div>
+          <input type="checkbox" id="a11y-bionic-toggle"
+            style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+        </div>
+
+        <!-- Typography & Dyslexia Toolbar -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>📖 Font Family</span>
+          </div>
+          <select id="a11y-font-select" class="a11y-select">
+            <option value="default">Inter (Default Crisp)</option>
+            <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+            <option value="system">System UI (Clean Sans-Serif)</option>
+          </select>
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔠 Font Size</span>
+            <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+          </div>
+          <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↕️ Line Spacing</span>
+            <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+          </div>
+          <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↔️ Letter Spacing</span>
+            <span id="a11y-letter-spacing-val"
+              style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+          </div>
+          <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+        </div>
+
+        <!-- Contrast & Colorblind Themes -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🎨 Contrast &amp; Colorblind Themes</span>
+          </div>
+          <select id="a11y-theme-select" class="a11y-select">
+            <option value="default">Dark Engineering (Default)</option>
+            <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+            <option value="clean-light">Clean Light Mode</option>
+            <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+          </select>
+        </div>
+
+        <button id="a11y-reset-prefs" class="btn btn-secondary"
+          style="padding: 8px; font-size: 0.82rem; margin-top: 10px;">
+          🔄 Reset to Default Theme
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Shared Scripts -->
+  <script src="../shared/js/accessibility-engine.js"></script>
+  <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/self-check.js"></script>
+  <script src="../shared/js/timer.js"></script>
+  <script src="../shared/js/form-drawer.js"></script>
+
+  <!-- Week 2 Custom Interactive Scripts -->
+  <script>
+    // 1. Hotspot Anatomy Explorer
+    const hotspotData = {
+      mcu: {
+        tag: "Subsystem 1",
+        title: "ATmega328P Microcontroller",
+        desc: "The brain of the board: an 8-bit AVR RISC microcontroller executing instructions at 16 MHz. Houses 32KB Flash (program storage), 2KB SRAM (variables), and 1KB EEPROM (non-volatile settings).",
+        spec: "28-pin Dual In-Line Package (DIP), 16 MIPS throughput at 16 MHz."
+      },
+      usb: {
+        tag: "Subsystem 2",
+        title: "USB Interface & Serial Bridge",
+        desc: "An ATmega16U2 chip programmed as a USB-to-Serial converter. Allows the PC to communicate with the ATmega328P via virtual COM port over USB Type-B.",
+        spec: "Handles USB communication, firmware flashing, and 500mA polyfuse overcurrent protection."
+      },
+      power: {
+        tag: "Subsystem 3",
+        title: "DC Barrel Jack & 5V Regulator",
+        desc: "Accepts 7V to 12V DC from an external battery or AC-to-DC adapter. An onboard linear voltage regulator steps this down to a clean, stable 5.0V for the microcontroller.",
+        spec: "Input: 7-12V DC recommended. Automatic power multiplexing between USB and external DC."
+      },
+      digital: {
+        tag: "Subsystem 4",
+        title: "Digital I/O & PWM Header",
+        desc: "Pins 0 to 13 support discrete binary input and output (0V = LOW, 5V = HIGH). Six pins (marked with ~) support 8-bit Pulse Width Modulation (PWM) for analog-like control.",
+        spec: "20 mA recommended max per pin. Pin 13 has an onboard SMD LED directly attached."
+      },
+      analog: {
+        tag: "Subsystem 5",
+        title: "Analogue Input Header (A0–A5)",
+        desc: "Six dedicated channels multiplexed into an onboard 10-bit Successive Approximation Analog-to-Digital Converter (ADC). Maps 0V–5V inputs into integers from 0 to 1023.",
+        spec: "10-bit resolution (approx 4.88 mV per unit step at 5V reference). Can also function as digital GPIO."
+      },
+      clock: {
+        tag: "Subsystem 6",
+        title: "16 MHz Crystal Oscillator",
+        desc: "Provides a precise, stable timing clock for the CPU and internal hardware timers. The ATmega328P executes most single-cycle instructions in just 62.5 nanoseconds.",
+        spec: "Frequency: 16.000 MHz. Stability: ±30 ppm."
+      }
+    };
+
+    function selectHotspot(key) {
+      document.querySelectorAll('.hotspot-btn').forEach(b => b.classList.remove('active'));
+      const btn = event.currentTarget;
+      if (btn) btn.classList.add('active');
+
+      const data = hotspotData[key];
+      if (data) {
+        document.getElementById('hotspot-tag').textContent = data.tag;
+        document.getElementById('hotspot-title').textContent = data.title;
+        document.getElementById('hotspot-desc').textContent = data.desc;
+        document.getElementById('hotspot-spec').innerHTML = `<strong>Key Spec:</strong> ${data.spec}`;
+      }
+    }
+
+    // 2. Slide 14: LED State Tester (ON / OFF / BLINK with fixed toggle)
+    let blinkInterval = null;
+    let isBlinking = false;
+
+    function setDemoLed(mode) {
+      const led = document.getElementById('demo-led-12');
+      const status = document.getElementById('demo-led-status-12');
+      const blinkBtn = document.getElementById('blink-btn-12');
+      if (!led || !status) return;
+
+      if (blinkInterval) {
+        clearInterval(blinkInterval);
+        blinkInterval = null;
+        isBlinking = false;
+        if (blinkBtn) blinkBtn.textContent = 'Start Blink (1Hz)';
+      }
+
+      if (mode === 'on') {
+        led.className = 'led-indicator on';
+        status.textContent = 'STATE: ON (5.0V Applied)';
+        status.style.color = '#10b981';
+      } else if (mode === 'off') {
+        led.className = 'led-indicator off';
+        status.textContent = 'STATE: OFF (0.0V Ground)';
+        status.style.color = '#ef4444';
+      }
+    }
+
+    function toggleBlinkDemo() {
+      const led = document.getElementById('demo-led-12');
+      const status = document.getElementById('demo-led-status-12');
+      const blinkBtn = document.getElementById('blink-btn-12');
+      if (!led || !status || !blinkBtn) return;
+
+      if (isBlinking) {
+        // Stop blink
+        clearInterval(blinkInterval);
+        blinkInterval = null;
+        isBlinking = false;
+        led.className = 'led-indicator off';
+        status.textContent = 'STATE: OFF (Blink Stopped)';
+        status.style.color = '#ef4444';
+        blinkBtn.textContent = 'Start Blink (1Hz)';
+        blinkBtn.classList.remove('btn-secondary');
+        blinkBtn.classList.add('btn-primary');
+      } else {
+        // Start blink
+        isBlinking = true;
+        blinkBtn.textContent = '⏹️ Stop Blink';
+        blinkBtn.classList.remove('btn-primary');
+        blinkBtn.classList.add('btn-secondary');
+        let state = false;
+        blinkInterval = setInterval(() => {
+          state = !state;
+          led.className = state ? 'led-indicator on' : 'led-indicator off';
+          status.textContent = state ? 'BLINKING: ON (5.0V)' : 'BLINKING: OFF (0.0V)';
+          status.style.color = state ? '#10b981' : '#f59e0b';
+        }, 500);
+      }
+    }
+
+    // 3. Slide 16: Single Pushbutton Simulator
+    let singleBtnPressed = false;
+    function pressSingleBtn(pressed) {
+      singleBtnPressed = pressed;
+      updateSingleBtnUI();
+    }
+    function toggleSingleBtnClick() {
+      singleBtnPressed = !singleBtnPressed;
+      updateSingleBtnUI();
+    }
+    function updateSingleBtnUI() {
+      const btn = document.getElementById('single-btn-sim');
+      const btnVal = document.getElementById('single-btn-val');
+      const led = document.getElementById('single-btn-led');
+      const ledVal = document.getElementById('single-led-val');
+      if (!btn || !btnVal || !led || !ledVal) return;
+
+      if (singleBtnPressed) {
+        btn.className = 'switch-toggle-btn closed';
+        btn.innerHTML = '🟢 BUTTON PRESSED (0V)';
+        btnVal.textContent = 'LOW (0V - Active)';
+        btnVal.style.color = '#34d399';
+
+        led.className = 'led-indicator on';
+        ledVal.textContent = 'HIGH (5V - ON)';
+        ledVal.style.color = '#34d399';
+      } else {
+        btn.className = 'switch-toggle-btn';
+        btn.innerHTML = '🔴 PUSH BUTTON (Pin 2)';
+        btnVal.textContent = 'HIGH (5V - Released)';
+        btnVal.style.color = '#38bdf8';
+
+        led.className = 'led-indicator off';
+        ledVal.textContent = 'LOW (0V - OFF)';
+        ledVal.style.color = '#f87171';
+      }
+    }
+
+    // 4. Slide 18: Dual-Button & Dual-LED Station
+    function triggerDualStation(action) {
+      const runLed = document.getElementById('dual-led-run');
+      const runText = document.getElementById('dual-run-text');
+      const haltLed = document.getElementById('dual-led-halt');
+      const haltText = document.getElementById('dual-halt-text');
+      const status = document.getElementById('dual-sys-status');
+      if (!runLed || !runText || !haltLed || !haltText || !status) return;
+
+      if (action === 'start') {
+        runLed.className = 'led-indicator on';
+        runText.textContent = 'RUN (Pin 12): ON (5V)';
+        runText.style.color = '#34d399';
+
+        haltLed.className = 'led-indicator off';
+        haltText.textContent = 'HALT (Pin 13): OFF (0V)';
+        haltText.style.color = '#64748b';
+
+        status.textContent = 'MACHINE RUNNING (GREEN ACTIVE)';
+        status.style.color = '#34d399';
+      } else if (action === 'stop') {
+        runLed.className = 'led-indicator off';
+        runText.textContent = 'RUN (Pin 12): OFF (0V)';
+        runText.style.color = '#64748b';
+
+        haltLed.className = 'led-indicator on';
+        haltText.textContent = 'HALT (Pin 13): ON (5V)';
+        haltText.style.color = '#ef4444';
+
+        status.textContent = 'EMERGENCY STOP (RED ACTIVE)';
+        status.style.color = '#ef4444';
+      }
+    }
+  </script>
+</body>
+
+</html>
