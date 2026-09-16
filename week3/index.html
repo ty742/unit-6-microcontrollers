@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: Microcontrollers — Week 3: Digital Inputs &amp; Binary Sensors</title>
+  <link rel="stylesheet" href="../shared/css/presentation.css">
+  <link rel="stylesheet" href="../shared/css/form-drawer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Slide Layout & Typography System */
+    .slide {
+      padding: 28px 56px 84px !important;
+    }
+
+    .slide-header {
+      margin-bottom: 16px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .slide-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-arduino));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(0, 151, 157, 0.2);
+      border: 1px solid var(--accent-arduino);
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    .badge-pill.gold {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--color-warning);
+      color: #fbbf24;
+    }
+
+    .badge-pill.form-link {
+      background: rgba(14, 165, 233, 0.22);
+      border: 1px solid #0ea5e9;
+      color: #38bdf8;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .badge-pill.form-link:hover {
+      background: rgba(14, 165, 233, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
+    }
+
+    .card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px 22px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    /* KSB Clean Grid Layout */
+    .ksb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .ksb-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ksb-card.k {
+      border-top: 5px solid var(--accent-cyan);
+    }
+
+    .ksb-card.s {
+      border-top: 5px solid var(--accent-arduino);
+    }
+
+    .ksb-card.b {
+      border-top: 5px solid #34d399;
+    }
+
+    .takeaway-banner {
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 1rem;
+      color: #f1f5f9;
+      margin-top: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .takeaway-banner strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.96rem;
+    }
+
+    .compare-table th {
+      background: rgba(30, 41, 59, 0.98);
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 1rem;
+      border-bottom: 2px solid var(--accent-arduino);
+    }
+
+    .compare-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Interactive Simulator Elements */
+    .sim-box {
+      background: #090e17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .switch-toggle-btn {
+      background: #334155;
+      color: #ffffff;
+      border: 2px solid #64748b;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .switch-toggle-btn.closed {
+      background: #059669;
+      border-color: #34d399;
+      box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
+    }
+
+    .switch-toggle-btn.danger {
+      background: #dc2626;
+      border-color: #f87171;
+      box-shadow: 0 0 16px rgba(248, 113, 113, 0.5);
+    }
+
+    .led-indicator {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.2s ease;
+    }
+
+    .led-indicator.off {
+      background: #1e293b;
+      box-shadow: none;
+    }
+
+    .led-indicator.on {
+      background: #10b981;
+      box-shadow: 0 0 18px #10b981, 0 0 30px #10b981;
+    }
+
+    .led-indicator.on-red {
+      background: #ef4444;
+      box-shadow: 0 0 18px #ef4444, 0 0 30px #ef4444;
+    }
+
+    .led-indicator.on-amber {
+      background: #f59e0b;
+      box-shadow: 0 0 18px #f59e0b, 0 0 30px #f59e0b;
+    }
+
+    .code-chip {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      color: #58a6ff;
+      line-height: 1.5;
+    }
+
+    /* Quiz Option Cards */
+    .quiz-option {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+
+    .quiz-option:hover {
+      background: rgba(51, 65, 85, 0.8);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .quiz-option.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #34d399 !important;
+      font-weight: 700;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #f87171 !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid"></div>
+
+  <div id="app-container">
+    <div id="deck-viewport">
+
+      <!-- Top Header -->
+      <header class="deck-header">
+        <div class="header-top-row">
+          <a href="../index.html" class="nav-hub-link" title="Return to Course Homepage Hub">
+            🏠 Course Hub
+          </a>
+          <div class="brand-badge">
+            <span class="pill">UNIT 6</span>
+            <span>Microcontrollers</span>
+            <span style="color: var(--text-muted);">|</span>
+            <span id="header-slide-topic" style="color: var(--accent-cyan); font-weight: 600;">Week 3: Digital Inputs
+              &amp; Sensors</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="timer-widget" data-duration="20"
+            style="display: inline-flex; align-items: center; gap: 6px; background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 8px;">
+            <span class="timer-display"
+              style="font-family: var(--font-mono); font-weight: 700; color: #fbbf24; font-size: 0.9rem;">20:00</span>
+            <button class="timer-toggle btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">Start</button>
+            <button class="timer-reset btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">↺</button>
+          </div>
+
+          <button class="btn btn-secondary" id="open-a11y-drawer" title="Accessibility &amp; Neurodiversity (Key: A)">
+            ⚙️ Accessibility
+          </button>
+          <button class="btn btn-secondary" id="open-slide-matrix" title="View all slides overview (Key: M)">
+            🗺️ Slide Map
+          </button>
+          <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 1: Student Information">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 4px;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            📝 Microsoft Form
+          </button>
+        </div>
+      </header>
+
+      <!-- Slides Wrapper -->
+      <main id="slides-wrapper">
+
+        <!-- ==========================================
+             SLIDE 1: Welcome & Briefing
+             ========================================== -->
+        <section class="slide active" id="slide-1">
+          <div class="slide-body" style="justify-content: center; align-items: flex-start;">
+            <div class="badge-bar">
+              <span class="badge-pill">Session: Week 3</span>
+              <span class="badge-pill">Duration: 20 Min Teaching</span>
+              <span class="badge-pill gold">BTEC Level 3</span>
+            </div>
+            <h1 class="hero-title">Digital Inputs &amp; Binary Sensors</h1>
+            <h2 class="slide-subtitle" style="font-size: 1.35rem; color: var(--text-primary); margin-bottom: 20px;">
+              The Binary Senses of Microcontrollers — Switches, Pull-Up Resistors &amp; Industrial Interlocks
+            </h2>
+            <div class="card highlight" style="max-width: 860px;">
+              <p style="font-size: 1.1rem; line-height: 1.6; color: var(--text-secondary);">
+                Welcome to Week 3! Today you step into the role of an industrial automation engineer. You will discover
+                how microcontrollers interface with the physical world through digital 2-state logic, master pull-up
+                resistors to eliminate floating pin noise, and build fail-safe safety interlocks.
+              </p>
+            </div>
+            <div style="margin-top: 24px; display: flex; gap: 14px;">
+              <button class="btn btn-primary" onclick="window.deckEngine.nextSlide()">Begin Investigation →</button>
+              <button class="btn btn-secondary open-forms-trigger" data-form-section="Section 1: Student Information">📝
+                Open Microsoft Form</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2: 20-Min Roadmap & KSB Breakdown
+             ========================================== -->
+        <section class="slide" id="slide-2">
+          <div class="slide-header">
+            <h2 class="slide-title">KSB Targets</h2>
+            <p class="slide-subtitle">Targeted Knowledge, Skills, and Engineering Behaviors for BTEC Unit 6 Assessment
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="ksb-grid">
+              <div class="ksb-card k">
+                <div class="card-title" style="color: var(--accent-cyan); font-size: 1.1rem; margin-bottom: 12px;">🧠
+                  Knowledge (K)</div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li><strong>Two-State Logic:</strong> HIGH (5V/3.3V) vs LOW (0V/GND) with zero middle states.</li>
+                  <li><strong>Floating Pins &amp; Antenna Effect:</strong> Why unconnected CMOS gates oscillate
+                    uncontrollably.</li>
+                  <li><strong>Active-HIGH vs Active-LOW:</strong> Normal open vs normal closed sensor conventions.</li>
+                  <li><strong>Industrial Digital Devices:</strong> Microswitches, proximity sensors, reed switches,
+                    safety stops.</li>
+                </ul>
+              </div>
+
+              <div class="ksb-card s">
+                <div class="card-title" style="color: var(--accent-arduino); font-size: 1.1rem; margin-bottom: 12px;">
+                  🛠️ Skills (S)
+                </div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li>Configure pins using <code style="color: #38bdf8;">pinMode(pin, INPUT_PULLUP)</code>.</li>
+                  <li>Sample pin voltages using <code style="color: #38bdf8;">digitalRead(pin)</code>.</li>
+                  <li>Implement multi-condition safety interlocking with logical AND (<code
+                      style="color: #38bdf8;">&amp;&amp;</code>) and NOT (<code style="color: #38bdf8;">!</code>).</li>
+                  <li>Diagnose circuit voltage levels with a Digital Multimeter (DMM).</li>
+                </ul>
+              </div>
+
+              <div class="ksb-card b">
+                <div class="card-title" style="color: #34d399; font-size: 1.1rem; margin-bottom: 12px;">🎯 Behaviors (B)
+                </div>
+                <ul style="padding-left: 20px; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65;">
+                  <li><strong>Fail-Safe Design:</strong> Systems must halt immediately if a wire breaks or sensor fails.
+                  </li>
+                  <li><strong>Methodical Testing:</strong> Predict voltage &rarr; Probe with DMM &rarr; Verify in Serial
+                    Monitor.</li>
+                  <li><strong>Clean Schematics:</strong> Document pin assignments and pull-up resistor values
+                    accurately.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Something to Remember:</strong> By the end of this session, you will be able to wire and code
+              robust digital inputs without noise interference or floating pin instability!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3: The 2-State Binary Reality
+             ========================================== -->
+        <section class="slide" id="slide-3">
+          <div class="slide-header">
+            <span class="slide-tag">Core Concept 1 • Logic Levels</span>
+            <h2 class="slide-title">The 2-State Binary Reality</h2>
+            <p class="slide-subtitle">Digital inputs answer one simple question: Is it ON or OFF?</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">💡 Analogue vs Digital: The Light Switch Analogy</div>
+                <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;">
+                  Unlike an <strong>analogue input</strong> which measures continuous degrees (e.g. a dimmer knob
+                  producing 21.3°C, 21.4°C, 21.5°C), a <strong>digital input</strong> can only exist in two distinct
+                  states.
+                </p>
+
+                <div style="margin-top: 14px; display: flex; gap: 10px;">
+                  <div
+                    style="flex: 1; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="font-weight: 800; color: #34d399; font-size: 1.1rem;">LOGIC 1 (HIGH)</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 4px;">Supply Voltage
+                      (~5.0V / 3.3V)</div>
+                    <div style="font-size: 0.82rem; color: #a7f3d0; margin-top: 2px;">ON / TRUE / PRESSED / CLOSED</div>
+                  </div>
+
+                  <div
+                    style="flex: 1; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 12px; text-align: center;">
+                    <div style="font-weight: 800; color: #f87171; font-size: 1.1rem;">LOGIC 0 (LOW)</div>
+                    <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 4px;">Ground (~0.0V GND)
+                    </div>
+                    <div style="font-size: 0.82rem; color: #fecaca; margin-top: 2px;">OFF / FALSE / OPEN / IDLE</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">⚡ ATmega328P Logic Thresholds (5V Vcc)</div>
+                <table class="compare-table">
+                  <thead>
+                    <tr>
+                      <th>Input Voltage (V_in)</th>
+                      <th>Interpreted Logic State</th>
+                      <th>Safe Operating Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong style="color: #34d399;">3.0V to 5.0V</strong></td>
+                      <td><strong>HIGH (1)</strong></td>
+                      <td>Guaranteed HIGH (&gt; 0.6 × Vcc)</td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color: #fbbf24;">1.5V to 3.0V</strong></td>
+                      <td><em>Undefined / Floating</em></td>
+                      <td>⚠️ Forbidden Zone (Metastable)</td>
+                    </tr>
+                    <tr>
+                      <td><strong style="color: #38bdf8;">0.0V to 1.5V</strong></td>
+                      <td><strong>LOW (0)</strong></td>
+                      <td>Guaranteed LOW (&lt; 0.3 × Vcc)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Key Engineering Rule:</strong> If the question can be answered with <em>YES/NO</em>,
+              <em>OPEN/CLOSED</em>, or <em>1/0</em>, it belongs on a <strong>Digital GPIO Pin</strong>!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4: Interactive Micro-Sim: Pushbutton & LED
+             ========================================== -->
+        <section class="slide" id="slide-4">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Micro-Sim 1 • Hands-On Logic</span>
+            <h2 class="slide-title">Interactive Pushbutton &amp; Logic Probe Simulator</h2>
+            <p class="slide-subtitle">Click and hold the button below to observe instant voltage levels, digital
+              readouts, and LED actuation</p>
+          </div>
+
+          <div class="slide-body">
+
+            <div class="grid-2col">
+              <!-- Left: Interactive Hardware Sim -->
+              <div class="sim-box">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 1rem; font-weight: 700; color: #ffffff;">⚡ Arduino Uno Pin 2 (Digital
+                    Input)</span>
+                  <span class="badge-pill" style="font-size: 0.78rem;">INPUT_PULLUP Active</span>
+                </div>
+
+                <!-- Pushbutton Trigger Control -->
+                <div
+                  style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: rgba(15, 23, 42, 0.8); border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); gap: 14px;">
+                  <button id="sim-btn-press" class="switch-toggle-btn" onmousedown="handleSimBtn(true)"
+                    onmouseup="handleSimBtn(false)" ontouchstart="handleSimBtn(true)" ontouchend="handleSimBtn(false)">
+                    🔘 HOLD TO PRESS PUSHBUTTON
+                  </button>
+                  <span style="font-size: 0.85rem; color: var(--text-muted);">(Hold mouse down or tap to simulate
+                    closing physical contacts)</span>
+                </div>
+
+                <!-- Live Circuit Telemetry -->
+                <div class="grid-2col" style="gap: 10px;">
+                  <div
+                    style="background: #0f172a; border-radius: 8px; padding: 12px; border-left: 3px solid var(--accent-cyan);">
+                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">DMM Voltage at
+                      Pin 2</div>
+                    <div id="sim-voltage"
+                      style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: #38bdf8;">5.00 V
+                    </div>
+                    <div id="sim-state-text" style="font-size: 0.82rem; color: #94a3b8;">State: Released (HIGH)</div>
+                  </div>
+
+                  <div
+                    style="background: #0f172a; border-radius: 8px; padding: 12px; border-left: 3px solid #10b981; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                      <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Output LED
+                        (Pin 13)</div>
+                      <div id="sim-led-text"
+                        style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 800; color: #94a3b8;">LED
+                        OFF</div>
+                    </div>
+                    <div id="sim-led" class="led-indicator off"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Code Implementation -->
+              <div class="card">
+                <div class="card-title">💻 Firmware Implementation (Active-LOW Pullup)</div>
+                <div
+                  style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; overflow-x: auto;">
+                  <span style="color: #64748b;">// --- Pin Definitions: constant integers prevent accidental
+                    modification</span><br>
+                  <span style="color: #ec4899;">const int</span> BUTTON_PIN = <span style="color: #38bdf8;">2</span>;
+                  <span style="color: #64748b;">// Digital Input: Pushbutton connected to GND</span><br>
+                  <span style="color: #ec4899;">const int</span> LED_PIN = <span style="color: #38bdf8;">13</span>;
+                  <span style="color: #64748b;">// Digital Output: Built-in LED on Arduino</span><br><br>
+                  <span style="color: #38bdf8;">void</span> <span style="color: #d2a8ff;">setup</span>() {<br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Enable internal ~20kΩ pull-up resistor (holds pin at 5V
+                    HIGH when open)</span><br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Eliminates floating pin noise without needing external
+                    resistors on breadboard</span><br>
+                  &nbsp;&nbsp;<span style="color: #38bdf8;">pinMode</span>(BUTTON_PIN, <span
+                    style="color: #fbbf24;">INPUT_PULLUP</span>);<br><br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Configure pin 13 as digital output to source up to 20mA
+                    current</span><br>
+                  &nbsp;&nbsp;<span style="color: #38bdf8;">pinMode</span>(LED_PIN, <span
+                    style="color: #fbbf24;">OUTPUT</span>);<br>
+                  }<br><br>
+                  <span style="color: #38bdf8;">void</span> <span style="color: #d2a8ff;">loop</span>() {<br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Sample voltage: returns 1 (HIGH = ~5V) or 0 (LOW =
+                    ~0V)</span><br>
+                  &nbsp;&nbsp;<span style="color: #ec4899;">int</span> buttonState = <span
+                    style="color: #38bdf8;">digitalRead</span>(BUTTON_PIN);<br><br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Active-LOW Logic: pressing button connects pin to GND (0V
+                    / LOW)</span><br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">if</span> (buttonState == <span
+                    style="color: #fbbf24;">LOW</span>) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(LED_PIN, <span
+                    style="color: #fbbf24;">HIGH</span>); <span style="color: #34d399;">// Apply 5V: Turn ON
+                    LED</span><br>
+                  &nbsp;&nbsp;} <span style="color: #f472b6;">else</span> {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(LED_PIN, <span
+                    style="color: #fbbf24;">LOW</span>); <span style="color: #ef4444;">// Apply 0V: Turn OFF
+                    LED</span><br>
+                  &nbsp;&nbsp;}<br>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>🔍 Engineering Insight:</strong> With <code
+                style="color: var(--accent-cyan);">INPUT_PULLUP</code>, pressing the switch pulls the pin down to
+              <strong>0V (LOW)</strong>. This is standard industrial practice because it minimizes external parts!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5: The Floating Pin Problem & Pull-Up/Pull-Down
+             ========================================== -->
+        <section class="slide" id="slide-5">
+          <div class="slide-header">
+            <span class="slide-tag">Electrical Circuit Theory • Critical Concept</span>
+            <h2 class="slide-title">Why Floating Pins Break Systems</h2>
+            <p class="slide-subtitle">A digital pin left unconnected acts like an antenna picking up electromagnetic
+              noise!</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3col">
+              <!-- Bad: Floating Pin -->
+              <div class="card" style="border: 1px solid rgba(239, 68, 68, 0.4);">
+                <div class="card-title" style="color: #f87171;">❌ 1. Floating Pin (Hazardous)</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                  When a switch is open with no resistor connected, the input impedance is ~100 MΩ.
+                </p>
+                <div
+                  style="background: rgba(239, 68, 68, 0.1); border-radius: 6px; padding: 10px; margin-top: 10px; font-size: 0.85rem; color: #fca5a5;">
+                  ⚡ Voltage randomly fluctuates between 0V and 5V due to static charge, mains hum, and nearby motors.
+                </div>
+              </div>
+
+              <!-- Good: Pull-Down -->
+              <div class="card" style="border: 1px solid rgba(14, 165, 233, 0.4);">
+                <div class="card-title" style="color: #38bdf8;">✅ 2. External Pull-Down (10kΩ)</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                  A 10kΩ resistor ties the pin firmly to <strong>GND (0V)</strong> when switch is open.
+                </p>
+                <div
+                  style="background: rgba(14, 165, 233, 0.1); border-radius: 6px; padding: 10px; margin-top: 10px; font-size: 0.85rem; color: #bae6fd;">
+                  • Idle = 0V (LOW)<br>
+                  • Pressed = 5V (HIGH)<br>
+                  • <em>Active-HIGH configuration</em>
+                </div>
+              </div>
+
+              <!-- Best: Internal Pull-Up -->
+              <div class="card" style="border: 1px solid rgba(52, 211, 153, 0.4);">
+                <div class="card-title" style="color: #34d399;">🌟 3. Internal Pull-Up (Recommended)</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                  ATmega328P has built-in <strong>20kΩ–50kΩ pull-up resistors</strong> enabled via firmware.
+                </p>
+                <div
+                  style="background: rgba(52, 211, 153, 0.1); border-radius: 6px; padding: 10px; margin-top: 10px; font-size: 0.85rem; color: #a7f3d0;">
+                  • Zero external resistors needed!<br>
+                  • Idle = 5V (HIGH)<br>
+                  • Pressed = 0V (LOW)<br>
+                  • Active-LOW configuration
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>⚠️ BTEC Exam Golden Rule:</strong> Never leave an active digital input pin floating. Always
+              declare <code style="color: var(--accent-cyan);">pinMode(pin, INPUT_PULLUP)</code> or install a physical
+              pull-up/pull-down resistor.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6: Industrial Automation Sensor Family
+             ========================================== -->
+        <section class="slide" id="slide-6">
+          <div class="slide-header">
+            <span class="slide-tag">Industrial Practice • Factory Floor</span>
+            <h2 class="slide-title">Typical Industrial Digital Input Devices</h2>
+            <p class="slide-subtitle">How physical factory events are transformed into 1s and 0s for PLCs and
+              Microcontrollers</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <div class="card">
+                <div class="card-title">🏭 Industrial Digital Sensors</div>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li><strong>🛑 Emergency Stop Buttons:</strong> Twist-release mushroom buttons with Normally Closed
+                    (NC) contacts for safety.</li>
+                  <li><strong>🚪 Guard Door Interlocks:</strong> Magnetic reed switches and keyed switches verifying
+                    physical safety enclosures.</li>
+                  <li><strong>📏 Inductive Proximity Sensors:</strong> Detect presence of metal parts on conveyor belts
+                    without contact.</li>
+                  <li><strong>✨ Optical Photoelectric Beams:</strong> Detect cartons, bottles, and pallets passing an
+                    infrared beam.</li>
+                  <li><strong>⚙️ Mechanical Limit Switches:</strong> Roller-lever switches detecting end-of-travel in
+                    CNC machines and 3D printers.</li>
+                </ul>
+              </div>
+
+              <div class="card highlight">
+                <div class="card-title">🛡️ The "Fail-Safe" Industrial Standard</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  In industrial safety systems (BS EN ISO 13849):
+                </p>
+                <div
+                  style="background: rgba(15, 23, 42, 0.9); border-radius: 8px; padding: 12px; margin-top: 8px; border-left: 3px solid #f59e0b;">
+                  <strong style="color: #fbbf24;">Why do E-Stops use Normally Closed (NC) circuits?</strong><br>
+                  <span style="font-size: 0.88rem; color: var(--text-secondary);">
+                    During normal operation, current flows through the closed loop (HIGH / 1). If a cable is severed or
+                    damaged, the circuit drops to <strong>0V (LOW)</strong> and the controller triggers an immediate
+                    emergency shutdown!
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>🏭 Industrial Law:</strong> If an emergency wire breaks, the system must <em>fail to safe</em>
+              (HALT), never keep running blind!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7: Interactive Micro-Sim: Bottling Plant Safety Interlock
+             ========================================== -->
+        <section class="slide" id="slide-7">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Micro-Sim 2 • Industrial Mission</span>
+            <h2 class="slide-title">Interactive Bottling Plant Safety Interlock</h2>
+            <p class="slide-subtitle">Toggle sensors to evaluate the real-time Boolean decision engine: IF (Bottle
+              &amp;&amp; Guard &amp;&amp; !E_Stop) THEN Fill Bottle</p>
+          </div>
+
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 4px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 3: Digital Inputs Evidence">
+                📝 ACTION: Open Microsoft Form &rarr; Document Industrial Safety Interlock
+              </span>
+            </div>
+
+            <div class="grid-2col">
+              <!-- Controls & Sensor States -->
+              <div class="sim-box">
+                <div style="font-weight: 700; color: #ffffff;">🏭 Digital Input Sensors:</div>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <!-- Sensor 1: Bottle Present -->
+                  <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: rgba(30,41,59,0.7); padding: 10px 14px; border-radius: 8px;">
+                    <div>
+                      <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">🍾 Optical Sensor (Pin 2)</div>
+                      <div id="lbl-bottle" style="font-size: 0.8rem; color: #94a3b8;">State: Bottle Missing (0)</div>
+                    </div>
+                    <button id="btn-toggle-bottle" class="switch-toggle-btn"
+                      style="padding: 6px 14px; font-size: 0.85rem;" onclick="togglePlantSensor('bottle')">
+                      Place Bottle
+                    </button>
+                  </div>
+
+                  <!-- Sensor 2: Guard Door -->
+                  <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: rgba(30,41,59,0.7); padding: 10px 14px; border-radius: 8px;">
+                    <div>
+                      <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">🚪 Guard Door Interlock (Pin 3)
+                      </div>
+                      <div id="lbl-guard" style="font-size: 0.8rem; color: #34d399;">State: Guard Closed (1)</div>
+                    </div>
+                    <button id="btn-toggle-guard" class="switch-toggle-btn closed"
+                      style="padding: 6px 14px; font-size: 0.85rem;" onclick="togglePlantSensor('guard')">
+                      Open Guard
+                    </button>
+                  </div>
+
+                  <!-- Sensor 3: E-Stop -->
+                  <div
+                    style="display: flex; align-items: center; justify-content: space-between; background: rgba(30,41,59,0.7); padding: 10px 14px; border-radius: 8px;">
+                    <div>
+                      <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">🛑 Emergency Stop (Pin 4)</div>
+                      <div id="lbl-estop" style="font-size: 0.8rem; color: #34d399;">State: Disengaged (Normal)</div>
+                    </div>
+                    <button id="btn-toggle-estop" class="switch-toggle-btn danger"
+                      style="padding: 6px 14px; font-size: 0.85rem;" onclick="togglePlantSensor('estop')">
+                      HIT E-STOP
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Output Actuator State & Logic Engine -->
+              <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title">⚙️ Controller Decision Engine</div>
+                  <div
+                    style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 0.83rem; color: #cbd5e1; line-height: 1.5; overflow-x: auto;">
+                    <span style="color: #64748b;">// 1. Digital Sensor Acquisition (Boolean state mapping)</span><br>
+                    <span style="color: #ec4899;">bool</span> bottlePresent = <span
+                      style="color: #38bdf8;">digitalRead</span>(PIN_BOTTLE); <span style="color: #64748b;">// Optical:
+                      HIGH (1) when object breaks beam</span><br>
+                    <span style="color: #ec4899;">bool</span> guardClosed = <span
+                      style="color: #38bdf8;">digitalRead</span>(PIN_GUARD); <span style="color: #64748b;">// Reed
+                      Switch: HIGH (1) when enclosure shut</span><br>
+                    <span style="color: #ec4899;">bool</span> eStopActive = <span
+                      style="color: #38bdf8;">digitalRead</span>(PIN_ESTOP); <span style="color: #64748b;">// NC Safety
+                      Switch: HIGH (1) if button tripped</span><br><br>
+                    <span style="color: #64748b;">// 2. Multi-Condition Safety Interlock:</span><br>
+                    <span style="color: #64748b;">// All permissive conditions must be TRUE simultaneously (&amp;&amp;)
+                      and E-Stop NOT active (!eStopActive)</span><br>
+                    <span style="color: #f472b6;">if</span> (bottlePresent &amp;&amp; guardClosed &amp;&amp;
+                    !eStopActive) {<br>
+                    &nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_PUMP, <span
+                      style="color: #fbbf24;">HIGH</span>); <span style="color: #34d399;">// Safe to actuate: Fill
+                      Bottle (5V)</span><br>
+                    &nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_CONVEYOR, <span
+                      style="color: #fbbf24;">HIGH</span>); <span style="color: #34d399;">// Advance production line
+                      (5V)</span><br>
+                    } <span style="color: #f472b6;">else</span> {<br>
+                    &nbsp;&nbsp;<span style="color: #64748b;">// Fail-Safe Default: Any safety hazard immediately
+                      de-energizes actuators</span><br>
+                    &nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_PUMP, <span
+                      style="color: #fbbf24;">LOW</span>); <span style="color: #ef4444;">// EMERGENCY SHUTOFF
+                      (0V)</span><br>
+                    &nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_CONVEYOR, <span
+                      style="color: #fbbf24;">LOW</span>); <span style="color: #ef4444;">// STOP CONVEYOR
+                      (0V)</span><br>
+                    }
+                  </div>
+                </div>
+
+                <!-- Live Status Output Display -->
+                <div
+                  style="background: rgba(15, 23, 42, 0.9); border-radius: 8px; padding: 14px; border: 1px solid var(--border-subtle); margin-top: 12px; display: flex; align-items: center; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase;">Actuator
+                      Output Status</div>
+                    <div id="plant-status-text" style="font-weight: 800; font-size: 1.05rem; color: #fbbf24;">LINE IDLE:
+                      Waiting for Bottle</div>
+                  </div>
+                  <div id="plant-led" class="led-indicator on-amber"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>🏭 Challenge:</strong> Try triggering the E-Stop or opening the Guard Door while filling. Notice
+              how the safety logic shuts down the pump in under 1 millisecond!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8: Real-World Applications (Everyday Systems)
+             ========================================== -->
+        <section class="slide" id="slide-8">
+          <div class="slide-header">
+            <span class="slide-tag">Real-World Engineering • Everyday Technology</span>
+            <h2 class="slide-title">Where Else Are Digital Inputs Hiding?</h2>
+            <p class="slide-subtitle">Modern vehicles, consumer gadgets, and robotics depend on hundreds of digital
+              inputs</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Automotive -->
+              <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="font-size: 1.6rem;">🚗</span>
+                  <div class="card-title" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Automotive Systems</div>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Modern vehicles contain hundreds of discrete digital inputs monitoring driver safety and powertrain
+                  status:
+                </p>
+                <ul
+                  style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
+                  <li><strong>Brake Pedal Switch:</strong> Disengages cruise control &amp; illuminates brake lights
+                    immediately.</li>
+                  <li><strong>Seatbelt Buckle Sensor:</strong> Warns passengers and arms active airbag pre-tensioners.
+                  </li>
+                  <li><strong>Door Ajar Interlock:</strong> Triggers interior courtesy illumination and cockpit alarms.
+                  </li>
+                  <li><strong>Reverse Gear Selector:</strong> Activates rear camera and ultrasonic parking beepers.</li>
+                </ul>
+              </div>
+
+              <!-- Smartphones & Consumer -->
+              <div class="card" style="border-top: 4px solid var(--accent-arduino);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="font-size: 1.6rem;">📱</span>
+                  <div class="card-title" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Smartphones &amp;
+                    Consumer Gadgets</div>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Portable electronics rely on micro-tactile and solid-state digital inputs for instant user
+                  interaction:
+                </p>
+                <ul
+                  style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
+                  <li><strong>Power &amp; Volume Buttons:</strong> Hardware interrupt triggers for display and volume
+                    control.</li>
+                  <li><strong>Headset Jack Detect:</strong> Mechanical switch detects insertion to route audio stream.
+                  </li>
+                  <li><strong>Fingerprint Touch Sensor:</strong> Capacitive touch line wakes processor from deep sleep.
+                  </li>
+                  <li><strong>Optical Proximity Sensor:</strong> Shuts down touch screen when phone is held to your ear.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Security & Smart Home -->
+              <div class="card" style="border-top: 4px solid #34d399;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="font-size: 1.6rem;">🏠</span>
+                  <div class="card-title" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Security &amp; Smart
+                    Building IoT</div>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Intruder alarm panels and home automation hubs continuously poll digital security loops:
+                </p>
+                <ul
+                  style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
+                  <li><strong>Magnetic Door &amp; Window Contacts:</strong> Reed switches detect perimeter breaches.
+                  </li>
+                  <li><strong>PIR Motion Detectors:</strong> Solid-state relay pulse indicates infrared motion presence.
+                  </li>
+                  <li><strong>Smart Lock Deadbolt Sensors:</strong> Verifies if the physical mechanical lock is engaged.
+                  </li>
+                  <li><strong>Enclosure Tamper Switches:</strong> Normally Closed circuit alerts if case is pried open.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Robotics & Automation -->
+              <div class="card" style="border-top: 4px solid #fbbf24;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                  <span style="font-size: 1.6rem;">🤖</span>
+                  <div class="card-title" style="margin: 0; font-size: 1.1rem; color: #ffffff;">Robotics &amp;
+                    Mechatronics</div>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  Autonomous robots and CNC machinery use digital boundaries for spatial navigation and protection:
+                </p>
+                <ul
+                  style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
+                  <li><strong>Physical Collision Bumpers:</strong> Microswitches trigger emergency obstacle avoidance.
+                  </li>
+                  <li><strong>Optical Line Following:</strong> High-contrast photo-interrupters track black arena lines.
+                  </li>
+                  <li><strong>Axis End-Stop Limit Switches:</strong> Calibrates mechanical zero-homing for 3D printers.
+                  </li>
+                  <li><strong>Safety Light Curtains:</strong> Multi-beam optical barriers halt robotic arms if breached.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 The Universal Test:</strong> If the sensor only outputs <strong>Presence / Absence</strong> or
+              <strong>Closed / Open</strong>, it is wired to a digital input!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9: 60-Second Live Micro-Quiz
+             ========================================== -->
+        <section class="slide" id="slide-9">
+          <div class="slide-header">
+            <span class="slide-tag">Assessment Checkpoint • 60-Second Sprint</span>
+            <h2 class="slide-title">Live 60-Second Micro-Quiz</h2>
+            <p class="slide-subtitle">Test your digital input instincts! Click the correct answer for instant live
+              feedback.</p>
+          </div>
+
+          <div class="slide-body">
+            <div style="display: flex; gap: 10px; margin-bottom: 4px;">
+              <span class="badge-pill form-link open-forms-trigger"
+                data-form-section="Section 3: Digital Inputs Evidence">
+                📝 ACTION: Open Microsoft Form &rarr; Record Micro-Quiz Answers
+              </span>
+            </div>
+
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Question 1 -->
+              <div class="card">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">1. What voltage does an Arduino
+                  digital pin read when pulled to Ground (GND)?</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q1')">A. 5.0 Volts (HIGH)</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q1')">B. 0.0 Volts (LOW)</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q1')">C. 2.5 Volts (Floating)</div>
+                </div>
+              </div>
+
+              <!-- Question 2 -->
+              <div class="card">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">2. Why is a digital input pin
+                  forbidden from floating unconnected?</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q2')">A. It burns out the microcontroller
+                    instantly</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q2')">B. It picks up EM noise and randomly
+                    toggles 1 and 0</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q2')">C. It reduces clock frequency from 16
+                    MHz to 8 MHz</div>
+                </div>
+              </div>
+
+              <!-- Question 3 -->
+              <div class="card">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">3. When using `pinMode(2,
+                  INPUT_PULLUP)`, what is read when button is released?</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q3')">A. HIGH (5V through internal pullup)
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q3')">B. LOW (0V through ground)</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q3')">C. Analog 512</div>
+                </div>
+              </div>
+
+              <!-- Question 4 -->
+              <div class="card">
+                <div style="font-weight: 700; color: #ffffff; margin-bottom: 8px;">4. Which device is an ANALOGUE input,
+                  NOT a digital input?</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q4')">A. Pushbutton switch</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q4')">B. Emergency stop push button</div>
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q4')">C. Continuous temperature thermistor
+                    (e.g. 21.4°C)</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner" id="quiz-score-banner">
+              <strong>🎯 Score:</strong> Answer the questions above to check your understanding.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 10: Hands-On Lab Challenge Brief
+             ========================================== -->
+        <section class="slide" id="slide-10">
+          <div class="slide-header">
+            <span class="slide-tag">Practical Lab Brief • Next 40 Minutes</span>
+            <h2 class="slide-title">Lab Challenge: The Dual-Button Machine Guard</h2>
+            <p class="slide-subtitle">Design your system architecture, draw circuit schematics, and implement the
+              physical hardware</p>
+          </div>
+
+          <div class="slide-body">
+
+            <div class="grid-2col">
+              <div class="card highlight">
+                <div class="card-title">🛠️ Circuit Hardware Requirements</div>
+                <ul style="padding-left: 18px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li><strong>Arduino Uno Rev3 + USB Cable</strong></li>
+                  <li><strong>Pushbutton 1 (START):</strong> Connected to Pin 2 with <code
+                      style="color: var(--accent-cyan);">INPUT_PULLUP</code>.</li>
+                  <li><strong>Pushbutton 2 (E-STOP):</strong> Connected to Pin 3 with <code
+                      style="color: var(--accent-cyan);">INPUT_PULLUP</code>.</li>
+                  <li><strong>Green LED (RUN):</strong> Pin 12 in series with a 220Ω resistor.</li>
+                  <li><strong>Red LED (STOP/FAULT):</strong> Pin 13 in series with a 220Ω resistor.</li>
+                  <li><strong>Amber / Yellow LED (ALERT):</strong> Pin 8 in series with a 220Ω resistor.</li>
+                </ul>
+              </div>
+
+              <div class="card">
+                <div class="card-title">📐 Engineering Design &amp; Logic Stages</div>
+                <ol style="padding-left: 18px; font-size: 0.90rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li><strong>Block Diagram Design:</strong> First, sketch an Input &rarr; Process &rarr; Output (IPO)
+                    system block diagram showing all signal paths and pin mappings.</li>
+                  <li><strong>Circuit Schematic:</strong> Draw the full electrical schematic diagram including pull-up
+                    switches and LED current-limiting resistors before wiring.</li>
+                  <li><strong>Operational Logic:</strong>
+                    <ul style="padding-left: 16px; margin-top: 2px;">
+                      <li>When <strong>START</strong> is pressed: Green LED turns ON; Red &amp; Amber LEDs turn OFF.
+                      </li>
+                      <li>When <strong>E-STOP</strong> is pressed: Green LED turns OFF immediately; Red turns ON, and
+                        Amber LED blinks as an active hazard alert!</li>
+                    </ul>
+                  </li>
+                  <li><strong>Verification:</strong> Probe pin voltages with the DMM and capture Serial Monitor
+                    telemetry.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Professional Workflow:</strong> Block Diagram → Circuit Schematic - software design
+              → Breadboard Assembly →
+              Firmware Code → Verification.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 11: Summary & Microsoft Form Exit Ticket
+             ========================================== -->
+        <section class="slide" id="slide-11">
+          <div class="slide-header">
+            <span class="slide-tag">Wrap Up • Portfolio Evidence</span>
+            <h2 class="slide-title">Session Summary &amp; Exit Ticket</h2>
+            <p class="slide-subtitle">Please submit your Week 3 responses into the Microsoft Form</p>
+          </div>
+
+          <div class="slide-body" style="text-align: center; max-width: 820px; margin: 0 auto;">
+            <div class="card"
+              style="padding: 28px; border: 1px solid var(--accent-arduino); box-shadow: 0 0 25px rgba(0, 151, 157, 0.2);">
+              <div style="font-size: 2.8rem; margin-bottom: 10px;">📋</div>
+              <h3 style="font-size: 1.45rem; color: #ffffff; margin-bottom: 10px;">Unit 6: Week 3 Form — Digital Inputs
+              </h3>
+              <p style="font-size: 0.98rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px;">
+                Complete your self-assessment check, record your DMM voltage table (HIGH/LOW logic levels), and explain
+                the industrial fail-safe concept in Section 3.
+              </p>
+
+              <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                <button class="btn btn-primary open-forms-trigger"
+                  data-form-section="Section 3: Digital Inputs Evidence" style="padding: 12px 28px; font-size: 1rem;">
+                  📝 Open Week 3 Microsoft Form Drawer
+                </button>
+                <a href="../index.html" class="btn btn-secondary"
+                  style="padding: 12px 24px; font-size: 1rem; text-decoration: none;">
+                  🏠 Return to Main Portal
+                </a>
+              </div>
+            </div>
+
+            <div class="takeaway-banner" style="margin-top: 20px;">
+              <strong>🎓 Key Takeaway:</strong> A digital input is binary (1 or 0), requires defined voltage references
+              (Pull-Up/Pull-Down), and powers the safety and automation backbone of modern engineering systems.
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Deck Footer -->
+      <footer class="deck-footer">
+        <div class="nav-controls">
+          <button class="nav-btn" id="prev-slide" title="Previous Slide (Left Arrow)">◀</button>
+          <button class="nav-btn" id="next-slide" title="Next Slide (Right Arrow)">▶</button>
+          <span class="slide-counter" id="slide-counter">1 / 11</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-secondary open-forms-trigger" data-form-section="Week 3 Form"
+            style="padding: 6px 12px; font-size: 0.8rem;">
+            📝 Form
+          </button>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Backdrop for Drawer -->
+    <div id="drawer-backdrop"></div>
+
+    <!-- Microsoft Forms Side-Drawer -->
+    <aside id="forms-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>📝</span>
+          <span>Week 3 Microsoft Forms Assessment</span>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-popout-btn" id="drawer-popout-btn" title="Open in new tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Pop out
+          </button>
+          <button class="drawer-close-btn" id="drawer-close-btn" title="Close drawer">✕</button>
+        </div>
+      </div>
+
+      <div class="drawer-body">
+        <iframe id="forms-iframe" class="drawer-iframe" src="about:blank" data-src="https://forms.office.com"
+          allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen>
+        </iframe>
+      </div>
+    </aside>
+
+    <!-- Slide Matrix / Map Modal -->
+    <div id="slide-matrix-modal" class="modal-overlay">
+      <div class="slide-matrix-card">
+        <div class="slide-matrix-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🗺️</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff; margin: 0;">Session Slide Matrix</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Click any slide card to jump directly
+                (or press 'M')</p>
+            </div>
+          </div>
+          <button id="close-slide-matrix" class="drawer-close-btn" style="padding: 6px 12px;">✕ Close</button>
+        </div>
+        <div id="slide-matrix-grid" class="slide-matrix-grid">
+          <!-- Populated dynamically by PresentationEngine -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility & Neurodiversity Drawer Backdrop -->
+    <div id="a11y-backdrop"></div>
+
+    <!-- Accessibility & Neurodiversity Side-Drawer -->
+    <aside id="a11y-drawer">
+      <div class="a11y-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">⚙️</span>
+          <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+        </div>
+        <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+      </div>
+
+      <div class="a11y-body">
+        <!-- Speech Synthesis (TTS) -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔊 Web Speech Slide Narration</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="a11y-speak-active-slide" class="btn btn-secondary"
+              style="flex: 1; padding: 8px 12px; font-size: 0.86rem;">
+              🔊 Read Slide Aloud
+            </button>
+            <button id="a11y-stop-speech" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.86rem;">
+              ⏹️ Stop
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Narration Speed:</span>
+            <span id="a11y-speech-rate-val"
+              style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">1.0x</span>
+          </div>
+          <input type="range" id="a11y-speech-rate" min="0.75" max="1.5" step="0.05" value="1.0" class="a11y-slider" />
+        </div>
+
+        <!-- Bionic Reading Mode -->
+        <div class="a11y-switch-row">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+          </div>
+          <input type="checkbox" id="a11y-bionic-toggle"
+            style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+        </div>
+
+        <!-- Typography & Dyslexia Toolbar -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>📖 Font Family</span>
+          </div>
+          <select id="a11y-font-select" class="a11y-select">
+            <option value="default">Inter (Default Crisp)</option>
+            <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+            <option value="system">System UI (Clean Sans-Serif)</option>
+          </select>
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔠 Font Size</span>
+            <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+          </div>
+          <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↕️ Line Spacing</span>
+            <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+          </div>
+          <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↔️ Letter Spacing</span>
+            <span id="a11y-letter-spacing-val"
+              style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+          </div>
+          <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+        </div>
+
+        <!-- Contrast & Colorblind Themes -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🎨 Contrast &amp; Colorblind Themes</span>
+          </div>
+          <select id="a11y-theme-select" class="a11y-select">
+            <option value="default">Dark Engineering (Default)</option>
+            <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+            <option value="clean-light">Clean Light Mode</option>
+            <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+          </select>
+        </div>
+
+        <button id="a11y-reset-prefs" class="btn btn-secondary"
+          style="padding: 8px; font-size: 0.82rem; margin-top: 10px; width: 100%;">
+          🔄 Reset to Default Theme
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Shared JavaScript Engines -->
+  <script src="../shared/js/accessibility-engine.js"></script>
+  <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/self-check.js"></script>
+  <script src="../shared/js/timer.js"></script>
+  <script src="../shared/js/form-drawer.js"></script>
+
+  <!-- Week 3 Interactive Simulator Logic -->
+  <script>
+    // 1. Simulator 1: Live Pushbutton Probe
+    let simBtnHeld = false;
+
+    function handleSimBtn(isPressed) {
+      simBtnHeld = isPressed;
+      const btn = document.getElementById('sim-btn-press');
+      const voltDisplay = document.getElementById('sim-voltage');
+      const stateText = document.getElementById('sim-state-text');
+      const led = document.getElementById('sim-led');
+      const ledText = document.getElementById('sim-led-text');
+
+      if (!btn || !voltDisplay || !stateText || !led || !ledText) return;
+
+      if (simBtnHeld) {
+        btn.classList.add('closed');
+        btn.innerHTML = '🟢 BUTTON HELD CLOSED (0V)';
+        voltDisplay.textContent = '0.04 V';
+        voltDisplay.style.color = '#34d399';
+        stateText.textContent = 'State: Pressed (LOW - Active)';
+        led.className = 'led-indicator on';
+        ledText.textContent = 'LED ON (5V)';
+        ledText.style.color = '#34d399';
+      } else {
+        btn.classList.remove('closed');
+        btn.innerHTML = '🔘 HOLD TO PRESS PUSHBUTTON';
+        voltDisplay.textContent = '5.00 V';
+        voltDisplay.style.color = '#38bdf8';
+        stateText.textContent = 'State: Released (HIGH - Pullup)';
+        led.className = 'led-indicator off';
+        ledText.textContent = 'LED OFF (0V)';
+        ledText.style.color = '#94a3b8';
+      }
+    }
+
+    // 2. Simulator 2: Bottling Plant Safety Interlock
+    const plantState = {
+      bottle: false,
+      guard: true,
+      estop: false
+    };
+
+    function togglePlantSensor(sensor) {
+      plantState[sensor] = !plantState[sensor];
+      updatePlantUI();
+    }
+
+    function updatePlantUI() {
+      const btnBottle = document.getElementById('btn-toggle-bottle');
+      const lblBottle = document.getElementById('lbl-bottle');
+      const btnGuard = document.getElementById('btn-toggle-guard');
+      const lblGuard = document.getElementById('lbl-guard');
+      const btnEstop = document.getElementById('btn-toggle-estop');
+      const lblEstop = document.getElementById('lbl-estop');
+      const statusText = document.getElementById('plant-status-text');
+      const statusLed = document.getElementById('plant-led');
+
+      // Bottle UI
+      if (plantState.bottle) {
+        btnBottle.classList.add('closed');
+        btnBottle.textContent = 'Remove Bottle';
+        lblBottle.textContent = 'State: Bottle Present (1)';
+        lblBottle.style.color = '#34d399';
+      } else {
+        btnBottle.classList.remove('closed');
+        btnBottle.textContent = 'Place Bottle';
+        lblBottle.textContent = 'State: Bottle Missing (0)';
+        lblBottle.style.color = '#94a3b8';
+      }
+
+      // Guard UI
+      if (plantState.guard) {
+        btnGuard.classList.add('closed');
+        btnGuard.textContent = 'Open Guard';
+        lblGuard.textContent = 'State: Guard Closed (1)';
+        lblGuard.style.color = '#34d399';
+      } else {
+        btnGuard.classList.remove('closed');
+        btnGuard.textContent = 'Close Guard';
+        lblGuard.textContent = 'State: Guard OPEN (0 - HAZARD)';
+        lblGuard.style.color = '#f87171';
+      }
+
+      // E-Stop UI
+      if (plantState.estop) {
+        btnEstop.textContent = 'RESET E-STOP';
+        btnEstop.style.background = '#f59e0b';
+        lblEstop.textContent = 'State: E-STOP ENGAGED (FAULT)';
+        lblEstop.style.color = '#ef4444';
+      } else {
+        btnEstop.textContent = 'HIT E-STOP';
+        btnEstop.style.background = '#dc2626';
+        lblEstop.textContent = 'State: Disengaged (Normal)';
+        lblEstop.style.color = '#34d399';
+      }
+
+      // Logic Engine Evaluation: bottle && guard && !estop
+      if (plantState.estop) {
+        statusText.textContent = '🛑 EMERGENCY HALT: E-Stop Tripped!';
+        statusText.style.color = '#ef4444';
+        statusLed.className = 'led-indicator on-red';
+      } else if (!plantState.guard) {
+        statusText.textContent = '⚠️ SAFETY INTERLOCK: Guard Open!';
+        statusText.style.color = '#f87171';
+        statusLed.className = 'led-indicator on-red';
+      } else if (!plantState.bottle) {
+        statusText.textContent = '⏳ LINE IDLE: Waiting for Bottle';
+        statusText.style.color = '#fbbf24';
+        statusLed.className = 'led-indicator on-amber';
+      } else {
+        statusText.textContent = '🟢 LINE ACTIVE: Filling Bottle & Conveyor Running';
+        statusText.style.color = '#34d399';
+        statusLed.className = 'led-indicator on';
+      }
+    }
+
+    // 3. Live 60-Second Micro-Quiz Engine
+    const quizResults = { q1: null, q2: null, q3: null, q4: null };
+
+    function checkQuiz(element, isCorrect, qId) {
+      const parent = element.parentElement;
+      const options = parent.querySelectorAll('.quiz-option');
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+      });
+
+      if (isCorrect) {
+        element.classList.add('correct');
+        quizResults[qId] = true;
+      } else {
+        element.classList.add('wrong');
+        quizResults[qId] = false;
+      }
+
+      const totalAnswered = Object.values(quizResults).filter(v => v !== null).length;
+      const correctCount = Object.values(quizResults).filter(v => v === true).length;
+      const banner = document.getElementById('quiz-score-banner');
+
+      if (banner) {
+        if (totalAnswered === 4) {
+          if (correctCount === 4) {
+            banner.innerHTML = `<strong>🎉 Perfect 4/4!</strong> Outstanding mastery of digital inputs and industrial circuit logic!`;
+            banner.style.borderLeftColor = '#10b981';
+          } else {
+            banner.innerHTML = `<strong>🎯 Score: ${correctCount}/4</strong> Good attempt! Review any red items before heading to the lab.`;
+            banner.style.borderLeftColor = '#f59e0b';
+          }
+        } else {
+          banner.innerHTML = `<strong>🎯 Current Score: ${correctCount}/${totalAnswered}</strong> (${4 - totalAnswered} questions remaining)`;
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

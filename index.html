@@ -578,7 +578,6 @@
       </div>
       <div class="top-nav-links">
         <a href="#weeks-section" class="nav-btn-link active-link">📚 All Weeks</a>
-        <a href="week1/index.html" class="nav-btn-link">⚡ Week 1 (Live)</a>
         <a href="contact.html" class="nav-btn-link">👨‍🏫 Tutor Contact</a>
         <button id="open-a11y-drawer" class="nav-btn-link" style="cursor: pointer;">⚙️ Accessibility</button>
       </div>
@@ -766,29 +765,30 @@
       </a>
 
       <!-- Week 3 Card -->
-      <div class="week-card" style="opacity: 0.88;" data-category="interfacing">
+      <a href="week3/index.html" class="week-card" data-category="interfacing"
+        style="text-decoration: none; color: inherit;">
         <div>
           <div class="card-top-meta">
-            <span class="week-badge upcoming">Week 3 • Upcoming</span>
-            <span class="tag-track">Hardware</span>
+            <span class="week-badge active">Week 3 • Live</span>
+            <span class="tag-track">Sensors &amp; Logic</span>
           </div>
-          <h3 class="week-title">Digital Sensors &amp; Actuators</h3>
+          <h3 class="week-title">Digital Inputs &amp; Sensor Interfacing</h3>
           <p class="week-desc">
-            Interfacing pushbutton switches, pull-up/pull-down resistors, hardware/software debounce algorithms, and
-            switching transistors &amp; relays.
+            Binary logic states (HIGH/LOW), input pull-up resistors, floating pin prevention, switch debouncing, and
+            industrial safety interlock logic.
           </p>
           <div class="week-meta-features">
-            <span class="feature-chip">Switch Debounce</span>
-            <span class="feature-chip">BJT Drivers</span>
-            <span class="feature-chip">Relay Isolation</span>
+            <span class="feature-chip">2-State Logic</span>
+            <span class="feature-chip">INPUT_PULLUP</span>
+            <span class="feature-chip">Bottling Interlock Sim</span>
+            <span class="feature-chip">Live Micro-Quiz</span>
           </div>
         </div>
         <div class="card-footer">
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Scheduled</span>
-          <span class="btn btn-secondary"
-            style="padding: 6px 14px; font-size: 0.8rem; pointer-events: none; opacity: 0.6;">Preview Soon</span>
+          <span style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700;">🟢 Ready to Deliver</span>
+          <span class="btn btn-primary" style="padding: 6px 16px; font-size: 0.84rem;">Launch Deck →</span>
         </div>
-      </div>
+      </a>
 
       <!-- Week 4 Card -->
       <div class="week-card" style="opacity: 0.88;" data-category="firmware">
