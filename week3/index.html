@@ -74,29 +74,22 @@
       color: #fbbf24;
     }
 
-    .badge-pill.form-link {
-      background: rgba(14, 165, 233, 0.22);
-      border: 1px solid #0ea5e9;
-      color: #38bdf8;
-      cursor: pointer;
-      font-size: 0.95rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .badge-pill.form-link:hover {
-      background: rgba(14, 165, 233, 0.4);
-      transform: translateY(-1px);
-      box-shadow: 0 0 12px rgba(14, 165, 233, 0.4);
-    }
-
     .card {
       background: var(--bg-surface-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 12px;
       padding: 20px 22px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 151, 157, 0.4);
+    }
+
+    .card.highlight {
+      border-color: var(--accent-arduino);
+      background: rgba(15, 23, 42, 0.92);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
 
     .card-title {
@@ -187,6 +180,7 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
     }
 
     .switch-toggle-btn {
@@ -198,10 +192,20 @@
       font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      user-select: none;
+    }
+
+    .switch-toggle-btn:hover {
+      transform: translateY(-1px);
+      border-color: #94a3b8;
+    }
+
+    .switch-toggle-btn:active {
+      transform: translateY(1px);
     }
 
     .switch-toggle-btn.closed {
@@ -222,7 +226,7 @@
       border-radius: 50%;
       display: inline-block;
       border: 2px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .led-indicator.off {
@@ -245,15 +249,16 @@
       box-shadow: 0 0 18px #f59e0b, 0 0 30px #f59e0b;
     }
 
-    .code-chip {
-      background: #0d1117;
-      border: 1px solid #30363d;
+    .code-terminal {
+      background: #090e17;
+      border: 1px solid #334155;
       border-radius: 8px;
-      padding: 12px;
+      padding: 14px 16px;
       font-family: var(--font-mono);
-      font-size: 0.92rem;
-      color: #58a6ff;
-      line-height: 1.5;
+      font-size: 0.84rem;
+      color: #cbd5e1;
+      line-height: 1.55;
+      overflow-x: auto;
     }
 
     /* Quiz Option Cards */
@@ -269,10 +274,11 @@
       align-items: center;
       justify-content: space-between;
       font-size: 0.95rem;
+      user-select: none;
     }
 
     .quiz-option:hover {
-      background: rgba(51, 65, 85, 0.8);
+      background: rgba(51, 65, 85, 0.9);
       border-color: var(--accent-cyan);
       transform: translateY(-2px);
     }
@@ -572,8 +578,7 @@
               <!-- Right: Code Implementation -->
               <div class="card">
                 <div class="card-title">💻 Firmware Implementation (Active-LOW Pullup)</div>
-                <div
-                  style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 0.84rem; color: #cbd5e1; line-height: 1.5; overflow-x: auto;">
+                <div class="code-terminal">
                   <span style="color: #64748b;">// --- Pin Definitions: constant integers prevent accidental
                     modification</span><br>
                   <span style="color: #ec4899;">const int</span> BUTTON_PIN = <span style="color: #38bdf8;">2</span>;
@@ -750,12 +755,6 @@
           </div>
 
           <div class="slide-body">
-            <div style="display: flex; gap: 10px; margin-bottom: 4px;">
-              <span class="badge-pill form-link open-forms-trigger"
-                data-form-section="Section 3: Digital Inputs Evidence">
-                📝 ACTION: Open Microsoft Form &rarr; Document Industrial Safety Interlock
-              </span>
-            </div>
 
             <div class="grid-2col">
               <!-- Controls & Sensor States -->
@@ -809,8 +808,7 @@
               <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                   <div class="card-title">⚙️ Controller Decision Engine</div>
-                  <div
-                    style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 14px 16px; font-family: var(--font-mono); font-size: 0.83rem; color: #cbd5e1; line-height: 1.5; overflow-x: auto;">
+                  <div class="code-terminal">
                     <span style="color: #64748b;">// 1. Digital Sensor Acquisition (Boolean state mapping)</span><br>
                     <span style="color: #ec4899;">bool</span> bottlePresent = <span
                       style="color: #38bdf8;">digitalRead</span>(PIN_BOTTLE); <span style="color: #64748b;">// Optical:
@@ -991,12 +989,6 @@
           </div>
 
           <div class="slide-body">
-            <div style="display: flex; gap: 10px; margin-bottom: 4px;">
-              <span class="badge-pill form-link open-forms-trigger"
-                data-form-section="Section 3: Digital Inputs Evidence">
-                📝 ACTION: Open Microsoft Form &rarr; Record Micro-Quiz Answers
-              </span>
-            </div>
 
             <div class="grid-2col" style="gap: 16px;">
               <!-- Question 1 -->
@@ -1340,53 +1332,82 @@
 
   <!-- Week 3 Interactive Simulator Logic -->
   <script>
-    // 1. Simulator 1: Live Pushbutton Probe
-    let simBtnHeld = false;
+    (function () {
+      'use strict';
 
-    function handleSimBtn(isPressed) {
-      simBtnHeld = isPressed;
-      const btn = document.getElementById('sim-btn-press');
+      // ==========================================
+      // 1. Pushbutton & Logic Probe Simulator
+      // ==========================================
+      const simBtn = document.getElementById('sim-btn-press');
       const voltDisplay = document.getElementById('sim-voltage');
       const stateText = document.getElementById('sim-state-text');
       const led = document.getElementById('sim-led');
       const ledText = document.getElementById('sim-led-text');
 
-      if (!btn || !voltDisplay || !stateText || !led || !ledText) return;
+      function setPushButtonState(isPressed) {
+        if (!simBtn || !voltDisplay || !stateText || !led || !ledText) return;
 
-      if (simBtnHeld) {
-        btn.classList.add('closed');
-        btn.innerHTML = '🟢 BUTTON HELD CLOSED (0V)';
-        voltDisplay.textContent = '0.04 V';
-        voltDisplay.style.color = '#34d399';
-        stateText.textContent = 'State: Pressed (LOW - Active)';
-        led.className = 'led-indicator on';
-        ledText.textContent = 'LED ON (5V)';
-        ledText.style.color = '#34d399';
-      } else {
-        btn.classList.remove('closed');
-        btn.innerHTML = '🔘 HOLD TO PRESS PUSHBUTTON';
-        voltDisplay.textContent = '5.00 V';
-        voltDisplay.style.color = '#38bdf8';
-        stateText.textContent = 'State: Released (HIGH - Pullup)';
-        led.className = 'led-indicator off';
-        ledText.textContent = 'LED OFF (0V)';
-        ledText.style.color = '#94a3b8';
+        if (isPressed) {
+          simBtn.classList.add('closed');
+          simBtn.innerHTML = '🟢 BUTTON HELD CLOSED (0V)';
+          voltDisplay.textContent = '0.04 V';
+          voltDisplay.style.color = '#34d399';
+          stateText.textContent = 'State: Pressed (LOW - Active)';
+          led.className = 'led-indicator on';
+          ledText.textContent = 'LED ON (5V)';
+          ledText.style.color = '#34d399';
+        } else {
+          simBtn.classList.remove('closed');
+          simBtn.innerHTML = '🔘 HOLD TO PRESS PUSHBUTTON';
+          voltDisplay.textContent = '5.00 V';
+          voltDisplay.style.color = '#38bdf8';
+          stateText.textContent = 'State: Released (HIGH - Pullup)';
+          led.className = 'led-indicator off';
+          ledText.textContent = 'LED OFF (0V)';
+          ledText.style.color = '#94a3b8';
+        }
       }
-    }
 
-    // 2. Simulator 2: Bottling Plant Safety Interlock
-    const plantState = {
-      bottle: false,
-      guard: true,
-      estop: false
-    };
+      if (simBtn) {
+        // Pointer events support desktop mouse and mobile touch uniformly
+        simBtn.addEventListener('pointerdown', function (e) {
+          e.preventDefault();
+          setPushButtonState(true);
+        });
 
-    function togglePlantSensor(sensor) {
-      plantState[sensor] = !plantState[sensor];
-      updatePlantUI();
-    }
+        window.addEventListener('pointerup', function () {
+          setPushButtonState(false);
+        });
 
-    function updatePlantUI() {
+        window.addEventListener('pointercancel', function () {
+          setPushButtonState(false);
+        });
+
+        // Keyboard accessibility: spacebar / Enter to hold button
+        simBtn.addEventListener('keydown', function (e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            setPushButtonState(true);
+          }
+        });
+
+        simBtn.addEventListener('keyup', function (e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            setPushButtonState(false);
+          }
+        });
+      }
+
+      // ==========================================
+      // 2. Bottling Plant Safety Interlock Simulator
+      // ==========================================
+      const plantState = {
+        bottle: false,
+        guard: true,
+        estop: false
+      };
+
       const btnBottle = document.getElementById('btn-toggle-bottle');
       const lblBottle = document.getElementById('lbl-bottle');
       const btnGuard = document.getElementById('btn-toggle-guard');
@@ -1396,101 +1417,117 @@
       const statusText = document.getElementById('plant-status-text');
       const statusLed = document.getElementById('plant-led');
 
-      // Bottle UI
-      if (plantState.bottle) {
-        btnBottle.classList.add('closed');
-        btnBottle.textContent = 'Remove Bottle';
-        lblBottle.textContent = 'State: Bottle Present (1)';
-        lblBottle.style.color = '#34d399';
-      } else {
-        btnBottle.classList.remove('closed');
-        btnBottle.textContent = 'Place Bottle';
-        lblBottle.textContent = 'State: Bottle Missing (0)';
-        lblBottle.style.color = '#94a3b8';
-      }
+      function updatePlantUI() {
+        if (!btnBottle || !btnGuard || !btnEstop || !statusText || !statusLed) return;
 
-      // Guard UI
-      if (plantState.guard) {
-        btnGuard.classList.add('closed');
-        btnGuard.textContent = 'Open Guard';
-        lblGuard.textContent = 'State: Guard Closed (1)';
-        lblGuard.style.color = '#34d399';
-      } else {
-        btnGuard.classList.remove('closed');
-        btnGuard.textContent = 'Close Guard';
-        lblGuard.textContent = 'State: Guard OPEN (0 - HAZARD)';
-        lblGuard.style.color = '#f87171';
-      }
-
-      // E-Stop UI
-      if (plantState.estop) {
-        btnEstop.textContent = 'RESET E-STOP';
-        btnEstop.style.background = '#f59e0b';
-        lblEstop.textContent = 'State: E-STOP ENGAGED (FAULT)';
-        lblEstop.style.color = '#ef4444';
-      } else {
-        btnEstop.textContent = 'HIT E-STOP';
-        btnEstop.style.background = '#dc2626';
-        lblEstop.textContent = 'State: Disengaged (Normal)';
-        lblEstop.style.color = '#34d399';
-      }
-
-      // Logic Engine Evaluation: bottle && guard && !estop
-      if (plantState.estop) {
-        statusText.textContent = '🛑 EMERGENCY HALT: E-Stop Tripped!';
-        statusText.style.color = '#ef4444';
-        statusLed.className = 'led-indicator on-red';
-      } else if (!plantState.guard) {
-        statusText.textContent = '⚠️ SAFETY INTERLOCK: Guard Open!';
-        statusText.style.color = '#f87171';
-        statusLed.className = 'led-indicator on-red';
-      } else if (!plantState.bottle) {
-        statusText.textContent = '⏳ LINE IDLE: Waiting for Bottle';
-        statusText.style.color = '#fbbf24';
-        statusLed.className = 'led-indicator on-amber';
-      } else {
-        statusText.textContent = '🟢 LINE ACTIVE: Filling Bottle & Conveyor Running';
-        statusText.style.color = '#34d399';
-        statusLed.className = 'led-indicator on';
-      }
-    }
-
-    // 3. Live 60-Second Micro-Quiz Engine
-    const quizResults = { q1: null, q2: null, q3: null, q4: null };
-
-    function checkQuiz(element, isCorrect, qId) {
-      const parent = element.parentElement;
-      const options = parent.querySelectorAll('.quiz-option');
-      options.forEach(opt => {
-        opt.classList.remove('correct', 'wrong');
-      });
-
-      if (isCorrect) {
-        element.classList.add('correct');
-        quizResults[qId] = true;
-      } else {
-        element.classList.add('wrong');
-        quizResults[qId] = false;
-      }
-
-      const totalAnswered = Object.values(quizResults).filter(v => v !== null).length;
-      const correctCount = Object.values(quizResults).filter(v => v === true).length;
-      const banner = document.getElementById('quiz-score-banner');
-
-      if (banner) {
-        if (totalAnswered === 4) {
-          if (correctCount === 4) {
-            banner.innerHTML = `<strong>🎉 Perfect 4/4!</strong> Outstanding mastery of digital inputs and industrial circuit logic!`;
-            banner.style.borderLeftColor = '#10b981';
-          } else {
-            banner.innerHTML = `<strong>🎯 Score: ${correctCount}/4</strong> Good attempt! Review any red items before heading to the lab.`;
-            banner.style.borderLeftColor = '#f59e0b';
-          }
+        // Bottle UI
+        if (plantState.bottle) {
+          btnBottle.classList.add('closed');
+          btnBottle.textContent = 'Remove Bottle';
+          lblBottle.textContent = 'State: Bottle Present (1)';
+          lblBottle.style.color = '#34d399';
         } else {
-          banner.innerHTML = `<strong>🎯 Current Score: ${correctCount}/${totalAnswered}</strong> (${4 - totalAnswered} questions remaining)`;
+          btnBottle.classList.remove('closed');
+          btnBottle.textContent = 'Place Bottle';
+          lblBottle.textContent = 'State: Bottle Missing (0)';
+          lblBottle.style.color = '#94a3b8';
+        }
+
+        // Guard UI
+        if (plantState.guard) {
+          btnGuard.classList.add('closed');
+          btnGuard.textContent = 'Open Guard';
+          lblGuard.textContent = 'State: Guard Closed (1)';
+          lblGuard.style.color = '#34d399';
+        } else {
+          btnGuard.classList.remove('closed');
+          btnGuard.textContent = 'Close Guard';
+          lblGuard.textContent = 'State: Guard OPEN (0 - HAZARD)';
+          lblGuard.style.color = '#f87171';
+        }
+
+        // E-Stop UI
+        if (plantState.estop) {
+          btnEstop.textContent = 'RESET E-STOP';
+          btnEstop.style.background = '#f59e0b';
+          lblEstop.textContent = 'State: E-STOP ENGAGED (FAULT)';
+          lblEstop.style.color = '#ef4444';
+        } else {
+          btnEstop.textContent = 'HIT E-STOP';
+          btnEstop.style.background = '#dc2626';
+          lblEstop.textContent = 'State: Disengaged (Normal)';
+          lblEstop.style.color = '#34d399';
+        }
+
+        // Decision Logic Engine: IF (bottlePresent && guardClosed && !eStopActive)
+        if (plantState.estop) {
+          statusText.textContent = '🛑 EMERGENCY HALT: E-Stop Tripped!';
+          statusText.style.color = '#ef4444';
+          statusLed.className = 'led-indicator on-red';
+        } else if (!plantState.guard) {
+          statusText.textContent = '⚠️ SAFETY INTERLOCK: Guard Open!';
+          statusText.style.color = '#f87171';
+          statusLed.className = 'led-indicator on-red';
+        } else if (!plantState.bottle) {
+          statusText.textContent = '⏳ LINE IDLE: Waiting for Bottle';
+          statusText.style.color = '#fbbf24';
+          statusLed.className = 'led-indicator on-amber';
+        } else {
+          statusText.textContent = '🟢 LINE ACTIVE: Filling Bottle & Conveyor Running';
+          statusText.style.color = '#34d399';
+          statusLed.className = 'led-indicator on';
         }
       }
-    }
+
+      window.togglePlantSensor = function (sensor) {
+        if (plantState.hasOwnProperty(sensor)) {
+          plantState[sensor] = !plantState[sensor];
+          updatePlantUI();
+        }
+      };
+
+      // ==========================================
+      // 3. Live 60-Second Micro-Quiz Engine
+      // ==========================================
+      const quizResults = { q1: null, q2: null, q3: null, q4: null };
+
+      window.checkQuiz = function (element, isCorrect, qId) {
+        const parent = element.parentElement;
+        if (!parent) return;
+
+        const options = parent.querySelectorAll('.quiz-option');
+        options.forEach(function (opt) {
+          opt.classList.remove('correct', 'wrong');
+        });
+
+        if (isCorrect) {
+          element.classList.add('correct');
+          quizResults[qId] = true;
+        } else {
+          element.classList.add('wrong');
+          quizResults[qId] = false;
+        }
+
+        const totalAnswered = Object.values(quizResults).filter(function (v) { return v !== null; }).length;
+        const correctCount = Object.values(quizResults).filter(function (v) { return v === true; }).length;
+        const banner = document.getElementById('quiz-score-banner');
+
+        if (banner) {
+          if (totalAnswered === 4) {
+            if (correctCount === 4) {
+              banner.innerHTML = `<strong>🎉 Perfect 4/4!</strong> Outstanding mastery of digital inputs and industrial circuit logic!`;
+              banner.style.borderLeftColor = '#10b981';
+            } else {
+              banner.innerHTML = `<strong>🎯 Score: ${correctCount}/4</strong> Good attempt! Review any red items before heading to the lab.`;
+              banner.style.borderLeftColor = '#f59e0b';
+            }
+          } else {
+            banner.innerHTML = `<strong>🎯 Current Score: ${correctCount}/${totalAnswered}</strong> (${4 - totalAnswered} questions remaining)`;
+          }
+        }
+      };
+
+    })();
   </script>
 </body>
 
