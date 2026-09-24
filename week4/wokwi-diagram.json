@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "author": "Mission Control Engineering Ltd / Unit 6 Engineering Team",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-arduino-uno",
+      "id": "uno",
+      "top": 210,
+      "left": 260,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_green",
+      "top": 30,
+      "left": 210,
+      "attrs": { "color": "green", "label": "READY" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_green",
+      "top": 110,
+      "left": 200,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_amber",
+      "top": 30,
+      "left": 310,
+      "attrs": { "color": "yellow", "label": "WARNING" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_amber",
+      "top": 110,
+      "left": 300,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_red",
+      "top": 30,
+      "left": 410,
+      "attrs": { "color": "red", "label": "FAULT" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_red",
+      "top": 110,
+      "left": 400,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "strobe",
+      "top": 30,
+      "left": 510,
+      "attrs": { "color": "white", "label": "STROBE" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_strobe",
+      "top": 110,
+      "left": 500,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "fan_buzzer",
+      "top": 35,
+      "left": 610,
+      "attrs": { "hasLocalSound": "true", "label": "COOLING FAN / ALARM" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn_ready",
+      "top": 190,
+      "left": 60,
+      "attrs": { "color": "green", "label": "B1: READY" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn_running",
+      "top": 270,
+      "left": 60,
+      "attrs": { "color": "blue", "label": "B2: RUNNING" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn_warning",
+      "top": 350,
+      "left": 60,
+      "attrs": { "color": "yellow", "label": "B3: WARNING" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn_fault",
+      "top": 430,
+      "left": 60,
+      "attrs": { "color": "red", "label": "B4: FAULT" }
+    }
+  ],
+  "connections": [
+    [ "uno:2", "r_green:1", "green", [ "v-30", "h-100" ] ],
+    [ "r_green:2", "led_green:A", "green", [ "v-10" ] ],
+    [ "led_green:C", "uno:GND.1", "black", [ "v-15", "h120", "v120" ] ],
+
+    [ "uno:3", "r_amber:1", "orange", [ "v-40", "h-30" ] ],
+    [ "r_amber:2", "led_amber:A", "orange", [ "v-10" ] ],
+    [ "led_amber:C", "led_green:C", "black", [ "v-15", "h-100" ] ],
+
+    [ "uno:4", "r_red:1", "red", [ "v-40", "h40" ] ],
+    [ "r_red:2", "led_red:A", "red", [ "v-10" ] ],
+    [ "led_red:C", "led_amber:C", "black", [ "v-15", "h-100" ] ],
+
+    [ "uno:5", "fan_buzzer:2", "cyan", [ "v-60", "h210" ] ],
+    [ "fan_buzzer:1", "uno:GND.1", "black", [ "v-20", "h-260", "v125" ] ],
+
+    [ "uno:6", "r_strobe:1", "purple", [ "v-50", "h110" ] ],
+    [ "r_strobe:2", "strobe:A", "white", [ "v-10" ] ],
+    [ "strobe:C", "led_red:C", "black", [ "v-15", "h-100" ] ],
+
+    [ "btn_ready:1.r", "uno:8", "green", [ "h60", "v-20", "h150" ] ],
+    [ "btn_running:1.r", "uno:9", "blue", [ "h50", "v-90", "h170" ] ],
+    [ "btn_warning:1.r", "uno:10", "gold", [ "h40", "v-160", "h190" ] ],
+    [ "btn_fault:1.r", "uno:11", "red", [ "h30", "v-230", "h210" ] ],
+
+    [ "uno:GND.2", "btn_ready:2.l", "black", [ "v60", "h-240", "v-130" ] ],
+    [ "btn_ready:2.l", "btn_running:2.l", "black", [ "h-20", "v80", "h20" ] ],
+    [ "btn_running:2.l", "btn_warning:2.l", "black", [ "h-20", "v80", "h20" ] ],
+    [ "btn_warning:2.l", "btn_fault:2.l", "black", [ "h-20", "v80", "h20" ] ]
+  ]
+}

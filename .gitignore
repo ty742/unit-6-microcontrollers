@@ -59,3 +59,10 @@ temp/
 /resource pack/
 # Ignore all png files in the root directory
 /*.png
+
+*guide.md
+*.docx
+*.pdf
+*.pptx
+*.doc
+*.txt

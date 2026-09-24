@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: Microcontrollers — Week 4: B1 Digital Outputs &amp; Machine Actuation</title>
+  <link rel="stylesheet" href="../shared/css/presentation.css">
+  <link rel="stylesheet" href="../shared/css/form-drawer.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Slide Layout & Typography System */
+    .slide {
+      padding: 24px 50px 84px !important;
+    }
+
+    .slide-header {
+      margin-bottom: 14px;
+    }
+
+    .slide-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .slide-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .slide-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-arduino));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(0, 151, 157, 0.2);
+      border: 1px solid var(--accent-arduino);
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    .badge-pill.gold {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--color-warning);
+      color: #fbbf24;
+    }
+
+    .badge-pill.purple {
+      background: rgba(168, 85, 247, 0.2);
+      border-color: #a855f7;
+      color: #d8b4fe;
+    }
+
+    .card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 151, 157, 0.4);
+    }
+
+    .card.highlight {
+      border-color: var(--accent-arduino);
+      background: rgba(15, 23, 42, 0.92);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    /* KSB Clean Grid Layout */
+    .ksb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .ksb-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ksb-card.k {
+      border-top: 5px solid var(--accent-cyan);
+    }
+
+    .ksb-card.s {
+      border-top: 5px solid var(--accent-arduino);
+    }
+
+    .ksb-card.b {
+      border-top: 5px solid #34d399;
+    }
+
+    .takeaway-banner {
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 0.96rem;
+      color: #f1f5f9;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .takeaway-banner strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.92rem;
+    }
+
+    .compare-table th {
+      background: rgba(30, 41, 59, 0.98);
+      color: #ffffff;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 0.95rem;
+      border-bottom: 2px solid var(--accent-arduino);
+    }
+
+    .compare-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* Interactive Simulator Box */
+    .sim-box {
+      background: #090e17;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Actuator Indicators */
+    .led-indicator {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.25s ease;
+    }
+
+    .led-indicator.off {
+      background: #1e293b;
+      box-shadow: none;
+      opacity: 0.5;
+    }
+
+    .led-indicator.on-green {
+      background: #10b981;
+      border-color: #a7f3d0;
+      box-shadow: 0 0 16px #10b981, 0 0 28px #10b981;
+      opacity: 1;
+    }
+
+    .led-indicator.on-amber {
+      background: #f59e0b;
+      border-color: #fde68a;
+      box-shadow: 0 0 16px #f59e0b, 0 0 28px #f59e0b;
+      opacity: 1;
+    }
+
+    .led-indicator.on-red {
+      background: #ef4444;
+      border-color: #fecaca;
+      box-shadow: 0 0 16px #ef4444, 0 0 28px #ef4444;
+      opacity: 1;
+    }
+
+    /* Strobe Light Animation */
+    .strobe-beacon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #334155;
+      border: 2px solid #64748b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .strobe-beacon.active {
+      background: #38bdf8;
+      border-color: #ffffff;
+      animation: strobeFlash 0.35s infinite alternate ease-in-out;
+    }
+
+    @keyframes strobeFlash {
+      0% {
+        background: #0284c7;
+        box-shadow: 0 0 5px #0284c7;
+        transform: scale(0.96);
+      }
+
+      100% {
+        background: #ffffff;
+        box-shadow: 0 0 25px #ffffff, 0 0 45px #38bdf8;
+        transform: scale(1.08);
+      }
+    }
+
+    /* Fan Actuator Animation */
+    .fan-housing {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #0f172a;
+      border: 3px solid #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+    }
+
+    .fan-blades {
+      font-size: 2.2rem;
+      line-height: 1;
+      display: inline-block;
+      transform-origin: center center;
+      color: #64748b;
+      transition: color 0.3s ease;
+    }
+
+    .fan-blades.spinning {
+      color: #38bdf8;
+      animation: spinFan 0.3s infinite linear;
+    }
+
+    @keyframes spinFan {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Pushbuttons */
+    .ctrl-btn {
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 2px solid #475569;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--accent-cyan);
+      background: #334155;
+      transform: translateY(-2px);
+    }
+
+    .ctrl-btn.active-state {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.25);
+      color: #a7f3d0;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+    }
+
+    .ctrl-btn.warn-state {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.25);
+      color: #fde68a;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .ctrl-btn.fault-state {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.25);
+      color: #fecaca;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
+    }
+
+    /* Terminal and Code */
+    .code-terminal {
+      background: #090e17;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      overflow-x: auto;
+    }
+
+    .code-line-highlight {
+      background: rgba(0, 151, 157, 0.25);
+      border-left: 3px solid var(--accent-cyan);
+      display: block;
+      padding: 2px 6px;
+      margin: 2px -6px;
+      border-radius: 3px;
+    }
+
+    /* Quiz Option Cards */
+    .quiz-option {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #f1f5f9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      user-select: none;
+    }
+
+    .quiz-option:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .quiz-option.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #34d399 !important;
+      font-weight: 700;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #f87171 !important;
+    }
+
+    /* Interactive Drag-and-Drop Sorter Styles */
+    .sort-item {
+      background: #1e293b;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #ffffff;
+      cursor: grab;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    }
+
+    .sort-item:hover {
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+      background: #334155;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+    }
+
+    .sort-item.dragging {
+      opacity: 0.45;
+      cursor: grabbing;
+      transform: scale(0.96);
+      border-style: dashed;
+      border-color: var(--accent-cyan);
+    }
+
+    .sort-item.selected-for-move {
+      border-color: #fbbf24 !important;
+      background: rgba(245, 158, 11, 0.25) !important;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.5) !important;
+    }
+
+    .sort-item.correct {
+      border-color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #a7f3d0 !important;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+    }
+
+    .sort-item.wrong {
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.2) !important;
+      color: #fecaca !important;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3) !important;
+    }
+
+    .sort-bucket {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px dashed #475569;
+      border-radius: 10px;
+      padding: 14px;
+      min-height: 115px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+      transition: all 0.2s ease;
+    }
+
+    .sort-bucket.drag-over {
+      border-color: #ffffff !important;
+      background: rgba(30, 41, 59, 0.9) !important;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+      transform: scale(1.01);
+    }
+
+    .sort-bucket.target-input {
+      border-color: var(--accent-cyan);
+    }
+
+    .sort-bucket.target-output {
+      border-color: #34d399;
+    }
+
+    /* State Matrix Table */
+    .state-interactive-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .state-interactive-table th,
+    .state-interactive-table td {
+      border: 1px solid #334155;
+      padding: 8px 10px;
+      text-align: center;
+    }
+
+    .state-interactive-table th {
+      background: #1e293b;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .state-toggle-cell {
+      cursor: pointer;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s ease;
+      display: inline-block;
+      user-select: none;
+      min-width: 32px;
+    }
+
+    .state-toggle-cell.val-0 {
+      background: #334155;
+      color: #94a3b8;
+    }
+
+    .state-toggle-cell.val-1 {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.6);
+    }
+
+    /* Contract Tier Badge */
+    .contract-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .contract-bronze {
+      background: rgba(205, 127, 50, 0.2);
+      border: 1px solid #cd7f32;
+      color: #e5a663;
+    }
+
+    .contract-silver {
+      background: rgba(192, 192, 192, 0.2);
+      border: 1px solid #c0c0c0;
+      color: #e2e8f0;
+    }
+
+    .contract-gold {
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #f59e0b;
+      color: #fbbf24;
+    }
+
+    .contract-platinum {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid #a855f7;
+      color: #d8b4fe;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid"></div>
+
+  <div id="app-container">
+    <div id="deck-viewport">
+
+      <!-- Top Header -->
+      <header class="deck-header">
+        <div class="header-top-row">
+          <a href="../index.html" class="nav-hub-link" title="Return to Course Homepage Hub">
+            🏠 Course Hub
+          </a>
+          <div class="brand-badge">
+            <span class="pill">UNIT 6</span>
+            <span>Microcontrollers</span>
+            <span style="color: var(--text-muted);">|</span>
+            <span id="header-slide-topic" style="color: var(--accent-cyan); font-weight: 600;">Week 4: Digital Outputs
+            </span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="timer-widget" data-duration="20"
+            style="display: inline-flex; align-items: center; gap: 6px; background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 8px;">
+            <span class="timer-display"
+              style="font-family: var(--font-mono); font-weight: 700; color: #fbbf24; font-size: 0.9rem;">20:00</span>
+            <button class="timer-toggle btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">Start</button>
+            <button class="timer-reset btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">↺</button>
+          </div>
+
+          <button class="btn btn-secondary" id="open-a11y-drawer" title="Accessibility &amp; Neurodiversity (Key: A)">
+            ⚙️ Accessibility
+          </button>
+          <button class="btn btn-secondary" id="open-slide-matrix" title="View all slides overview (Key: M)">
+            🗺️ Slide Map
+          </button>
+          <button class="btn btn-form-action open-forms-trigger" data-form-section="Section 1: Student Information">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 4px;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+            📝 Microsoft Form
+          </button>
+        </div>
+      </header>
+
+      <!-- Slides Wrapper -->
+      <main id="slides-wrapper">
+
+        <!-- ==========================================
+             SLIDE 1: Welcome & Mission Briefing
+             ========================================== -->
+        <section class="slide active" id="slide-1">
+          <div class="slide-body" style="justify-content: center; align-items: flex-start;">
+            <div class="badge-bar">
+              <span class="badge-pill">Session: Week 4</span>
+              <span class="badge-pill">Duration: 3 Hours</span>
+              <span class="badge-pill gold">BTEC Unit 6 </span>
+              <span class="badge-pill purple">Mission Control Engineering Ltd</span>
+            </div>
+            <h1 class="hero-title">Digital Outputs:<br>Make the Machine Respond</h1>
+            <h2 class="slide-subtitle" style="font-size: 1.25rem; color: var(--text-primary); margin-bottom: 16px;">
+              Actuator Interfacing, Flowcharts to Pseudocode, and Industrial Packaging Machine Commissioning
+            </h2>
+            <div class="card highlight" style="max-width: 900px;">
+              <div style="font-size: 1.15rem; font-weight: 700; color: #38bdf8; margin-bottom: 8px;">
+                🚀 The Big Question:
+              </div>
+              <p style="font-size: 1.1rem; line-height: 1.6; color: #f1f5f9; margin-bottom: 12px;">
+                <em>"How do engineers make machines communicate with human operators and physically control high-power
+                  industrial equipment?"</em>
+              </p>
+              <p style="font-size: 0.95rem; line-height: 1.55; color: var(--text-secondary);">
+                <strong>Mission Story:</strong> You have joined <strong>Mission Control Engineering Ltd</strong> as a
+                Junior Automation Engineer.
+                Multiple industrial clients need machines to show status, warn factory operators, cool critical
+                electronics, and respond reliably
+                to pushbuttons. Your engineering challenge is to design, flowchart, code, test, and commission these
+                systems.
+              </p>
+            </div>
+            <div style="margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="window.deckEngine.nextSlide()">Accept Mission Briefing →</button>
+              <button class="btn btn-secondary open-forms-trigger" data-form-section="Section 1: Student Information">
+                📝 Open Week 4 Evidence Form
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2: Learning Goals & BTEC Workflow
+             ========================================== -->
+        <section class="slide" id="slide-2">
+          <div class="slide-header">
+            <span class="slide-tag">Curriculum Alignment • BTEC National &amp; Higher Engineering</span>
+            <h2 class="slide-title">Learning Goals &amp; Engineering Workflow</h2>
+            <p class="slide-subtitle">Targeted competencies and the engineering workflow for BTEC Unit 6 Assessment
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="ksb-grid">
+              <div class="ksb-card k">
+                <div class="card-title" style="color: var(--accent-cyan); font-size: 1.05rem;">🎯 Learning Goals (B1)
+                </div>
+                <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li>✅ Explain what a digital output is and its voltage logic.</li>
+                  <li>✅ Select the correct visual, sound, or mechanical actuator.</li>
+                  <li>✅ Construct an ISO standard system flowchart.</li>
+                  <li>✅ Translate flowcharts into formal pseudocode.</li>
+                  <li>✅ Program Arduino outputs with safe current limits.</li>
+                  <li>✅ Integrate digital inputs with multi-state outputs.</li>
+                  <li>✅ Systematically troubleshoot hardware/firmware faults.</li>
+                </ul>
+              </div>
+
+              <div class="ksb-card s">
+                <div class="card-title" style="color: var(--accent-arduino); font-size: 1.05rem;">🔄 The BTEC
+                  Engineering Cycle</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; color: #f1f5f9;">
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                    <strong>1. Scenario &amp; Brief:</strong> Customer needs analysis
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #00979d;">
+                    <strong>2. I/O Allocation:</strong> Map sensors &amp; actuators
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #10b981;">
+                    <strong>3. State Table:</strong> Predict truth matrix
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #f59e0b;">
+                    <strong>4. Flowchart &amp; Pseudocode:</strong> Plan logic
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #ec4899;">
+                    <strong>5. Code &amp; Test:</strong> Stepwise commissioning
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 5px 8px; border-radius: 6px; border-left: 3px solid #a855f7;">
+                    <strong>6. Fault Finding &amp; Evidence:</strong> Log fixes
+                  </div>
+                </div>
+              </div>
+
+              <div class="ksb-card b">
+                <div class="card-title" style="color: #34d399; font-size: 1.05rem;">💼 Professional Behaviors</div>
+                <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li><strong>Safety First:</strong> Never exceed 20mA on ATmega328P output pins.</li>
+                  <li><strong>No Guesswork:</strong> State table &amp; flowchart drafted before any code is written.
+                  </li>
+                  <li><strong>Stepwise Verification:</strong> Test components in isolation prior to system integration.
+                  </li>
+                  <li><strong>Diagnostic Rigor:</strong> Record symptoms, root causes, and solutions in evidence logs.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Industry Standard:</strong> In professional automation engineering, 80% of project time is
+              spent on planning, state verification, and modular testing. Writing code is simply translating your
+              verified flowchart!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3: Retrieval Practice: Input vs Output
+             ========================================== -->
+        <section class="slide" id="slide-3">
+          <div class="slide-header">
+            <span class="slide-tag">10-Min Retrieval Practice • Foundational Diagnostics</span>
+            <h2 class="slide-title">Transducer Classification: Input or Output?</h2>
+            <p class="slide-subtitle">Drag and drop each component into either the Inputs (Sensors) or Outputs
+              (Actuators) container, then verify your logic</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="card highlight" style="padding: 12px 18px;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-weight: 700; color: #ffffff;">📦 Available Components (Drag to sort):</span>
+                  <span id="pool-count" class="badge-pill" style="font-size: 0.75rem;">8 remaining</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                  <button class="btn btn-primary" id="btn-check-sort" onclick="checkSortClassification()"
+                    style="padding: 5px 14px; font-size: 0.82rem;">
+                    ✓ Check Classification
+                  </button>
+                  <button class="btn btn-secondary" id="btn-reveal-sort" onclick="revealSortAnswers()"
+                    style="display: none; padding: 5px 14px; font-size: 0.82rem; border-color: #f59e0b; color: #fbbf24;">
+                    🔍 Reveal Correct Answers
+                  </button>
+                  <button class="btn btn-secondary" onclick="resetSortActivity()"
+                    style="padding: 5px 12px; font-size: 0.82rem;">
+                    ↺ Reset Sorter
+                  </button>
+                </div>
+              </div>
+              <div id="sort-items-pool" class="sort-bucket"
+                style="border: 1px dashed rgba(255,255,255,0.18); min-height: 52px; background: rgba(15,23,42,0.6); margin-top: 10px;">
+                <div class="sort-item" id="item-btn" draggable="true" data-type="input" data-label="🔘 Push Button">🔘
+                  Push Button</div>
+                <div class="sort-item" id="item-led" draggable="true" data-type="output" data-label="💡 Status LED">💡
+                  Status LED</div>
+                <div class="sort-item" id="item-fan" draggable="true" data-type="output" data-label="🌀 Cooling Fan">🌀
+                  Cooling Fan</div>
+                <div class="sort-item" id="item-buzzer" draggable="true" data-type="output"
+                  data-label="🔊 Piezo Buzzer">🔊 Piezo Buzzer</div>
+                <div class="sort-item" id="item-strobe" draggable="true" data-type="output"
+                  data-label="🚨 Strobe Light">🚨 Strobe Light</div>
+                <div class="sort-item" id="item-temp" draggable="true" data-type="input"
+                  data-label="🌡️ Temperature Sensor">🌡️ Temperature Sensor</div>
+                <div class="sort-item" id="item-motor" draggable="true" data-type="output" data-label="⚙️ DC Motor">⚙️
+                  DC Motor</div>
+                <div class="sort-item" id="item-ldr" draggable="true" data-type="input"
+                  data-label="☀️ Light Dependent Resistor (LDR)">☀️ Light Dependent Resistor (LDR)</div>
+              </div>
+            </div>
+
+            <div class="grid-2col" style="gap: 14px;">
+              <!-- Target Inputs -->
+              <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="card-title" style="color: var(--accent-cyan); margin: 0;">📥 Digital / Analogue Inputs
+                    (Sensors)</span>
+                  <span id="input-count" class="badge-pill" style="font-size: 0.75rem;">0 placed</span>
+                </div>
+                <div id="bucket-inputs" class="sort-bucket target-input"></div>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                  *Sensors convert physical energy (light, heat, pressure) into electrical voltage signals.
+                </p>
+              </div>
+
+              <!-- Target Outputs -->
+              <div class="card" style="border-top: 4px solid #34d399;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="card-title" style="color: #34d399; margin: 0;">📤 Digital Outputs (Actuators)</span>
+                  <span id="output-count" class="badge-pill"
+                    style="font-size: 0.75rem; border-color: #34d399; color: #34d399;">0 placed</span>
+                </div>
+                <div id="bucket-outputs" class="sort-bucket target-output"></div>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+                  *Actuators convert electrical signals from the microcontroller into physical actions (light, sound,
+                  motion).
+                </p>
+              </div>
+            </div>
+
+            <div id="sort-feedback" class="takeaway-banner" style="display: none;">
+              <!-- Populated by JS when checked -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4: Discovery: How Machines Respond
+             ========================================== -->
+        <section class="slide" id="slide-4">
+          <div class="slide-header">
+            <span class="slide-tag">Discovery • Actuator Domains</span>
+            <h2 class="slide-title">How Machines Respond: Visual, Sound &amp; Motion</h2>
+            <p class="slide-subtitle">Selecting the optimal output actuator based on engineering and human-machine
+              interface requirements</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="ksb-grid">
+              <!-- Visual -->
+              <div class="card" style="border-top: 4px solid #38bdf8;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">👁️</span>
+                  <div>
+                    <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Visual Outputs</h3>
+                    <span style="font-size: 0.76rem; color: #38bdf8;">Human-Machine Visual Interface</span>
+                  </div>
+                </div>
+                <ul style="padding-left: 18px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;">
+                  <li><strong>Standard LEDs:</strong> High-efficiency state indicators (Green = OK, Amber = Warning, Red
+                    = Fault).</li>
+                  <li><strong>RGB LEDs:</strong> Multi-colour status from a single component via PWM mixing.</li>
+                  <li><strong>Stack / Tower Lights:</strong> 360° visibility in noisy factory environments.</li>
+                  <li><strong>Strobe Lights:</strong> Intense flashing xenon/LED bursts to demand immediate operator
+                    attention.</li>
+                </ul>
+              </div>
+
+              <!-- Sound -->
+              <div class="card" style="border-top: 4px solid #f59e0b;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">🔊</span>
+                  <div>
+                    <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Sound Outputs</h3>
+                    <span style="font-size: 0.76rem; color: #fbbf24;">Auditory Warning Signals</span>
+                  </div>
+                </div>
+                <ul style="padding-left: 18px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;">
+                  <li><strong>Piezo Buzzers:</strong> Low-cost acoustic sounders (2kHz–4kHz resonance).</li>
+                  <li><strong>Active Buzzer:</strong> Generates continuous tone upon applying direct 5V DC.</li>
+                  <li><strong>Passive Buzzer:</strong> Requires frequency waveform (e.g. `tone(pin, freq)`).</li>
+                  <li><strong>Auditory Siren:</strong> High-decibel warning for machine starts and emergency halts.</li>
+                </ul>
+              </div>
+
+              <!-- Mechanical -->
+              <div class="card" style="border-top: 4px solid #10b981;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                  <span style="font-size: 1.5rem;">⚙️</span>
+                  <div>
+                    <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Mechanical Outputs</h3>
+                    <span style="font-size: 0.76rem; color: #34d399;">Kinetic &amp; Thermal Work</span>
+                  </div>
+                </div>
+                <ul style="padding-left: 18px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55;">
+                  <li><strong>Cooling Fans:</strong> Forced air convection to prevent electronic thermal breakdown.</li>
+                  <li><strong>DC Motors:</strong> Rotary drive for conveyors, pumps, and packaging feed rollers.</li>
+                  <li><strong>Servos &amp; Solenoids:</strong> Precise positional actuation and pneumatic valves.</li>
+                  <li><strong>Relays &amp; Contactors:</strong> Isolating high-voltage AC mains from 5V logic.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card highlight" style="padding: 12px 18px;">
+              <span style="font-weight: 700; color: #ffffff;">⚡ Electrical Engineering Rule:</span>
+              <span style="font-size: 0.9rem; color: var(--text-secondary); margin-left: 8px;">
+                Low-power visual indicators (LEDs) can be driven directly by microcontroller pins (with a
+                current-limiting resistor).
+                Heavy visual, sound, or mechanical loads (Fans, Motors, Sirens) <strong>MUST NEVER</strong> be powered
+                directly from an ATmega328P pin!
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5: Engineering Decision Challenge
+             ========================================== -->
+        <section class="slide" id="slide-5">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Challenge • Human Factors &amp; Safety</span>
+            <h2 class="slide-title">Engineering Decision Challenge: Choose the Best Output</h2>
+            <p class="slide-subtitle">Evaluate industrial operating constraints and select the most appropriate actuator
+              combination</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-3col" style="gap: 14px;">
+              <!-- Scenario 1 -->
+              <div class="card">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                  <span class="contract-badge contract-bronze">Scenario 1</span>
+                  <span style="font-weight: 700; color: #ffffff; font-size: 0.92rem;">Thermal Overload</span>
+                </div>
+                <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 12px;">
+                  An enclosed motor-drive electronics cabinet is overheating (cabinet internal temp &gt; 55°C). Which
+                  output should activate?
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'A buzzer alerts operators but does not remove heat!')">
+                    <span>A) Audible Buzzer</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, true, 'Correct! Forced convection fan cools the internal heat sinks immediately.')">
+                    <span>B) DC Cooling Fan</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'LED provides indication but does not lower cabinet temperature.')">
+                    <span>C) Green LED</span>
+                  </button>
+                </div>
+                <div class="decision-feedback" style="font-size: 0.8rem; margin-top: 8px; min-height: 32px;"></div>
+              </div>
+
+              <!-- Scenario 2 -->
+              <div class="card">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                  <span class="contract-badge contract-silver">Scenario 2</span>
+                  <span style="font-weight: 700; color: #ffffff; font-size: 0.92rem;">Emergency Stop</span>
+                </div>
+                <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 12px;">
+                  An Emergency Stop button is pressed in a noisy factory hall (ambient noise &gt; 92 dBA). Which output
+                  gives highest visibility?
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'In a loud 92 dBA factory floor, quiet buzzers are completely drowned out.')">
+                    <span>A) Low-Tone Buzzer</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, true, 'Correct! High-intensity strobe flashes cut through ambient noise and plant fog.')">
+                    <span>B) High-Intensity Strobe</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'A single small LED is too subtle for safety-critical emergency awareness.')">
+                    <span>C) Small 3mm Amber LED</span>
+                  </button>
+                </div>
+                <div class="decision-feedback" style="font-size: 0.8rem; margin-top: 8px; min-height: 32px;"></div>
+              </div>
+
+              <!-- Scenario 3 -->
+              <div class="card">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                  <span class="contract-badge contract-gold">Scenario 3</span>
+                  <span style="font-weight: 700; color: #ffffff; font-size: 0.92rem;">Severe Fault</span>
+                </div>
+                <p style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 12px;">
+                  A packaging machine jam has occurred and safety guards are breached. Which combination ensures safe
+                  status broadcast?
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'Green indicates healthy operation—misleading in a jam fault!')">
+                    <span>A) Green LED + Fan</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, false, 'Amber indicates warning; severe faults demand unambiguous red shutdown.')">
+                    <span>B) Amber LED only</span>
+                  </button>
+                  <button class="quiz-option"
+                    onclick="evaluateDecision(this, true, 'Correct! Red LED provides fixed status while the Strobe signals urgent stoppage.')">
+                    <span>C) Red LED + Strobe</span>
+                  </button>
+                </div>
+                <div class="decision-feedback" style="font-size: 0.8rem; margin-top: 8px; min-height: 32px;"></div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>🏭 Human Factors Engineering (HFE):</strong> Safety outputs must be multimodal—combining distinct
+              colour conventions (Red = Danger, Amber = Caution, Green = Safe) with dynamic movement or high-intensity
+              flash to overcome perceptual blindness.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6: Hardware Interfacing & Currents
+             ========================================== -->
+        <section class="slide" id="slide-6">
+          <div class="slide-header">
+            <span class="slide-tag">Electrical Engineering • Safe Interfacing</span>
+            <h2 class="slide-title">Current Limits &amp; Transistor Switch Drivers</h2>
+            <p class="slide-subtitle">Protecting the ATmega328P from thermal damage and destructive inductive flyback
+              voltage</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Left: Direct vs Driver Rules -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">⚡ Microcontroller Output Pin Ratings</div>
+                <table class="compare-table" style="margin-top: 8px;">
+                  <tr>
+                    <th>Parameter</th>
+                    <th>ATmega328P Limit</th>
+                    <th>Engineering Action</th>
+                  </tr>
+                  <tr>
+                    <td><strong>Nominal Pin Current</strong></td>
+                    <td><code>20 mA</code> recommended</td>
+                    <td>Use series resistor with LEDs (220Ω – 330Ω)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Absolute Maximum Pin</strong></td>
+                    <td><code>40 mA</code> damage threshold</td>
+                    <td>Exceeding this burns internal CMOS FET gates</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Total Package Limit</strong></td>
+                    <td><code>200 mA</code> across all pins</td>
+                    <td>Never illuminate all LEDs at max current simultaneously</td>
+                  </tr>
+                  <tr>
+                    <td><strong>DC Fan / Motor Current</strong></td>
+                    <td><code>150 mA – 1000+ mA</code></td>
+                    <td><strong>NEVER direct!</strong> Requires Transistor or MOSFET</td>
+                  </tr>
+                </table>
+
+                <div
+                  style="background: rgba(15,23,42,0.9); border-radius: 8px; padding: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 0.82rem; border-left: 3px solid var(--accent-arduino);">
+                  <strong>Ohm's Law for LED Resistor:</strong><br>
+                  R = (V_CC - V_Forward) / I_Forward = (5.0V - 2.0V) / 0.015A = <strong>200 Ω</strong> (Use standard
+                  <strong>220Ω or 330Ω</strong>).
+                </div>
+              </div>
+
+              <!-- Right: Transistor Driver Schematic -->
+              <div class="card">
+                <div class="card-title" style="color: #34d399;">🔌 Inductive Driver &amp; Flyback Protection</div>
+                <div
+                  style="background: #090e17; border-radius: 8px; padding: 12px; border: 1px solid #334155; text-align: center;">
+                  <!-- Clean SVG Schematic -->
+                  <svg viewBox="0 0 380 200" width="100%" height="160" style="max-width: 360px;">
+                    <!-- Power Rail +5V/12V -->
+                    <line x1="20" y1="20" x2="360" y2="20" stroke="#f59e0b" stroke-width="2" />
+                    <text x="25" y="16" fill="#f59e0b" font-size="10" font-family="monospace">+Vcc (5V / External
+                      12V)</text>
+
+                    <!-- Motor / Fan -->
+                    <circle cx="280" cy="65" r="22" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+                    <text x="270" y="70" fill="#ffffff" font-size="14" font-weight="bold">M</text>
+                    <line x1="280" y1="20" x2="280" y2="43" stroke="#f59e0b" stroke-width="2" />
+
+                    <!-- Flyback Diode across coil -->
+                    <line x1="335" y1="43" x2="335" y2="87" stroke="#94a3b8" stroke-width="1.5" />
+                    <line x1="280" y1="43" x2="335" y2="43" stroke="#94a3b8" stroke-width="1.5" />
+                    <line x1="280" y1="87" x2="335" y2="87" stroke="#94a3b8" stroke-width="1.5" />
+                    <!-- Diode symbol -->
+                    <polygon points="330,70 340,70 335,60" fill="#f87171" />
+                    <line x1="330" y1="60" x2="340" y2="60" stroke="#f87171" stroke-width="2" />
+                    <text x="345" y="68" fill="#f87171" font-size="9" font-family="monospace">1N4001 Flyback</text>
+
+                    <!-- NPN Transistor -->
+                    <circle cx="280" cy="130" r="18" fill="none" stroke="#64748b" stroke-width="1.5" />
+                    <!-- Base line -->
+                    <line x1="272" y1="120" x2="272" y2="140" stroke="#ffffff" stroke-width="2" />
+                    <!-- Collector -->
+                    <line x1="280" y1="87" x2="280" y2="110" stroke="#38bdf8" stroke-width="1.5" />
+                    <line x1="280" y1="110" x2="272" y2="124" stroke="#ffffff" stroke-width="1.5" />
+                    <!-- Emitter to GND -->
+                    <line x1="272" y1="136" x2="280" y2="150" stroke="#ffffff" stroke-width="1.5" />
+                    <polygon points="278,145 281,148 276,150" fill="#ffffff" />
+                    <line x1="280" y1="150" x2="280" y2="175" stroke="#94a3b8" stroke-width="1.5" />
+                    <!-- GND line -->
+                    <line x1="260" y1="175" x2="300" y2="175" stroke="#94a3b8" stroke-width="2" />
+                    <line x1="268" y1="180" x2="292" y2="180" stroke="#94a3b8" stroke-width="1.5" />
+                    <line x1="274" y1="185" x2="286" y2="185" stroke="#94a3b8" stroke-width="1.5" />
+
+                    <!-- Base Resistor from MCU Pin -->
+                    <rect x="130" y="125" width="40" height="12" fill="#334155" stroke="#38bdf8" />
+                    <text x="134" y="134" fill="#ffffff" font-size="8" font-family="monospace">1kΩ Base</text>
+                    <line x1="170" y1="131" x2="272" y2="131" stroke="#ffffff" stroke-width="1.5" />
+                    <line x1="70" y1="131" x2="130" y2="131" stroke="#38bdf8" stroke-width="1.5" />
+                    <circle cx="70" cy="131" r="4" fill="#38bdf8" />
+                    <text x="15" y="135" fill="#38bdf8" font-size="9" font-family="monospace">MCU Pin (D5)</text>
+                    <text x="240" y="165" fill="#a7f3d0" font-size="9" font-family="monospace">2N2222 / TIP120</text>
+                  </svg>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px;">
+                  ⚠️ When an inductive coil (fan/motor) switches off, magnetic field collapse creates a huge negative
+                  voltage spike (<strong>Back-EMF</strong>). The <strong>1N4001 flyback diode</strong> clamps this
+                  safely!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7: Commissioning Brief: Packaging Machine
+             ========================================== -->
+        <section class="slide" id="slide-7">
+          <div class="slide-header">
+            <span class="slide-tag">Main Commissioning Task • Customer Specification</span>
+            <h2 class="slide-title">Mission Brief: The 4-State Packaging Machine</h2>
+            <p class="slide-subtitle">Customer Brief: A packaging machine station at Mission Control Engineering Ltd
+              requires four operational states controlled by four momentary operator pushbuttons (connected with
+              internal pullups).</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Inputs & Brief -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">📥 Input Interface Specification</div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">
+                  The machine operator station features four momentary pushbuttons with internal pull-up resistors
+                  (`INPUT_PULLUP`).
+                </p>
+                <table class="compare-table">
+                  <tr>
+                    <th>Input Trigger</th>
+                    <th>Target Machine State</th>
+                    <th>Pin Assignment</th>
+                  </tr>
+                  <tr>
+                    <td><strong>Button 1</strong></td>
+                    <td><span class="badge-pill"
+                        style="font-size: 0.75rem; border-color: #34d399; color: #34d399;">READY</span></td>
+                    <td><code>Pin D8 (INPUT_PULLUP)</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Button 2</strong></td>
+                    <td><span class="badge-pill"
+                        style="font-size: 0.75rem; border-color: #38bdf8; color: #38bdf8;">RUNNING</span></td>
+                    <td><code>Pin D9 (INPUT_PULLUP)</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Button 3</strong></td>
+                    <td><span class="badge-pill"
+                        style="font-size: 0.75rem; border-color: #f59e0b; color: #fbbf24;">WARNING</span></td>
+                    <td><code>Pin D10 (INPUT_PULLUP)</code></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Button 4</strong></td>
+                    <td><span class="badge-pill"
+                        style="font-size: 0.75rem; border-color: #ef4444; color: #f87171;">FAULT</span></td>
+                    <td><code>Pin D11 (INPUT_PULLUP)</code></td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Required Output Behaviors -->
+              <div class="card">
+                <div class="card-title" style="color: #34d399;">📤 Output Actuator Requirements</div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;">
+                  Each state triggers a distinct combination of visual indicators and mechanical cooling:
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.86rem;">
+                  <div
+                    style="background: rgba(16,185,129,0.15); border: 1px solid #10b981; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🟢 READY State</strong>
+                    <span>Green LED <strong>ON</strong> (All others OFF)</span>
+                  </div>
+                  <div
+                    style="background: rgba(56,189,248,0.15); border: 1px solid #38bdf8; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🔵 RUNNING State</strong>
+                    <span>Green LED <strong>ON</strong> + Cooling Fan <strong>ON</strong></span>
+                  </div>
+                  <div
+                    style="background: rgba(245,158,11,0.15); border: 1px solid #f59e0b; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🟡 WARNING State</strong>
+                    <span>Amber LED <strong>ON</strong> (Fan &amp; Green OFF)</span>
+                  </div>
+                  <div
+                    style="background: rgba(239,68,68,0.15); border: 1px solid #ef4444; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <strong>🔴 FAULT State</strong>
+                    <span>Red LED <strong>ON</strong> + Strobe Light <strong>FLASHING</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>⚙️ Engineering Deliverable:</strong> You must create the truth table, system flowchart,
+              pseudocode, and firmware before assembling hardware.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8: Predict Before Build: State Table
+             ========================================== -->
+        <section class="slide" id="slide-8">
+          <div class="slide-header">
+            <span class="slide-tag">Predict Before Build • State Table Verification</span>
+            <h2 class="slide-title">Interactive Engineering State Table</h2>
+            <p class="slide-subtitle">Click the cells to toggle binary states (0 = OFF, 1 = ON) to match the packaging
+              machine customer brief</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="card highlight" style="padding: 14px 18px;">
+              <table class="state-interactive-table" id="interactive-state-table">
+                <thead>
+                  <tr>
+                    <th>Machine State</th>
+                    <th>Green LED (D2)</th>
+                    <th>Amber LED (D3)</th>
+                    <th>Red LED (D4)</th>
+                    <th>Cooling Fan (D5)</th>
+                    <th>Strobe Light (D6)</th>
+                    <th>Validation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-row="ready">
+                    <td style="font-weight: 700; color: #34d399;">🟢 Ready</td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td class="row-status" style="font-size: 0.8rem; color: var(--text-muted);">Unchecked</td>
+                  </tr>
+                  <tr data-row="running">
+                    <td style="font-weight: 700; color: #38bdf8;">🔵 Running</td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td class="row-status" style="font-size: 0.8rem; color: var(--text-muted);">Unchecked</td>
+                  </tr>
+                  <tr data-row="warning">
+                    <td style="font-weight: 700; color: #fbbf24;">🟡 Warning</td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td class="row-status" style="font-size: 0.8rem; color: var(--text-muted);">Unchecked</td>
+                  </tr>
+                  <tr data-row="fault">
+                    <td style="font-weight: 700; color: #f87171;">🔴 Fault</td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td><span class="state-toggle-cell val-0" onclick="toggleStateCell(this)">0</span></td>
+                    <td class="row-status" style="font-size: 0.8rem; color: var(--text-muted);">Unchecked</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; flex-wrap: wrap; gap: 10px;">
+                <button class="btn btn-primary" onclick="verifyStateTable()"
+                  style="padding: 8px 18px; font-size: 0.88rem;">
+                  ✓ Check State Table Prediction
+                </button>
+                <button class="btn btn-secondary" onclick="revealStateTableAnswers()"
+                  style="padding: 8px 14px; font-size: 0.84rem;">
+                  🔍 Reveal Target Engineering Solution
+                </button>
+                <div id="table-score-feedback" style="font-size: 0.9rem; font-weight: 700; color: var(--accent-cyan);">
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>📝 BTEC Criteria Note:</strong> You must include this completed state table inside Section 2 of
+              your Microsoft Forms report. It guarantees zero conflicting actuator signals!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9: Engineering Planning: Flowcharts
+             ========================================== -->
+        <section class="slide" id="slide-9">
+          <div class="slide-header">
+            <span class="slide-tag">Engineering Planning • ISO Systems Flowcharting</span>
+            <h2 class="slide-title">System Architecture: Flowcharts</h2>
+            <p class="slide-subtitle">Engineers design solutions before writing a single line of executable code. They
+              plan the logic and algorithms first to ensure that the code is correct and efficient. <span><br>Graphical
+                flowcharts are used to map out the logic of the solution</span></br></p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Left: Flowchart Symbols -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">📐 Standard Flowchart Symbols</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                  <div
+                    style="display: flex; align-items: center; gap: 12px; background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 8px;">
+                    <div
+                      style="width: 70px; height: 36px; border-radius: 18px; border: 2px solid #38bdf8; background: rgba(56, 189, 248, 0.12); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #38bdf8; flex-shrink: 0;">
+                      OVAL
+                    </div>
+                    <div>
+                      <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">START / END (Terminator)</div>
+                      <div style="font-size: 0.78rem; color: var(--text-muted);">Defines entry and exit points of
+                        firmware loop.</div>
+                    </div>
+                  </div>
+
+                  <div
+                    style="display: flex; align-items: center; gap: 12px; background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 8px;">
+                    <div
+                      style="width: 70px; height: 36px; border-radius: 4px; border: 2px solid #10b981; background: rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: #10b981; flex-shrink: 0;">
+                      RECTANGLE
+                    </div>
+                    <div>
+                      <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">PROCESS / ACTION</div>
+                      <div style="font-size: 0.78rem; color: var(--text-muted);">Execute command:
+                        <code>Turn Fan ON</code>, <code>LED = HIGH</code>.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style="display: flex; align-items: center; gap: 12px; background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 8px;">
+                    <div
+                      style="width: 70px; height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                      <svg viewBox="0 0 70 36" width="70" height="36" style="display: block;">
+                        <polygon points="35,2 68,18 35,34 2,18" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b"
+                          stroke-width="2" />
+                        <text x="35" y="21" fill="#fbbf24" font-size="7.5" font-weight="700" text-anchor="middle"
+                          font-family="system-ui, sans-serif" letter-spacing="0.5px">DIAMOND</text>
+                      </svg>
+                    </div>
+                    <div>
+                      <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">DECISION / QUESTION</div>
+                      <div style="font-size: 0.78rem; color: var(--text-muted);">Evaluates conditional query:
+                        <code>Button 1 Pressed? (YES/NO)</code>.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style="display: flex; align-items: center; gap: 12px; background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 8px;">
+                    <div
+                      style="width: 70px; height: 36px; border-radius: 4px; border: 1px dashed rgba(236, 72, 153, 0.5); background: rgba(236, 72, 153, 0.12); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #ec4899; flex-shrink: 0;">
+                      ➔
+                    </div>
+                    <div>
+                      <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">FLOW LINE / ARROW</div>
+                      <div style="font-size: 0.78rem; color: var(--text-muted);">Shows uninterrupted sequence of
+                        execution direction.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Visual Flowchart Map -->
+              <div class="card" style="display: flex; flex-direction: column;">
+                <div class="card-title" style="color: #34d399;">🗺️ Packaging Machine Control Flow</div>
+                <div
+                  style="background: #090e17; border: 1px solid #334155; border-radius: 8px; padding: 10px; flex: 1; text-align: center;">
+                  <svg viewBox="0 0 320 230" width="100%" height="210">
+                    <!-- Start Oval -->
+                    <rect x="110" y="5" width="100" height="24" rx="12" fill="#1e293b" stroke="#38bdf8"
+                      stroke-width="2" />
+                    <text x="160" y="21" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">LOOP
+                      START</text>
+                    <line x1="160" y1="29" x2="160" y2="45" stroke="#ffffff" stroke-width="1.5"
+                      marker-end="url(#arrow)" />
+
+                    <!-- Read Inputs -->
+                    <rect x="90" y="45" width="140" height="24" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
+                    <text x="160" y="61" fill="#a7f3d0" font-size="9" text-anchor="middle">Read Buttons (B1–B4)</text>
+                    <line x1="160" y1="69" x2="160" y2="85" stroke="#ffffff" stroke-width="1.5" />
+
+                    <!-- Decision Diamond: B1 Pressed? -->
+                    <polygon points="160,85 210,105 160,125 110,105" fill="#1e293b" stroke="#f59e0b"
+                      stroke-width="1.5" />
+                    <text x="160" y="108" fill="#fbbf24" font-size="8" font-weight="bold" text-anchor="middle">B1
+                      Pressed?</text>
+
+                    <!-- YES branch to Ready -->
+                    <line x1="210" y1="105" x2="245" y2="105" stroke="#10b981" stroke-width="1.5" />
+                    <text x="220" y="98" fill="#10b981" font-size="8">YES</text>
+                    <rect x="245" y="93" width="70" height="24" fill="#1e293b" stroke="#10b981" stroke-width="1.5" />
+                    <text x="280" y="108" fill="#ffffff" font-size="8" text-anchor="middle">Green LED ON</text>
+
+                    <!-- NO branch down to next check -->
+                    <line x1="160" y1="125" x2="160" y2="145" stroke="#ef4444" stroke-width="1.5" />
+                    <text x="165" y="137" fill="#ef4444" font-size="8">NO</text>
+
+                    <!-- Decision Diamond: B2 Pressed? -->
+                    <polygon points="160,145 210,165 160,185 110,165" fill="#1e293b" stroke="#f59e0b"
+                      stroke-width="1.5" />
+                    <text x="160" y="168" fill="#fbbf24" font-size="8" font-weight="bold" text-anchor="middle">B2
+                      Pressed?</text>
+
+                    <!-- YES branch to Running -->
+                    <line x1="210" y1="165" x2="245" y2="165" stroke="#38bdf8" stroke-width="1.5" />
+                    <text x="220" y="158" fill="#38bdf8" font-size="8">YES</text>
+                    <rect x="245" y="153" width="70" height="24" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+                    <text x="280" y="168" fill="#ffffff" font-size="7.5" text-anchor="middle">Green + Fan ON</text>
+
+                    <!-- NO branch down to B3/B4 -->
+                    <line x1="160" y1="185" x2="160" y2="205" stroke="#94a3b8" stroke-width="1.5" />
+                    <text x="165" y="197" fill="#94a3b8" font-size="8">NO</text>
+                    <rect x="110" y="205" width="100" height="20" fill="#0f172a" stroke="#a855f7" stroke-width="1.5" />
+                    <text x="160" y="219" fill="#d8b4fe" font-size="8" text-anchor="middle">Check B3 (Warn) / B4
+                      (Fault)</text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 10: Flowchart to Pseudocode
+             ========================================== -->
+        <section class="slide" id="slide-10">
+          <div class="slide-header">
+            <span class="slide-tag">Code Engineering • Logic Translation</span>
+            <h2 class="slide-title">Flowchart to Pseudocode: Bridging Logic &amp; Code</h2>
+            <p class="slide-subtitle">Converting visual flowchart decisions into unambiguous structured pseudocode and
+              Arduino C++</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Pseudocode -->
+              <div class="card">
+                <div class="card-title" style="color: #fbbf24;">📝 Formal Engineering Pseudocode</div>
+                <div class="code-terminal" style="font-size: 0.82rem;">
+                  <span style="color: #64748b;">// --- MAIN AUTOMATION CONTROL LOOP ---</span><br>
+                  <span style="color: #ec4899;">LOOP</span> forever:<br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">IF</span> Button1 is pressed <span
+                    style="color: #f472b6;">THEN</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Green_LED = HIGH<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Amber_LED = LOW<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Red_LED = LOW<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Fan = LOW<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Strobe = LOW<br><br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">ELSE IF</span> Button2 is pressed <span
+                    style="color: #f472b6;">THEN</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Green_LED = HIGH<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Fan = HIGH<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Amber_LED = LOW<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Red_LED = LOW<br><br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">ELSE IF</span> Button3 is pressed <span
+                    style="color: #f472b6;">THEN</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Amber_LED = HIGH<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Green_LED = LOW<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Fan = LOW<br><br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">ELSE IF</span> Button4 is pressed <span
+                    style="color: #f472b6;">THEN</span><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Red_LED = HIGH<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;SET Strobe = HIGH<br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">END IF</span><br>
+                  <span style="color: #ec4899;">END LOOP</span>
+                </div>
+              </div>
+
+              <!-- Arduino C++ Equivalent -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-arduino);">💻 Arduino C++ Implementation</div>
+                <div class="code-terminal" style="font-size: 0.82rem;">
+                  <span style="color: #38bdf8;">void</span> <span style="color: #d2a8ff;">setup</span>() {<br>
+                  &nbsp;&nbsp;<span style="color: #38bdf8;">pinMode</span>(PIN_BTN1, <span
+                    style="color: #fbbf24;">INPUT_PULLUP</span>);<br>
+                  &nbsp;&nbsp;<span style="color: #38bdf8;">pinMode</span>(PIN_LED_GREEN, <span
+                    style="color: #fbbf24;">OUTPUT</span>);<br>
+                  &nbsp;&nbsp;<span style="color: #38bdf8;">pinMode</span>(PIN_FAN, <span
+                    style="color: #fbbf24;">OUTPUT</span>);<br>
+                  }<br><br>
+                  <span style="color: #38bdf8;">void</span> <span style="color: #d2a8ff;">loop</span>() {<br>
+                  &nbsp;&nbsp;<span style="color: #64748b;">// Button LOW when pressed (Active-LOW pullup)</span><br>
+                  &nbsp;&nbsp;<span style="color: #f472b6;">if</span> (<span
+                    style="color: #38bdf8;">digitalRead</span>(PIN_BTN1) == <span style="color: #fbbf24;">LOW</span>)
+                  {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_LED_GREEN, <span
+                    style="color: #fbbf24;">HIGH</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_FAN, <span
+                    style="color: #fbbf24;">LOW</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_LED_AMBER, <span
+                    style="color: #fbbf24;">LOW</span>);<br>
+                  &nbsp;&nbsp;} <span style="color: #f472b6;">else if</span> (<span
+                    style="color: #38bdf8;">digitalRead</span>(PIN_BTN2) == <span style="color: #fbbf24;">LOW</span>)
+                  {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_LED_GREEN, <span
+                    style="color: #fbbf24;">HIGH</span>);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #38bdf8;">digitalWrite</span>(PIN_FAN, <span
+                    style="color: #fbbf24;">HIGH</span>);<br>
+                  &nbsp;&nbsp;}<br>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>💡 Active-LOW Note:</strong> When using <code>INPUT_PULLUP</code>, pressing the button connects
+              the pin to GND, producing logic <code>LOW (0)</code>. Your `IF` conditions check for
+              <code>digitalRead(btn) == LOW</code>!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 11: Interactive Live Simulator
+             ========================================== -->
+        <section class="slide" id="slide-11">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Commissioning Lab • Live Simulation</span>
+            <h2 class="slide-title">Packaging Machine Commissioning Simulator</h2>
+            <p class="slide-subtitle">Press the station buttons below to trigger machine states and observe actuator
+              responses in real time</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Left: Hardware Actuator Panel -->
+              <div class="sim-box">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-weight: 700; color: #ffffff;">🏭 Operator Station Buttons:</span>
+                  <span id="active-state-pill" class="badge-pill"
+                    style="font-size: 0.8rem; border-color: #64748b; color: #94a3b8;">
+                    STANDBY / ALL OFF
+                  </span>
+                </div>
+
+                <!-- 4 State Pushbuttons -->
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                  <button id="btn-state-ready" class="ctrl-btn" onclick="setPackagingState('ready')">
+                    🟢 B1: Ready State
+                  </button>
+                  <button id="btn-state-running" class="ctrl-btn" onclick="setPackagingState('running')">
+                    🔵 B2: Running State
+                  </button>
+                  <button id="btn-state-warning" class="ctrl-btn" onclick="setPackagingState('warning')">
+                    🟡 B3: Warning State
+                  </button>
+                  <button id="btn-state-fault" class="ctrl-btn" onclick="setPackagingState('fault')">
+                    🔴 B4: Fault State
+                  </button>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                  <button class="btn btn-secondary" onclick="setPackagingState('off')"
+                    style="padding: 4px 12px; font-size: 0.78rem;">
+                    ⏹️ Reset / Clear All Outputs
+                  </button>
+                </div>
+
+                <!-- Actuator Physical Display Panel -->
+                <div
+                  style="background: #0f172a; border-radius: 10px; padding: 14px; border: 1px solid #334155; display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 14px;">
+                  <!-- Green LED -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div id="sim-green-led" class="led-indicator off"></div>
+                    <span style="font-size: 0.76rem; color: #a7f3d0; font-weight: 600;">Green LED (D2)</span>
+                  </div>
+
+                  <!-- Amber LED -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div id="sim-amber-led" class="led-indicator off"></div>
+                    <span style="font-size: 0.76rem; color: #fde68a; font-weight: 600;">Amber LED (D3)</span>
+                  </div>
+
+                  <!-- Red LED -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div id="sim-red-led" class="led-indicator off"></div>
+                    <span style="font-size: 0.76rem; color: #fecaca; font-weight: 600;">Red LED (D4)</span>
+                  </div>
+
+                  <!-- Cooling Fan -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div class="fan-housing">
+                      <span id="sim-fan-blades" class="fan-blades">🌀</span>
+                    </div>
+                    <span style="font-size: 0.76rem; color: #38bdf8; font-weight: 600;">Fan (D5)</span>
+                  </div>
+
+                  <!-- Strobe Light -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+                    <div id="sim-strobe" class="strobe-beacon">🚨</div>
+                    <span style="font-size: 0.76rem; color: #ffffff; font-weight: 600;">Strobe (D6)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Telemetry & Live Code Monitor -->
+              <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title" style="color: #38bdf8;">📊 Live I/O Pin Telemetry</div>
+                  <table class="compare-table" style="font-size: 0.8rem; margin-top: 6px;">
+                    <tr>
+                      <th>Output Pin</th>
+                      <th>Actuator</th>
+                      <th>Logic Level</th>
+                      <th>Voltage</th>
+                    </tr>
+                    <tr>
+                      <td>Pin D2</td>
+                      <td>Green Indicator</td>
+                      <td id="telem-d2-lvl">LOW (0)</td>
+                      <td id="telem-d2-v">0.00 V</td>
+                    </tr>
+                    <tr>
+                      <td>Pin D3</td>
+                      <td>Amber Indicator</td>
+                      <td id="telem-d3-lvl">LOW (0)</td>
+                      <td id="telem-d3-v">0.00 V</td>
+                    </tr>
+                    <tr>
+                      <td>Pin D4</td>
+                      <td>Red Indicator</td>
+                      <td id="telem-d4-lvl">LOW (0)</td>
+                      <td id="telem-d4-v">0.00 V</td>
+                    </tr>
+                    <tr>
+                      <td>Pin D5</td>
+                      <td>Cooling Fan Driver</td>
+                      <td id="telem-d5-lvl">LOW (0)</td>
+                      <td id="telem-d5-v">0.00 V</td>
+                    </tr>
+                    <tr>
+                      <td>Pin D6</td>
+                      <td>Strobe Beacon</td>
+                      <td id="telem-d6-lvl">LOW (0)</td>
+                      <td id="telem-d6-v">0.00 V</td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div style="margin-top: 10px;">
+                  <span style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Active Firmware Branch:</span>
+                  <div id="sim-active-code" class="code-terminal"
+                    style="font-size: 0.78rem; min-height: 48px; padding: 8px;">
+                    <span style="color: #64748b;">// Awaiting operator pushbutton trigger...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 12: Stepwise Build & Test Plan
+             ========================================== -->
+        <section class="slide" id="slide-12">
+          <div class="slide-header">
+            <span class="slide-tag">Quality Assurance • Commissioning Methodology</span>
+            <h2 class="slide-title">Modular Build &amp; Test Plan</h2>
+            <p class="slide-subtitle">Professional engineers test individual components before multi-state integration
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- 7 Steps -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">🔬 7-Step Commissioning Checklist</div>
+                <div style="display: flex; flex-direction: column; gap: 7px; margin-top: 8px; font-size: 0.85rem;">
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 1:</strong> Test Green LED (Pin D2 Blink Test)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 2:</strong> Test Amber LED (Pin D3 Blink Test)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 3:</strong> Test Red LED (Pin D4 Blink Test)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 4:</strong> Test Fan Transistor Driver (Pin D5 pulse)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 5:</strong> Test Strobe Beacon / Flash Routine (Pin D6)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 6:</strong> Test Pushbuttons via Serial Monitor (D8–D11)</span>
+                    <span class="badge-pill" style="font-size: 0.72rem;">Pass / Fail</span>
+                  </div>
+                  <div
+                    style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; padding: 8px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between;">
+                    <span><strong>Step 7:</strong> Full Integrated System Commissioning</span>
+                    <span class="badge-pill" style="font-size: 0.72rem; border-color: #10b981; color: #34d399;">Final
+                      Sign-Off</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Engineering Rationale -->
+              <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="card-title" style="color: #34d399;">💡 The Engineering Isolation Principle</div>
+                  <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
+                    When a beginner wires an entire circuit with 4 buttons, 3 LEDs, a fan, and a strobe all at once and
+                    it fails, there are <strong>over 40 possible points of failure</strong> (loose wire, backwards LED,
+                    missing pullup, bad variable, wrong pin).
+                  </p>
+                  <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
+                    By isolating each component and uploading a simple 5-line diagnostic script, you verify physical
+                    continuity and pin mapping in <strong>under 30 seconds</strong> before combining them into a complex
+                    state machine.
+                  </p>
+                </div>
+
+                <div class="card highlight" style="padding: 10px 14px;">
+                  <span style="font-weight: 700; color: #fbbf24;">⚡ Lab Rule:</span>
+                  <span style="font-size: 0.84rem; color: #f1f5f9; margin-left: 6px;">
+                    Never proceed to multi-input coding until every single LED and actuator has verified physical
+                    response on your breadboard!
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 13: Tiered Engineering Challenges
+             ========================================== -->
+        <section class="slide" id="slide-13">
+          <div class="slide-header">
+            <span class="slide-tag">Differentiated Challenges • Contract Progression</span>
+            <h2 class="slide-title">Tiered Engineering Challenges (Bronze to Platinum)</h2>
+            <p class="slide-subtitle">Progress sequentially through client contracts. Advance to the next level only
+              when your current tier functions perfectly</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 14px;">
+              <!-- Bronze -->
+              <div class="card" style="border-left: 4px solid #cd7f32;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span class="contract-badge contract-bronze">BRONZE CONTRACT</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Cabinet Cooling Controller</span>
+                </div>
+                <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Customer Brief:</strong> Engineer needs fan cooling for an electronics cabinet.<br>
+                  • <strong>Inputs:</strong> Button 1 (Fan ON), Button 2 (Fan OFF).<br>
+                  • <strong>Output:</strong> Fan actuator.<br>
+                  • <strong>Success Criteria:</strong> Flowchart, Pseudocode, Working program, Fan starts &amp; stops
+                  reliably.
+                </div>
+              </div>
+
+              <!-- Silver -->
+              <div class="card" style="border-left: 4px solid #c0c0c0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span class="contract-badge contract-silver">SILVER CONTRACT</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Machine Status System</span>
+                </div>
+                <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Customer Brief:</strong> A small conveyor needs dual-state visual indication.<br>
+                  • <strong>Inputs:</strong> Button 1 (Ready State), Button 2 (Fault State).<br>
+                  • <strong>Outputs:</strong> Ready = Green LED, Fault = Red LED.<br>
+                  • <strong>Success Criteria:</strong> Mutually exclusive LED logic, Flowchart, Pseudocode, Tested.
+                </div>
+              </div>
+
+              <!-- Gold -->
+              <div class="card" style="border-left: 4px solid #f59e0b;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span class="contract-badge contract-gold">GOLD CONTRACT</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Production Machine Controller</span>
+                </div>
+                <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Customer Brief:</strong> Production machine needs status indication and forced cooling.<br>
+                  • <strong>Inputs:</strong> Button 1 (Ready), Button 2 (Running), Button 3 (Fault).<br>
+                  • <strong>Outputs:</strong> Ready = Green; Running = Green + Fan; Fault = Red.<br>
+                  • <strong>Success Criteria:</strong> Multi-output control, Full flowchart &amp; pseudocode, Tested.
+                </div>
+              </div>
+
+              <!-- Platinum -->
+              <div class="card" style="border-left: 4px solid #a855f7;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span class="contract-badge contract-platinum">PLATINUM CONTRACT</span>
+                  <span style="font-size: 0.78rem; color: var(--text-muted);">Smart Production Line + Extension</span>
+                </div>
+                <div style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+                  <strong>Customer Brief:</strong> Complete 4-state factory packaging line with warning strobe.<br>
+                  • <strong>Inputs:</strong> Buttons 1–4 (Ready, Running, Warning, Fault).<br>
+                  • <strong>Outputs:</strong> Ready (Green), Running (Green+Fan), Warning (Amber), Fault
+                  (Red+Strobe).<br>
+                  • <strong>Extension:</strong> Program custom warning flash sequence or strobe frequency modulation.
+                </div>
+              </div>
+            </div>
+
+            <div class="takeaway-banner">
+              <strong>🏆 Contract Milestone:</strong> Try and complete Platinum contract to prepare you for the Unit 6
+              Summative Assignment.
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 14: Fault-Finding Challenge
+             ========================================== -->
+        <section class="slide" id="slide-14">
+          <div class="slide-header">
+            <span class="slide-tag">Workshop Diagnostics • Fault-Finding Challenge</span>
+            <h2 class="slide-title">Fault-Finding: The Commissioning Diagnostic Lab</h2>
+            <p class="slide-subtitle">Identify root causes and corrective actions for common industrial hardware and
+              firmware faults</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="card highlight" style="padding: 12px 18px;">
+              <span style="font-weight: 700; color: #ffffff;">🔧 Select a Workshop Fault Symptom:</span>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                <button class="btn btn-secondary" onclick="loadFaultScenario(1)">Fault 1: LED Will Not
+                  Illuminate</button>
+                <button class="btn btn-secondary" onclick="loadFaultScenario(2)">Fault 2: LED Very Dim (~1.5V)</button>
+                <button class="btn btn-secondary" onclick="loadFaultScenario(3)">Fault 3: Erratic False
+                  Triggers</button>
+                <button class="btn btn-secondary" onclick="loadFaultScenario(4)">Fault 4: Wrong Output
+                  Activates</button>
+              </div>
+            </div>
+
+            <div id="fault-display-box" class="card"
+              style="min-height: 160px; display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-size: 1.05rem; font-weight: 700; color: #38bdf8; margin-bottom: 6px;">
+                🔍 Click a fault above to begin diagnostic investigation
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                In the physical lab, your tutor will introduce intentional wiring or coding faults into your circuit.
+                You must document: (1) Fault Observed, (2) Diagnostic Technique, and (3) Corrective Engineering
+                Solution.
+              </p>
+            </div>
+
+            <div class="grid-3col" style="gap: 10px; font-size: 0.8rem;">
+              <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                <strong style="color: #f87171;">Reversed LED:</strong> Diodes only conduct forward biased (Anode to Pin,
+                Cathode to GND).
+              </div>
+              <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                <strong style="color: #fbbf24;">Missing pinMode:</strong> Omitting <code>pinMode(pin, OUTPUT)</code>
+                leaves pin in high-impedance mode!
+              </div>
+              <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                <strong style="color: #38bdf8;">Floating Pin:</strong> Omitting <code>INPUT_PULLUP</code> causes
+                atmospheric electromagnetic noise pick-up.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 15: Formative Check: Quick Quiz
+             ========================================== -->
+        <section class="slide" id="slide-15">
+          <div class="slide-header">
+            <span class="slide-tag">Formative Assessment • Quick Quiz</span>
+            <h2 class="slide-title">Digital Outputs &amp; Systems Quick Quiz</h2>
+            <p class="slide-subtitle">Evaluate your understanding of actuator current limits, state tables, and
+              pseudocode</p>
+          </div>
+
+          <div class="slide-body">
+            <div id="quiz-score-banner" class="takeaway-banner" style="margin-bottom: 8px;">
+              <strong>🎯 Current Score: 0/4</strong> (Answer all 4 questions below)
+            </div>
+
+            <div class="grid-2col" style="gap: 12px;">
+              <!-- Q1 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem; margin-bottom: 8px;">
+                  1. What is the recommended continuous current limit for an ATmega328P I/O pin?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q1')">
+                    <span>A) 20 mA (Absolute maximum 40 mA)</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q1')">
+                    <span>B) 500 mA</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q1')">
+                    <span>C) 2 Amps</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q2 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem; margin-bottom: 8px;">
+                  2. Why can a DC cooling fan NOT be connected directly to an Arduino output pin?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q2')">
+                    <span>A) Fans only run on alternating current (AC)</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q2')">
+                    <span>B) Fans draw excessive current (&gt;150mA) and generate destructive back-EMF</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q2')">
+                    <span>C) Arduino code cannot output PWM signals</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q3 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem; margin-bottom: 8px;">
+                  3. In standard flowcharting, which symbol represents a decision question?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q3')">
+                    <span>A) Rectangle</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q3')">
+                    <span>B) Diamond (with YES and NO branch arrows)</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q3')">
+                    <span>C) Oval</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Q4 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.9rem; margin-bottom: 8px;">
+                  4. If an LED is wired correctly but barely glows and pin voltage is ~1.5V, what is the likely cause?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div class="quiz-option" onclick="checkQuiz(this, true, 'q4')">
+                    <span>A) Forgot `pinMode(pin, OUTPUT)` (pin stuck in weak pullup mode)</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q4')">
+                    <span>B) The microcontroller clock speed is too fast</span>
+                  </div>
+                  <div class="quiz-option" onclick="checkQuiz(this, false, 'q4')">
+                    <span>C) Resistor value is too low</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 16: Assessment Evidence & Reflection
+             ========================================== -->
+        <section class="slide" id="slide-16">
+          <div class="slide-header">
+            <span class="slide-tag">Assessment Portfolio • Submission Brief</span>
+            <h2 class="slide-title">Session Evidence &amp; Exit Ticket Reflection</h2>
+            <p class="slide-subtitle">Documenting your engineering contract deliverables for BTEC Unit 6 B1 assessment
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Evidence Required -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">📁 Required Submission Artifacts</div>
+                <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <li><strong>Technical Report Document (Word/PDF):</strong>
+                    <ul style="padding-left: 16px; margin-top: 4px;">
+                      <li>Selected Scenario &amp; Customer Brief</li>
+                      <li>Completed State Truth Table</li>
+                      <li>System Architecture Flowchart</li>
+                      <li>Formal Pseudocode</li>
+                      <li>Annotated C++ Program Code</li>
+                      <li>Fault-Finding Log (Fault, Method, Fix)</li>
+                    </ul>
+                  </li>
+                  <li><strong>Circuit Photographs:</strong> Clear, in-focus photos of the breadboard assembly.</li>
+                  <li><strong>Video Explanation (1–3 Mins):</strong>
+                    Demonstrating inputs, outputs, state transitions, and explaining one fault fixed.
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Exit Reflections -->
+              <div class="card">
+                <div class="card-title" style="color: #34d399;">💭 Exit Ticket Reflections</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; color: #f1f5f9;">
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px; border-radius: 6px;">
+                    1. <em>The most useful actuator for this system was... because...</em>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px; border-radius: 6px;">
+                    2. <em>The hardest fault to troubleshoot was... because...</em>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px; border-radius: 6px;">
+                    3. <em>Drawing the flowchart first helped prevent...</em>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px; border-radius: 6px;">
+                    4. <em>Writing pseudocode made writing the Arduino C++ code...</em>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px; border-radius: 6px;">
+                    5. <em>My highest achieved contract level today was... (Bronze / Silver / Gold / Platinum).</em>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div
+              style="background: rgba(15, 23, 42, 0.95); border: 1px solid var(--accent-arduino); border-radius: 12px; padding: 16px; text-align: center; margin-top: 6px;">
+              <h3 style="font-size: 1.15rem; color: #ffffff; margin-bottom: 8px;">Ready to Submit Your Evidence?</h3>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 14px;">
+                Open the Microsoft Forms drawer to paste your state table, flowchart image, code snippet, and reflection
+                answers.
+              </p>
+              <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                <a href="Unit6_Week4_Student_Report_Template.docx" download class="btn btn-secondary"
+                  style="padding: 10px 20px; font-size: 0.95rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                  📄 Download Report Template (.docx)
+                </a>
+                <button class="btn btn-primary open-forms-trigger" data-form-section="Section 4: Evidence Submission"
+                  style="padding: 10px 24px; font-size: 0.95rem;">
+                  📝 Open Week 4 Microsoft Form Drawer
+                </button>
+                <a href="../index.html" class="btn btn-secondary"
+                  style="padding: 10px 20px; font-size: 0.95rem; text-decoration: none;">
+                  🏠 Return to Course Hub
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Deck Footer -->
+      <footer class="deck-footer">
+        <div class="nav-controls">
+          <button class="nav-btn" id="prev-slide" title="Previous Slide (Left Arrow)">◀</button>
+          <button class="nav-btn" id="next-slide" title="Next Slide (Right Arrow)">▶</button>
+          <span class="slide-counter" id="slide-counter">1 / 16</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button class="btn btn-secondary open-forms-trigger" data-form-section="Week 4 Form"
+            style="padding: 6px 12px; font-size: 0.8rem;">
+            📝 Form
+          </button>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Backdrop for Drawer -->
+    <div id="drawer-backdrop"></div>
+
+    <!-- Microsoft Forms Side-Drawer -->
+    <aside id="forms-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>📝</span>
+          <span>Week 4 Microsoft Forms Assessment</span>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-popout-btn" id="drawer-popout-btn" title="Open in new tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Pop out
+          </button>
+          <button class="drawer-close-btn" id="drawer-close-btn" title="Close drawer">✕</button>
+        </div>
+      </div>
+
+      <div class="drawer-body">
+        <iframe id="forms-iframe" class="drawer-iframe" src="about:blank" data-src="https://forms.office.com"
+          allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen>
+        </iframe>
+      </div>
+    </aside>
+
+    <!-- Slide Matrix / Map Modal -->
+    <div id="slide-matrix-modal" class="modal-overlay">
+      <div class="slide-matrix-card">
+        <div class="slide-matrix-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🗺️</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff; margin: 0;">Session Slide Matrix</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Click any slide card to jump directly
+                (or press 'M')</p>
+            </div>
+          </div>
+          <button id="close-slide-matrix" class="drawer-close-btn" style="padding: 6px 12px;">✕ Close</button>
+        </div>
+        <div id="slide-matrix-grid" class="slide-matrix-grid">
+          <!-- Populated dynamically by PresentationEngine -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility & Neurodiversity Drawer Backdrop -->
+    <div id="a11y-backdrop"></div>
+
+    <!-- Accessibility & Neurodiversity Side-Drawer -->
+    <aside id="a11y-drawer">
+      <div class="a11y-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">⚙️</span>
+          <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+        </div>
+        <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+      </div>
+
+      <div class="a11y-body">
+        <!-- Speech Synthesis (TTS) -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔊 Web Speech Slide Narration</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="a11y-speak-active-slide" class="btn btn-secondary"
+              style="flex: 1; padding: 8px 12px; font-size: 0.86rem;">
+              🔊 Read Slide Aloud
+            </button>
+            <button id="a11y-stop-speech" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.86rem;">
+              ⏹️ Stop
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Narration Speed:</span>
+            <span id="a11y-speech-rate-val"
+              style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">1.0x</span>
+          </div>
+          <input type="range" id="a11y-speech-rate" min="0.75" max="1.5" step="0.05" value="1.0" class="a11y-slider" />
+        </div>
+
+        <!-- Bionic Reading Mode -->
+        <div class="a11y-switch-row">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+          </div>
+          <input type="checkbox" id="a11y-bionic-toggle"
+            style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+        </div>
+
+        <!-- Typography & Dyslexia Toolbar -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>📖 Font Family</span>
+          </div>
+          <select id="a11y-font-select" class="a11y-select">
+            <option value="default">Inter (Default Crisp)</option>
+            <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+            <option value="system">System UI (Clean Sans-Serif)</option>
+          </select>
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔠 Font Size</span>
+            <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+          </div>
+          <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↕️ Line Spacing</span>
+            <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+          </div>
+          <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↔️ Letter Spacing</span>
+            <span id="a11y-letter-spacing-val"
+              style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+          </div>
+          <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+        </div>
+
+        <!-- Contrast & Colorblind Themes -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🎨 Contrast &amp; Colorblind Themes</span>
+          </div>
+          <select id="a11y-theme-select" class="a11y-select">
+            <option value="default">Dark Engineering (Default)</option>
+            <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+            <option value="clean-light">Clean Light Mode</option>
+            <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+          </select>
+        </div>
+
+        <button id="a11y-reset-prefs" class="btn btn-secondary"
+          style="padding: 8px; font-size: 0.82rem; margin-top: 10px; width: 100%;">
+          🔄 Reset to Default Theme
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Shared JavaScript Engines -->
+  <script src="../shared/js/accessibility-engine.js"></script>
+  <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/self-check.js"></script>
+  <script src="../shared/js/timer.js"></script>
+  <script src="../shared/js/form-drawer.js"></script>
+
+  <!-- Week 4 Interactive Simulator Logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ==========================================
+      // 1. Transducer Sorter (Input vs Output)
+      // ==========================================
+      const pool = document.getElementById('sort-items-pool');
+      const bInputs = document.getElementById('bucket-inputs');
+      const bOutputs = document.getElementById('bucket-outputs');
+      const inCount = document.getElementById('input-count');
+      const outCount = document.getElementById('output-count');
+      const poolCount = document.getElementById('pool-count');
+      const sortFb = document.getElementById('sort-feedback');
+      const btnReveal = document.getElementById('btn-reveal-sort');
+      const sortItems = document.querySelectorAll('.sort-item');
+
+      let draggedItem = null;
+      let selectedItem = null;
+
+      function updateSortCounts() {
+        const pCount = pool ? pool.querySelectorAll('.sort-item').length : 0;
+        const iCount = bInputs ? bInputs.querySelectorAll('.sort-item').length : 0;
+        const oCount = bOutputs ? bOutputs.querySelectorAll('.sort-item').length : 0;
+        if (poolCount) poolCount.textContent = `${pCount} remaining`;
+        if (inCount) inCount.textContent = `${iCount} placed`;
+        if (outCount) outCount.textContent = `${oCount} placed`;
+      }
+
+      // Initialize Drag & Drop Events on Items
+      sortItems.forEach(item => {
+        item.addEventListener('dragstart', function (e) {
+          draggedItem = item;
+          item.classList.add('dragging');
+          item.classList.remove('selected-for-move');
+          selectedItem = null;
+          e.dataTransfer.setData('text/plain', item.id);
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        item.addEventListener('dragend', function () {
+          item.classList.remove('dragging');
+          draggedItem = null;
+          document.querySelectorAll('.sort-bucket').forEach(b => b.classList.remove('drag-over'));
+        });
+
+        // Click / Tap selection for mobile touch screens & keyboard accessibility
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (selectedItem === item) {
+            item.classList.remove('selected-for-move');
+            selectedItem = null;
+          } else {
+            sortItems.forEach(i => i.classList.remove('selected-for-move'));
+            item.classList.add('selected-for-move');
+            selectedItem = item;
+          }
+        });
+      });
+
+      // Drop Zones: Pool, Inputs Bucket, Outputs Bucket
+      const dropZones = [pool, bInputs, bOutputs];
+
+      dropZones.forEach(zone => {
+        if (!zone) return;
+
+        zone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          zone.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', function () {
+          zone.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          if (draggedItem) {
+            zone.appendChild(draggedItem);
+            draggedItem.classList.remove('correct', 'wrong', 'selected-for-move');
+            draggedItem.textContent = draggedItem.getAttribute('data-label');
+            updateSortCounts();
+          }
+        });
+
+        // Click zone to place selected item (touch / keyboard fallback)
+        zone.addEventListener('click', function () {
+          if (selectedItem) {
+            zone.appendChild(selectedItem);
+            selectedItem.classList.remove('correct', 'wrong', 'selected-for-move');
+            selectedItem.textContent = selectedItem.getAttribute('data-label');
+            selectedItem = null;
+            updateSortCounts();
+          }
+        });
+      });
+
+      // Verify Classification Logic
+      window.checkSortClassification = function () {
+        const inputPlaced = bInputs ? bInputs.querySelectorAll('.sort-item') : [];
+        const outputPlaced = bOutputs ? bOutputs.querySelectorAll('.sort-item') : [];
+        const poolRemaining = pool ? pool.querySelectorAll('.sort-item') : [];
+
+        let correctCount = 0;
+
+        inputPlaced.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          if (type === 'input') {
+            item.className = 'sort-item correct';
+            item.innerHTML = `✓ ${baseLabel}`;
+            correctCount++;
+          } else {
+            item.className = 'sort-item wrong';
+            item.innerHTML = `✗ ${baseLabel}`;
+          }
+        });
+
+        outputPlaced.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          if (type === 'output') {
+            item.className = 'sort-item correct';
+            item.innerHTML = `✓ ${baseLabel}`;
+            correctCount++;
+          } else {
+            item.className = 'sort-item wrong';
+            item.innerHTML = `✗ ${baseLabel}`;
+          }
+        });
+
+        poolRemaining.forEach(item => {
+          item.className = 'sort-item';
+          item.textContent = item.getAttribute('data-label');
+        });
+
+        if (sortFb) {
+          sortFb.style.display = 'block';
+
+          if (poolRemaining.length > 0) {
+            sortFb.style.borderLeftColor = '#f59e0b';
+            sortFb.innerHTML = `<strong>⚠️ Classification Incomplete:</strong> You placed ${inputPlaced.length + outputPlaced.length} of 8 components (${poolRemaining.length} remaining in the pool). Current correct: <strong>${correctCount} / 8</strong>. Drag the remaining items to complete!`;
+            // Show reveal button since student did not get 8/8
+            if (btnReveal) btnReveal.style.display = 'inline-flex';
+          } else if (correctCount === 8) {
+            sortFb.style.borderLeftColor = '#10b981';
+            sortFb.innerHTML = `<strong>🎉 Perfect 8/8!</strong> Excellent engineering insight! You correctly sorted all 3 Sensors (Pushbutton, Temperature Sensor, LDR) and all 5 Actuators (LED, Fan, Buzzer, Strobe, Motor) on your own.`;
+            // Hide reveal button because they got it right!
+            if (btnReveal) btnReveal.style.display = 'none';
+          } else {
+            sortFb.style.borderLeftColor = '#ef4444';
+            sortFb.innerHTML = `<strong>🎯 Score: ${correctCount} / 8</strong>. Some components are in the wrong container (marked with ✗). Re-think your choices, swap them, or click <strong>Reveal Correct Answers</strong> below.`;
+            // Show reveal button only when student did not get it right
+            if (btnReveal) btnReveal.style.display = 'inline-flex';
+          }
+        }
+      };
+
+      // Reveal Correct Answers (Only shown when student did not get it right)
+      window.revealSortAnswers = function () {
+        if (!pool || !bInputs || !bOutputs) return;
+        const allItems = document.querySelectorAll('.sort-item');
+
+        allItems.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          item.className = 'sort-item correct';
+          item.innerHTML = `✓ ${baseLabel}`;
+
+          if (type === 'input') {
+            bInputs.appendChild(item);
+          } else {
+            bOutputs.appendChild(item);
+          }
+        });
+
+        updateSortCounts();
+
+        // Hide reveal button after revealing
+        if (btnReveal) btnReveal.style.display = 'none';
+
+        if (sortFb) {
+          sortFb.style.display = 'block';
+          sortFb.style.borderLeftColor = '#38bdf8';
+          sortFb.innerHTML = `
+            <strong>💡 Engineering Solution Revealed:</strong><br>
+            • <strong>Inputs / Sensors (3):</strong> <em>Push Button</em> (mechanical switch), <em>Temperature Sensor</em> (thermal-to-voltage transducer), <em>LDR</em> (light-to-resistance transducer).<br>
+            • <strong>Outputs / Actuators (5):</strong> <em>Status LED</em> (light photon output), <em>Cooling Fan</em> (convective airflow), <em>Piezo Buzzer</em> (acoustic sound wave), <em>Strobe Light</em> (high-intensity optical burst), <em>DC Motor</em> (rotary mechanical torque).
+          `;
+        }
+      };
+
+      window.resetSortActivity = function () {
+        if (!pool || !bInputs || !bOutputs) return;
+        const allItems = document.querySelectorAll('.sort-item');
+        allItems.forEach(item => {
+          item.className = 'sort-item';
+          item.textContent = item.getAttribute('data-label');
+          pool.appendChild(item);
+        });
+        selectedItem = null;
+        draggedItem = null;
+        if (btnReveal) btnReveal.style.display = 'none';
+        if (sortFb) sortFb.style.display = 'none';
+        updateSortCounts();
+      };
+
+      // ==========================================
+      // 2. Engineering Decision Challenge
+      // ==========================================
+      window.evaluateDecision = function (btn, isCorrect, feedbackText) {
+        const parent = btn.parentElement;
+        const container = parent.parentElement;
+        const feedbackEl = container.querySelector('.decision-feedback');
+
+        parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('correct', 'wrong'));
+
+        if (isCorrect) {
+          btn.classList.add('correct');
+          if (feedbackEl) {
+            feedbackEl.innerHTML = `<span style="color: #34d399; font-weight: 700;">✅ ${feedbackText}</span>`;
+          }
+        } else {
+          btn.classList.add('wrong');
+          if (feedbackEl) {
+            feedbackEl.innerHTML = `<span style="color: #f87171; font-weight: 700;">❌ ${feedbackText}</span>`;
+          }
+        }
+      };
+
+      // ==========================================
+      // 3. Predict Before Build: State Table Toggle
+      // ==========================================
+      window.toggleStateCell = function (cell) {
+        if (cell.classList.contains('val-0')) {
+          cell.classList.remove('val-0');
+          cell.classList.add('val-1');
+          cell.textContent = '1';
+        } else {
+          cell.classList.remove('val-1');
+          cell.classList.add('val-0');
+          cell.textContent = '0';
+        }
+      };
+
+      const targetStates = {
+        ready: [1, 0, 0, 0, 0], // Green
+        running: [1, 0, 0, 1, 0], // Green + Fan
+        warning: [0, 1, 0, 0, 0], // Amber
+        fault: [0, 0, 1, 0, 1]  // Red + Strobe
+      };
+
+      window.verifyStateTable = function () {
+        const table = document.getElementById('interactive-state-table');
+        if (!table) return;
+        const rows = table.querySelectorAll('tbody tr');
+        let allCorrect = true;
+
+        rows.forEach(row => {
+          const rowKey = row.getAttribute('data-row');
+          const target = targetStates[rowKey];
+          const cells = row.querySelectorAll('.state-toggle-cell');
+          const statusCell = row.querySelector('.row-status');
+
+          let rowMatch = true;
+          cells.forEach((c, idx) => {
+            const val = parseInt(c.textContent.trim(), 10);
+            if (val !== target[idx]) rowMatch = false;
+          });
+
+          if (rowMatch) {
+            statusCell.innerHTML = '<span style="color: #34d399; font-weight: 700;">✓ Correct</span>';
+            row.style.background = 'rgba(16, 185, 129, 0.1)';
+          } else {
+            statusCell.innerHTML = '<span style="color: #f87171; font-weight: 700;">✗ Review</span>';
+            row.style.background = 'rgba(239, 68, 68, 0.1)';
+            allCorrect = false;
+          }
+        });
+
+        const feedback = document.getElementById('table-score-feedback');
+        if (feedback) {
+          if (allCorrect) {
+            feedback.innerHTML = '🎉 100% Perfect State Table! All actuator outputs verified.';
+            feedback.style.color = '#34d399';
+          } else {
+            feedback.innerHTML = '⚠️ Some states mismatch the customer brief. Check Running & Fault rows!';
+            feedback.style.color = '#fbbf24';
+          }
+        }
+      };
+
+      window.revealStateTableAnswers = function () {
+        const table = document.getElementById('interactive-state-table');
+        if (!table) return;
+        const rows = table.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+          const rowKey = row.getAttribute('data-row');
+          const target = targetStates[rowKey];
+          const cells = row.querySelectorAll('.state-toggle-cell');
+          const statusCell = row.querySelector('.row-status');
+
+          cells.forEach((c, idx) => {
+            c.className = target[idx] === 1 ? 'state-toggle-cell val-1' : 'state-toggle-cell val-0';
+            c.textContent = target[idx];
+          });
+          statusCell.innerHTML = '<span style="color: #38bdf8; font-weight: 700;">★ Target Match</span>';
+          row.style.background = 'rgba(56, 189, 248, 0.08)';
+        });
+
+        const feedback = document.getElementById('table-score-feedback');
+        if (feedback) {
+          feedback.innerHTML = '💡 Solution Revealed: Green for Ready; Green+Fan for Running; Amber for Warning; Red+Strobe for Fault.';
+          feedback.style.color = '#38bdf8';
+        }
+      };
+
+      // ==========================================
+      // 4. Packaging Machine Commissioning Simulator
+      // ==========================================
+      const statePill = document.getElementById('active-state-pill');
+      const greenLed = document.getElementById('sim-green-led');
+      const amberLed = document.getElementById('sim-amber-led');
+      const redLed = document.getElementById('sim-red-led');
+      const fanBlades = document.getElementById('sim-fan-blades');
+      const strobeLight = document.getElementById('sim-strobe');
+      const codeBox = document.getElementById('sim-active-code');
+
+      // Telemetry elements
+      const tD2L = document.getElementById('telem-d2-lvl');
+      const tD2V = document.getElementById('telem-d2-v');
+      const tD3L = document.getElementById('telem-d3-lvl');
+      const tD3V = document.getElementById('telem-d3-v');
+      const tD4L = document.getElementById('telem-d4-lvl');
+      const tD4V = document.getElementById('telem-d4-v');
+      const tD5L = document.getElementById('telem-d5-lvl');
+      const tD5V = document.getElementById('telem-d5-v');
+      const tD6L = document.getElementById('telem-d6-lvl');
+      const tD6V = document.getElementById('telem-d6-v');
+
+      window.setPackagingState = function (state) {
+        // Reset all button styles
+        document.querySelectorAll('.ctrl-btn').forEach(b => {
+          b.classList.remove('active-state', 'warn-state', 'fault-state');
+        });
+
+        // Reset actuators
+        greenLed.className = 'led-indicator off';
+        amberLed.className = 'led-indicator off';
+        redLed.className = 'led-indicator off';
+        fanBlades.className = 'fan-blades';
+        strobeLight.className = 'strobe-beacon';
+
+        // Reset Telemetry
+        function setPin(lvlEl, vEl, isHigh) {
+          if (isHigh) {
+            lvlEl.textContent = 'HIGH (1)';
+            lvlEl.style.color = '#34d399';
+            vEl.textContent = '5.00 V';
+            vEl.style.color = '#34d399';
+          } else {
+            lvlEl.textContent = 'LOW (0)';
+            lvlEl.style.color = '#94a3b8';
+            vEl.textContent = '0.00 V';
+            vEl.style.color = '#94a3b8';
+          }
+        }
+
+        let d2 = false, d3 = false, d4 = false, d5 = false, d6 = false;
+
+        if (state === 'ready') {
+          const btn = document.getElementById('btn-state-ready');
+          if (btn) btn.classList.add('active-state');
+          statePill.textContent = 'STATE 1: READY (NORMAL)';
+          statePill.style.borderColor = '#10b981';
+          statePill.style.color = '#34d399';
+          greenLed.className = 'led-indicator on-green';
+          d2 = true;
+          codeBox.innerHTML = `
+            <span class="code-line-highlight">// Branch 1: READY STATE ACTIVATED</span><br>
+            digitalWrite(PIN_GREEN, HIGH); &nbsp;<span style="color:#34d399;">// 5V to Green LED</span><br>
+            digitalWrite(PIN_AMBER, LOW);<br>
+            digitalWrite(PIN_RED, LOW);<br>
+            digitalWrite(PIN_FAN, LOW);<br>
+            digitalWrite(PIN_STROBE, LOW);
+          `;
+        } else if (state === 'running') {
+          const btn = document.getElementById('btn-state-running');
+          if (btn) btn.classList.add('active-state');
+          statePill.textContent = 'STATE 2: RUNNING (ACTIVE + FAN)';
+          statePill.style.borderColor = '#38bdf8';
+          statePill.style.color = '#38bdf8';
+          greenLed.className = 'led-indicator on-green';
+          fanBlades.className = 'fan-blades spinning';
+          d2 = true;
+          d5 = true;
+          codeBox.innerHTML = `
+            <span class="code-line-highlight">// Branch 2: RUNNING STATE ACTIVATED</span><br>
+            digitalWrite(PIN_GREEN, HIGH); &nbsp;<span style="color:#34d399;">// Machine Online</span><br>
+            digitalWrite(PIN_FAN, HIGH); &nbsp;&nbsp;<span style="color:#38bdf8;">// 2N2222 Driver Base HIGH -&gt; Fan Spins!</span><br>
+            digitalWrite(PIN_AMBER, LOW);<br>
+            digitalWrite(PIN_RED, LOW);<br>
+            digitalWrite(PIN_STROBE, LOW);
+          `;
+        } else if (state === 'warning') {
+          const btn = document.getElementById('btn-state-warning');
+          if (btn) btn.classList.add('warn-state');
+          statePill.textContent = 'STATE 3: WARNING (CAUTION)';
+          statePill.style.borderColor = '#f59e0b';
+          statePill.style.color = '#fbbf24';
+          amberLed.className = 'led-indicator on-amber';
+          d3 = true;
+          codeBox.innerHTML = `
+            <span class="code-line-highlight">// Branch 3: WARNING STATE ACTIVATED</span><br>
+            digitalWrite(PIN_GREEN, LOW);<br>
+            digitalWrite(PIN_AMBER, HIGH); &nbsp;<span style="color:#fbbf24;">// 5V to Amber LED</span><br>
+            digitalWrite(PIN_FAN, LOW); &nbsp;&nbsp;&nbsp;<span style="color:#64748b;">// Fan Stopped</span><br>
+            digitalWrite(PIN_RED, LOW);<br>
+            digitalWrite(PIN_STROBE, LOW);
+          `;
+        } else if (state === 'fault') {
+          const btn = document.getElementById('btn-state-fault');
+          if (btn) btn.classList.add('fault-state');
+          statePill.textContent = 'STATE 4: FAULT (HALT + STROBE)';
+          statePill.style.borderColor = '#ef4444';
+          statePill.style.color = '#f87171';
+          redLed.className = 'led-indicator on-red';
+          strobeLight.className = 'strobe-beacon active';
+          d4 = true;
+          d6 = true;
+          codeBox.innerHTML = `
+            <span class="code-line-highlight">// Branch 4: FAULT STATE ACTIVATED</span><br>
+            digitalWrite(PIN_GREEN, LOW);<br>
+            digitalWrite(PIN_AMBER, LOW);<br>
+            digitalWrite(PIN_RED, HIGH); &nbsp;&nbsp;&nbsp;<span style="color:#ef4444;">// Red Status Active</span><br>
+            digitalWrite(PIN_FAN, LOW);<br>
+            digitalWrite(PIN_STROBE, HIGH); &nbsp;<span style="color:#38bdf8;">// Warning Strobe Pulsing</span>
+          `;
+        } else {
+          statePill.textContent = 'STANDBY / ALL OFF';
+          statePill.style.borderColor = '#64748b';
+          statePill.style.color = '#94a3b8';
+          codeBox.innerHTML = '<span style="color: #64748b;">// All outputs cleared. Waiting for pushbutton event...</span>';
+        }
+
+        setPin(tD2L, tD2V, d2);
+        setPin(tD3L, tD3V, d3);
+        setPin(tD4L, tD4V, d4);
+        setPin(tD5L, tD5V, d5);
+        setPin(tD6L, tD6V, d6);
+      };
+
+      // ==========================================
+      // 5. Fault-Finding Diagnostic Lab
+      // ==========================================
+      const faultScenarios = {
+        1: {
+          title: "Fault 1: LED Will Not Illuminate At All",
+          symptom: "When Button 1 is pressed, the multimeter measures 5.00V at Pin D2, but the Green LED remains completely dark.",
+          rootCause: "LED Reversed (Anode and Cathode swapped). Light Emitting Diodes only conduct current in forward bias (Anode to Positive, Cathode/Flat edge to GND).",
+          solution: "Rotate the LED 180 degrees. Ensure the longer lead (Anode) connects to the current-limiting resistor and Pin D2, while the shorter flat-edge lead (Cathode) connects to circuit Ground (GND)."
+        },
+        2: {
+          title: "Fault 2: LED Barely Glows & Measures Only ~1.5V",
+          symptom: "The LED turns on faintly in a dark room. Multimeter probe at the Arduino header pin reads ~1.5V instead of solid 5.0V.",
+          rootCause: "Missing `pinMode(pin, OUTPUT)` in the setup() block! The pin was left in high-impedance INPUT mode; writing HIGH merely enabled the internal 20kΩ pull-up resistor, starving the LED of forward current.",
+          solution: "Add `pinMode(PIN_GREEN, OUTPUT);` inside `void setup()`. This configures the internal CMOS push-pull FETs to actively drive up to 20mA at 5V."
+        },
+        3: {
+          title: "Fault 3: Erratic False Triggers & Flickering States",
+          symptom: "No button is being pressed, yet the machine randomly jumps between Ready, Warning, and Running whenever an engineer waves their hand near the breadboard.",
+          rootCause: "Floating Input Pin! The pushbuttons were configured with plain `pinMode(pin, INPUT)` without an external or internal pull-up resistor. The input pin acts as an open antenna picking up electrostatic fields.",
+          solution: "Change firmware setup to `pinMode(pin, INPUT_PULLUP)` or add a physical 10kΩ pull-up resistor between the pin and 5V. This locks the open circuit securely at HIGH until pressed."
+        },
+        4: {
+          title: "Fault 4: Wrong Output Activates (Logic Mismatch)",
+          symptom: "Pressing Button 2 (Running) causes the Amber LED to turn on instead of the Green LED + Fan.",
+          rootCause: "Pin Mapping / Variable Mismatch in header definitions (e.g. `#define PIN_AMBER 2` swapped with `PIN_GREEN 3`).",
+          solution: "Audit hardware wiring against the schematic pin assignment table. Cross-reference pin constant declarations at the top of the sketch to confirm D2=Green, D3=Amber, D4=Red, D5=Fan."
+        }
+      };
+
+      window.loadFaultScenario = function (id) {
+        const data = faultScenarios[id];
+        const box = document.getElementById('fault-display-box');
+        if (!data || !box) return;
+
+        box.innerHTML = `
+          <div style="font-size: 1.1rem; font-weight: 800; color: #fbbf24; margin-bottom: 6px;">
+            ⚠️ ${data.title}
+          </div>
+          <div style="background: rgba(15,23,42,0.8); padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #f87171;">
+            <strong style="color: #ffffff;">Symptom:</strong> <span style="color: #cbd5e1; font-size: 0.88rem;">${data.symptom}</span>
+          </div>
+          <div style="background: rgba(15,23,42,0.8); padding: 8px 12px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #fbbf24;">
+            <strong style="color: #ffffff;">Root Cause:</strong> <span style="color: #cbd5e1; font-size: 0.88rem;">${data.rootCause}</span>
+          </div>
+          <div style="background: rgba(15,23,42,0.8); padding: 8px 12px; border-radius: 6px; border-left: 3px solid #34d399;">
+            <strong style="color: #ffffff;">Corrective Engineering Fix:</strong> <span style="color: #a7f3d0; font-size: 0.88rem;">${data.solution}</span>
+          </div>
+        `;
+      };
+
+      // ==========================================
+      // 6. Live 60-Second Micro-Quiz Engine
+      // ==========================================
+      const quizResults = { q1: null, q2: null, q3: null, q4: null };
+
+      window.checkQuiz = function (element, isCorrect, qId) {
+        const parent = element.parentElement;
+        if (!parent) return;
+
+        const options = parent.querySelectorAll('.quiz-option');
+        options.forEach(opt => opt.classList.remove('correct', 'wrong'));
+
+        if (isCorrect) {
+          element.classList.add('correct');
+          quizResults[qId] = true;
+        } else {
+          element.classList.add('wrong');
+          quizResults[qId] = false;
+        }
+
+        const totalAnswered = Object.values(quizResults).filter(v => v !== null).length;
+        const correctCount = Object.values(quizResults).filter(v => v === true).length;
+        const banner = document.getElementById('quiz-score-banner');
+
+        if (banner) {
+          if (totalAnswered === 4) {
+            if (correctCount === 4) {
+              banner.innerHTML = `<strong>🎉 Perfect 4/4!</strong> Outstanding mastery of digital outputs, inductive drivers, state tables, and diagnostics!`;
+              banner.style.borderLeftColor = '#10b981';
+            } else {
+              banner.innerHTML = `<strong>🎯 Score: ${correctCount}/4</strong> Good effort! Review the red items before completing your workshop submission.`;
+              banner.style.borderLeftColor = '#f59e0b';
+            }
+          } else {
+            banner.innerHTML = `<strong>🎯 Current Score: ${correctCount}/${totalAnswered}</strong> (${4 - totalAnswered} questions remaining)`;
+          }
+        }
+      };
+
+    })();
+  </script>
+</body>
+
+</html>

@@ -27,10 +27,19 @@ Designed for seamless deployment to **GitHub Pages** and direct embedding as a *
 │       ├── self-check.js        # Formative diagnostic self-check widgets
 │       ├── timer.js             # Countdown widgets (Start / Pause / Reset)
 │       └── form-drawer.js       # MS Forms drawer toggle & quick-jump handler
-└── week1/                       # Week 1: Engineering Baseline
-    ├── index.html               # 18-Slide Interactive Slide Deck + Form Drawer
-    ├── forms-guide.md           # Copy-paste Microsoft Forms setup template (5 sections)
-    └── wokwi-diagram.json       # Wokwi 5V + 330Ω + LED circuit simulation file
+├── week1/                       # Week 1: Engineering Baseline
+│   ├── index.html               # 18-Slide Interactive Slide Deck + Form Drawer
+│   ├── forms-guide.md           # Copy-paste Microsoft Forms setup template (5 sections)
+│   └── wokwi-diagram.json       # Wokwi 5V + 330Ω + LED circuit simulation file
+├── week2/                       # Week 2: From PC to Embedded Controller
+│   ├── index.html               # 20-Slide Interactive Slide Deck
+│   └── forms-guide.md           # Student Workbook & Evidence Portfolio Guide
+├── week3/                       # Week 3: Digital Inputs & Binary Sensors
+│   └── index.html               # 11-Slide Interactive Slide Deck + Bottling Plant Simulator
+└── week4/                       # Week 4: B1 Digital Outputs & Actuation
+    ├── index.html               # 16-Slide Interactive Slide Deck + Packaging Machine Simulator
+    ├── forms-guide.md           # Student Workbook & Evidence Portfolio Guide
+    └── wokwi-diagram.json       # Complete Wokwi simulation circuit file
 ```
 
 ---
