@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "author": "Unit 6 Engineering Team / Gloscol Engineering",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-arduino-uno",
+      "id": "uno",
+      "top": 200,
+      "left": 280,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-potentiometer",
+      "id": "pot1",
+      "top": 220,
+      "left": 60,
+      "attrs": {
+        "label": "STROBE SPEED (A0)"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_strobe",
+      "top": 40,
+      "left": 360,
+      "attrs": {
+        "color": "white",
+        "label": "INSPECTION STROBE (D13)"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_strobe",
+      "top": 120,
+      "left": 350,
+      "attrs": {
+        "value": "220"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led_warn",
+      "top": 40,
+      "left": 470,
+      "attrs": {
+        "color": "yellow",
+        "label": "HIGH-SPEED ALERT (D12)"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r_warn",
+      "top": 120,
+      "left": 460,
+      "attrs": {
+        "value": "220"
+      }
+    }
+  ],
+  "connections": [
+    [
+      "uno:5V",
+      "pot1:VCC",
+      "red",
+      [
+        "v40",
+        "h-200",
+        "v-60"
+      ]
+    ],
+    [
+      "uno:GND.1",
+      "pot1:GND",
+      "black",
+      [
+        "v60",
+        "h-220",
+        "v-80"
+      ]
+    ],
+    [
+      "pot1:SIG",
+      "uno:A0",
+      "green",
+      [
+        "h60",
+        "v120",
+        "h120"
+      ]
+    ],
+    [
+      "uno:13",
+      "r_strobe:1",
+      "cyan",
+      [
+        "v-40",
+        "h-20"
+      ]
+    ],
+    [
+      "r_strobe:2",
+      "led_strobe:A",
+      "cyan",
+      [
+        "v-10"
+      ]
+    ],
+    [
+      "led_strobe:C",
+      "uno:GND.2",
+      "black",
+      [
+        "v-15",
+        "h60",
+        "v110"
+      ]
+    ],
+    [
+      "uno:12",
+      "r_warn:1",
+      "orange",
+      [
+        "v-40",
+        "h90"
+      ]
+    ],
+    [
+      "r_warn:2",
+      "led_warn:A",
+      "orange",
+      [
+        "v-10"
+      ]
+    ],
+    [
+      "led_warn:C",
+      "led_strobe:C",
+      "black",
+      [
+        "v-15",
+        "h-50"
+      ]
+    ]
+  ]
+}

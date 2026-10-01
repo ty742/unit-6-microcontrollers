@@ -36,10 +36,16 @@ Designed for seamless deployment to **GitHub Pages** and direct embedding as a *
 │   └── forms-guide.md           # Student Workbook & Evidence Portfolio Guide
 ├── week3/                       # Week 3: Digital Inputs & Binary Sensors
 │   └── index.html               # 11-Slide Interactive Slide Deck + Bottling Plant Simulator
-└── week4/                       # Week 4: B1 Digital Outputs & Actuation
-    ├── index.html               # 16-Slide Interactive Slide Deck + Packaging Machine Simulator
+├── week4/                       # Week 4: B1 Digital Outputs & Actuation
+│   ├── index.html               # 16-Slide Interactive Slide Deck + Packaging Machine Simulator
+│   ├── forms-guide.md           # Student Workbook & Evidence Portfolio Guide
+│   ├── wokwi-diagram.json       # Complete Wokwi simulation circuit file
+│   └── Unit6_Week4_Student_Report_Template.docx # Pre-formatted student report template
+└── week5/                       # Week 5: B1 Analogue Inputs & ADC Telemetry
+    ├── index.html               # 16-Slide Interactive Slide Deck + Strobe & Serial Telemetry Simulator
     ├── forms-guide.md           # Student Workbook & Evidence Portfolio Guide
-    └── wokwi-diagram.json       # Complete Wokwi simulation circuit file
+    ├── wokwi-diagram.json       # Complete Wokwi potentiometer & strobe circuit file
+    └── Unit6_Week5_Student_Report_Template.docx # Pre-formatted student report template
 ```
 
 ---

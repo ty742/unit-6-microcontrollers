@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 6: Microcontrollers — Week 5: Analog Inputs &amp; ADC</title>
+  <link rel="stylesheet" href="../shared/css/presentation.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Slide Layout & Typography System */
+    .slide {
+      padding: 24px 50px 84px !important;
+    }
+
+    .slide-header {
+      margin-bottom: 14px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.3px;
+    }
+
+    .slide-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .slide-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .hero-title {
+      font-size: 2.85rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-arduino));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(0, 151, 157, 0.2);
+      border: 1px solid var(--accent-arduino);
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    .badge-pill.gold {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: var(--color-warning);
+      color: #fbbf24;
+    }
+
+    .card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(0, 151, 157, 0.4);
+    }
+
+    .card.highlight {
+      border-color: var(--accent-arduino);
+      background: rgba(15, 23, 42, 0.92);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    /* KSB Learning Outcome Grid */
+    .ksb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .ksb-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .ksb-card.k {
+      border-top: 4px solid var(--accent-cyan);
+    }
+
+    .ksb-card.s {
+      border-top: 4px solid var(--accent-arduino);
+    }
+
+    .ksb-card.b {
+      border-top: 4px solid #fbbf24;
+    }
+
+    @media (max-width: 900px) {
+
+      .grid-2col,
+      .grid-3col,
+      .grid-4col,
+      .ksb-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .slide {
+        padding: 18px 20px 80px !important;
+      }
+    }
+
+    /* Signal Sorter Drag & Drop Styles */
+    .sort-activity-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .sort-pool {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px dashed rgba(51, 65, 85, 0.8);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 110px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+    }
+
+    .sort-bucket {
+      background: rgba(30, 41, 59, 0.6);
+      border: 2px dashed rgba(51, 65, 85, 0.7);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 190px;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sort-bucket.drag-over {
+      border-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.12);
+      transform: scale(1.01);
+    }
+
+    .sort-item {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      color: #f1f5f9;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: grab;
+      user-select: none;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .sort-item:hover {
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .sort-item.dragging {
+      opacity: 0.4;
+      cursor: grabbing;
+    }
+
+    .sort-item.selected-for-move {
+      border-color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      background: rgba(56, 189, 248, 0.2);
+    }
+
+    .sort-item.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #a7f3d0 !important;
+    }
+
+    .sort-item.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+
+    /* Strobe Lab Simulator Styles */
+    .strobe-sim-panel {
+      background: radial-gradient(circle at 75% 25%, rgba(0, 151, 157, 0.15) 0%, transparent 60%), rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--accent-arduino);
+      border-radius: 14px;
+      padding: 18px 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .pot-dial-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .pot-knob-visual {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #475569 0%, #1e293b 70%, #0f172a 100%);
+      border: 4px solid #64748b;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+      transition: transform 0.05s linear, border-color 0.2s ease;
+    }
+
+    .pot-knob-visual:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .pot-pointer {
+      position: absolute;
+      width: 4px;
+      height: 28px;
+      background: #38bdf8;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .strobe-beacon-visual {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 3px solid #475569;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: background 0.05s ease, box-shadow 0.05s ease, border-color 0.05s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .strobe-beacon-visual.flash-on {
+      background: #ffffff !important;
+      border-color: #38bdf8 !important;
+      box-shadow: 0 0 45px rgba(255, 255, 255, 0.95), 0 0 80px rgba(56, 189, 248, 0.7) !important;
+    }
+
+    .strobe-beacon-visual.flash-on span {
+      color: #0f172a !important;
+      font-weight: 800;
+    }
+
+    /* Serial Monitor Terminal Window */
+    .serial-terminal {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      height: 230px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .serial-header {
+      background: #1e293b;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+    }
+
+    .serial-log-body {
+      padding: 10px 12px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      color: #38bdf8;
+    }
+
+    .serial-line {
+      line-height: 1.4;
+      word-break: break-all;
+    }
+
+    .serial-line.sys {
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* Code Display Box */
+    .code-box {
+      background: #090d16;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent-arduino);
+    }
+
+    .code-hl {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .code-comm {
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .code-fn {
+      color: #f472b6;
+    }
+
+    .code-num {
+      color: #34d399;
+    }
+
+    /* Micro-Quiz Options */
+    .quiz-option {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      color: #f1f5f9;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(37, 51, 72, 0.9);
+      transform: translateX(3px);
+    }
+
+    .quiz-option.correct {
+      background: rgba(16, 185, 129, 0.25) !important;
+      border-color: #10b981 !important;
+      color: #a7f3d0 !important;
+    }
+
+    .quiz-option.wrong {
+      background: rgba(239, 68, 68, 0.25) !important;
+      border-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+
+    /* Timer Widget */
+    .timer-badge-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--accent-arduino);
+      border-radius: 8px;
+      padding: 4px 12px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="bg-grid"></div>
+
+  <div id="app-container">
+    <div id="deck-viewport">
+
+      <!-- Top Header -->
+      <header class="deck-header">
+        <div class="header-top-row">
+          <a href="../index.html" class="nav-hub-link" title="Return to Course Homepage Hub">
+            🏠 Course Hub
+          </a>
+          <div class="brand-badge">
+            <span class="pill">UNIT 6</span>
+            <span>Microcontrollers</span>
+            <span style="color: var(--text-muted);">|</span>
+            <span id="header-slide-topic" style="color: var(--accent-cyan); font-weight: 600;">Week 5: Analog Inputs
+              &amp; ADC</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <div class="timer-widget" data-duration="15"
+            style="display: inline-flex; align-items: center; gap: 6px; background: rgba(30, 41, 59, 0.8); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 8px;">
+            <span class="timer-display"
+              style="font-family: var(--font-mono); font-weight: 700; color: #fbbf24; font-size: 0.9rem;">15:00</span>
+            <button class="timer-toggle btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">Start</button>
+            <button class="timer-reset btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;">↺</button>
+          </div>
+
+          <button class="btn btn-secondary" id="open-a11y-drawer" title="Accessibility &amp; Neurodiversity (Key: A)">
+            ⚙️ Accessibility
+          </button>
+          <button class="btn btn-secondary" id="open-slide-matrix" title="View all slides overview (Key: M)">
+            🗺️ Slide Map
+          </button>
+        </div>
+      </header>
+
+      <!-- Slides Wrapper -->
+      <main id="slides-wrapper">
+
+        <!-- ==========================================
+             SLIDE 1: Welcome & Mission
+             ========================================== -->
+        <section class="slide active" id="slide-1">
+          <div class="slide-body" style="justify-content: center; align-items: flex-start;">
+            <div class="badge-bar">
+              <span class="badge-pill">Unit 6: Microcontrollers</span>
+              <span class="badge-pill gold">Week 5</span>
+              <span class="badge-pill">Beginner Friendly</span>
+              <span class="badge-pill"
+                style="border-color: #38bdf8; color: #38bdf8; background: rgba(56, 189, 248, 0.15);">Criterion B1</span>
+            </div>
+
+            <h1 class="hero-title">Analog Inputs</h1>
+            <h2 class="slide-subtitle" style="font-size: 1.25rem; color: #ffffff; margin-bottom: 16px;">
+              Measuring the Real World: Continuous Voltages, ADC Conversion &amp; Telemetry
+            </h2>
+
+            <p
+              style="font-size: 1.02rem; color: var(--text-secondary); max-width: 820px; line-height: 1.6; margin-bottom: 22px;">
+              The physical world is smooth and continuous: temperatures rise gently, light fades gradually, and dials
+              rotate seamlessly. Today you will learn how an Arduino reads these real-world <strong>Analog
+                Inputs</strong>, turns them into numbers, and uses them to control a machine and stream live telemetry
+              to your screen.
+            </p>
+
+            <div class="grid-3col" style="width: 100%; max-width: 920px; margin-bottom: 22px;">
+              <div class="card" style="padding: 16px; border-top: 3px solid var(--accent-cyan);">
+                <div style="font-size: 1.4rem; margin-bottom: 6px;">🌍</div>
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">1. Continuous Physical Signals</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Sensors output infinitely
+                  variable voltages between 0V and 5V.</div>
+              </div>
+              <div class="card" style="padding: 16px; border-top: 3px solid #fbbf24;">
+                <div style="font-size: 1.4rem; margin-bottom: 6px;">🔢</div>
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">2. The 10-Bit ADC Translator</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Arduino translates that
+                  voltage into an integer from 0 to 1023.</div>
+              </div>
+              <div class="card" style="padding: 16px; border-top: 3px solid var(--accent-arduino);">
+                <div style="font-size: 1.4rem; margin-bottom: 6px;">⚡</div>
+                <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;">3. Control &amp; Telemetry</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Modulate strobe flash speed
+                  and stream live data to your laptop.</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <button class="btn btn-primary" onclick="window.deckEngine ? window.deckEngine.nextSlide() : null"
+                style="padding: 10px 24px; font-size: 0.95rem;">
+                Explore Learning Outcomes →
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 2: Clear Learning Outcomes (KSB)
+             ========================================== -->
+        <section class="slide" id="slide-2">
+          <div class="slide-header">
+            <span class="slide-tag">Lesson Objectives • BTEC Unit 6 Criterion B1</span>
+            <h2 class="slide-title">Learning Outcomes: Analog Inputs &amp; ADC</h2>
+            <p class="slide-subtitle">Clear Knowledge, Practical Skills, and Professional Behaviors for today's session:
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="ksb-grid">
+              <!-- Knowledge -->
+              <div class="ksb-card k">
+                <div class="card-title" style="color: var(--accent-cyan); font-size: 1.05rem; margin-bottom: 10px;">
+                  🧠 Knowledge (K)
+                </div>
+                <ul
+                  style="padding-left: 18px; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
+                  <li><strong>Continuous vs. Discrete:</strong> Explain why natural phenomena (heat, light, force,
+                    angle) are analog voltages, unlike 2-state digital signals.</li>
+                  <li><strong>Sensor Variety:</strong> Identify common analog input devices: potentiometers (angle),
+                    thermistors (heat), and LDRs (light).</li>
+                  <li><strong>ADC Quantization:</strong> Understand how a 10-bit ADC slices 0–5V into 1024 discrete
+                    steps (values 0 to 1023, ~4.89 mV/step).</li>
+                </ul>
+              </div>
+
+              <!-- Skills -->
+              <div class="ksb-card s">
+                <div class="card-title" style="color: var(--accent-arduino); font-size: 1.05rem; margin-bottom: 10px;">
+                  🛠️ Skills (S)
+                </div>
+                <ul
+                  style="padding-left: 18px; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
+                  <li><strong>Divider Circuit Wiring:</strong> Correctly wire a 3-pin potentiometer to 5V, GND, and
+                    analog pin A0 on the breadboard.</li>
+                  <li><strong>Voltage Acquisition:</strong> Sample analog pins in Arduino C++ using <code
+                      style="color: #38bdf8;">analogRead(A0)</code>.</li>
+                  <li><strong>Dynamic Output Control:</strong> Use sensor readings to adjust LED timing via <code
+                      style="color: #38bdf8;">delay(sensorValue)</code> to build a variable strobe light.</li>
+                </ul>
+              </div>
+
+              <!-- Behaviors & Diagnostics -->
+              <div class="ksb-card b">
+                <div class="card-title" style="color: #fbbf24; font-size: 1.05rem; margin-bottom: 10px;">
+                  🎯 Telemetry &amp; Diagnostics (B)
+                </div>
+                <ul
+                  style="padding-left: 18px; font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
+                  <li><strong>Serial Stream Setup:</strong> Open laptop communication at 9600 baud with <code
+                      style="color: #38bdf8;">Serial.begin(9600)</code> and <code
+                      style="color: #38bdf8;">Serial.println()</code>.</li>
+                  <li><strong>Fault Finding:</strong> Use the Serial Monitor to detect open grounds, disconnected
+                    wipers, and code freezes in seconds.</li>
+                  <li><strong>Evidence Portfolio:</strong> Capture live telemetry screenshots and breadboard photos for
+                    your Criterion B1 report.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Success Checklist -->
+            <div
+              style="background: rgba(17, 24, 39, 0.85); border: 1px solid rgba(51, 65, 85, 0.8); border-radius: 10px; padding: 12px 18px; margin-top: 6px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.2rem;">🎯</span>
+              <div style="font-size: 0.88rem; color: var(--text-secondary);">
+                <strong style="color: #ffffff;">Lab Benchmark:</strong>
+                Success is when you can wire a potentiometer to Pin A0, turn the dial to change the LED strobe speed,
+                and verify the changing 0–1023 numbers on your Serial Monitor.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 3: Starter - Analogue vs Digital
+             ========================================== -->
+        <section class="slide" id="slide-3">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">3-Min Warm Up • The Big Difference</span>
+                <h2 class="slide-title">Analogue vs. Digital: What's the Difference?</h2>
+                <p class="slide-subtitle">Everything in electronics is either Digital (2 choices) or Analogue (smooth
+                  &amp; continuous)</p>
+              </div>
+              <div class="timer-badge-container">
+                <span>⏱️</span>
+                <span class="timer-display" data-duration="180">03:00</span>
+                <button class="timer-btn timer-start-btn" style="padding: 2px 6px; font-size: 0.72rem;">Start</button>
+                <button class="timer-btn timer-reset-btn" style="padding: 2px 6px; font-size: 0.72rem;">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-body">
+            <!-- Simple 2-column comparison -->
+            <div class="grid-2col" style="margin-bottom: 8px;">
+              <div class="card" style="border-left: 4px solid var(--accent-cyan); padding: 14px 18px;">
+                <div style="font-weight: 800; color: var(--accent-cyan); font-size: 1rem; margin-bottom: 4px;">🌊
+                  Analogue (Continuous)</div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Like a <strong>dimmer switch</strong> or a <strong>volume dial</strong>. It can be set to any level:
+                  off, faint, medium, loud, or anywhere in between.
+                </div>
+              </div>
+              <div class="card" style="border-left: 4px solid #fbbf24; padding: 14px 18px;">
+                <div style="font-weight: 800; color: #fbbf24; font-size: 1rem; margin-bottom: 4px;">⚡ Digital (Only 2
+                  States)</div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Like a standard <strong>light switch</strong>. It is either completely <strong>ON (HIGH)</strong> or
+                  completely <strong>OFF (LOW)</strong>. Nothing in between!
+                </div>
+              </div>
+            </div>
+
+            <!-- Draggable items pool -->
+            <div
+              style="background: rgba(15, 23, 42, 0.6); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(51, 65, 85, 0.6);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Click or drag to sort each
+                  item:</span>
+                <span id="pool-count"
+                  style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">6
+                  remaining</span>
+              </div>
+              <div class="sort-pool" id="sort-items-pool">
+                <div class="sort-item" draggable="true" id="item-pot" data-type="analogue"
+                  data-label="Potentiometer (Volume Dial)">🎛️ Potentiometer (Volume Dial)</div>
+                <div class="sort-item" draggable="true" id="item-btn" data-type="digital"
+                  data-label="Pushbutton Switch">🔘 Pushbutton Switch</div>
+                <div class="sort-item" draggable="true" id="item-led" data-type="digital"
+                  data-label="LED Light (ON / OFF)">💡 LED Light (ON / OFF)</div>
+                <div class="sort-item" draggable="true" id="item-tmp" data-type="analogue"
+                  data-label="Temperature Sensor">🌡️ Temperature Sensor</div>
+                <div class="sort-item" draggable="true" id="item-adc" data-type="digital"
+                  data-label="Computer Binary Numbers">🔢 Computer Binary Numbers</div>
+                <div class="sort-item" draggable="true" id="item-ldr" data-type="analogue"
+                  data-label="Sunlight Dimmer Sensor">☀️ Sunlight Dimmer Sensor</div>
+              </div>
+            </div>
+
+            <!-- Buckets -->
+            <div class="sort-activity-container">
+              <div class="sort-bucket" id="bucket-analogue">
+                <div
+                  style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 6px;">
+                  <strong style="color: var(--accent-cyan); font-size: 0.92rem;">🌊 Analogue (Smooth /
+                    Variable)</strong>
+                  <span id="analogue-count"
+                    style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-muted);">0 placed</span>
+                </div>
+              </div>
+              <div class="sort-bucket" id="bucket-digital">
+                <div
+                  style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(51, 65, 85, 0.6); padding-bottom: 6px;">
+                  <strong style="color: #fbbf24; font-size: 0.92rem;">⚡ Digital (Only 2 Choices)</strong>
+                  <span id="digital-count"
+                    style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-muted);">0 placed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Feedback -->
+            <div id="sort-feedback"
+              style="display: none; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; border-left: 4px solid var(--accent-cyan); background: rgba(15,23,42,0.9);">
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button class="btn btn-primary" onclick="window.checkSortClassification()"
+                style="padding: 7px 16px; font-size: 0.84rem;">
+                ✓ Check My Answers
+              </button>
+              <button id="btn-reveal-sort" class="btn btn-secondary" onclick="window.revealSortAnswers()"
+                style="display: none; padding: 7px 16px; font-size: 0.84rem;">
+                💡 Reveal Solution
+              </button>
+              <button class="btn btn-secondary" onclick="window.resetSortActivity()"
+                style="padding: 7px 14px; font-size: 0.84rem;">
+                🔄 Reset
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 4: Different Kinds of Analog Inputs
+             ========================================== -->
+        <section class="slide" id="slide-4">
+          <div class="slide-header">
+            <span class="slide-tag">Engineering Practice • Real-World Sensors</span>
+            <h2 class="slide-title">Types of Analog Inputs in Modern Systems</h2>
+            <p class="slide-subtitle">How microcontrollers measure continuous physical forces, temperatures, and motion
+              across industry</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 14px;">
+              <!-- 1. Position & Motion -->
+              <div class="card" style="border-top: 3px solid var(--accent-cyan); padding: 14px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="font-size: 1.3rem;">🎛️</span>
+                  <div class="card-title" style="margin: 0; font-size: 1rem; color: #ffffff;">Position, Angle &amp;
+                    Motion</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">
+                  Mechanical sensors that measure rotation angle, sliding distance, or user control dials.
+                </p>
+                <div
+                  style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.5; color: #cbd5e1;">
+                  <div>• <strong>Devices:</strong> Rotary potentiometers, linear slider pots, joysticks, throttle
+                    pedals.</div>
+                  <div>• <strong>Where used:</strong> EV accelerator pedals, robotic arm joint feedback, audio mixing
+                    desks.</div>
+                  <div>• <strong>How it outputs:</strong> A sliding wiper outputs a smooth voltage proportional to
+                    position.</div>
+                </div>
+              </div>
+
+              <!-- 2. Temperature & Thermal -->
+              <div class="card" style="border-top: 3px solid #f87171; padding: 14px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="font-size: 1.3rem;">🌡️</span>
+                  <div class="card-title" style="margin: 0; font-size: 1rem; color: #ffffff;">Temperature &amp; Thermal
+                    Sensors</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">
+                  Thermal transducers that measure temperature changes with high accuracy.
+                </p>
+                <div
+                  style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.5; color: #cbd5e1;">
+                  <div>• <strong>Devices:</strong> NTC/PTC Thermistors, TMP36 ICs, analog RTD sensors.</div>
+                  <div>• <strong>Where used:</strong> EV battery cooling systems, 3D printer hotends, HVAC thermostats.
+                  </div>
+                  <div>• <strong>How it outputs:</strong> Electrical resistance changes smoothly with heat, varying the
+                    voltage (10mV/°C).</div>
+                </div>
+              </div>
+
+              <!-- 3. Light & Optical -->
+              <div class="card" style="border-top: 3px solid #fbbf24; padding: 14px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="font-size: 1.3rem;">☀️</span>
+                  <div class="card-title" style="margin: 0; font-size: 1rem; color: #ffffff;">Light &amp; Optical
+                    Sensors</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">
+                  Photosensitive components that detect ambient brightness, reflections, and illumination.
+                </p>
+                <div
+                  style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.5; color: #cbd5e1;">
+                  <div>• <strong>Devices:</strong> Light Dependent Resistors (LDRs / Photoresistors), phototransistors.
+                  </div>
+                  <div>• <strong>Where used:</strong> Automatic vehicle headlights, solar panel trackers, phone
+                    auto-brightness.</div>
+                  <div>• <strong>How it outputs:</strong> Absorbed photons free electrons; resistance drops from 1MΩ
+                    (dark) to 400Ω (bright).</div>
+                </div>
+              </div>
+
+              <!-- 4. Force, Pressure & Environmental -->
+              <div class="card" style="border-top: 3px solid #34d399; padding: 14px 16px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                  <span style="font-size: 1.3rem;">🗜️</span>
+                  <div class="card-title" style="margin: 0; font-size: 1rem; color: #ffffff;">Force, Pressure &amp;
+                    Liquids</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">
+                  Mechanical and environmental sensors that detect physical force, weight, pressure, or moisture.
+                </p>
+                <div
+                  style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px; font-size: 0.82rem; line-height: 1.5; color: #cbd5e1;">
+                  <div>• <strong>Devices:</strong> Force-Sensing Resistors (FSRs), strain gauges, pressure transducers,
+                    soil probes.</div>
+                  <div>• <strong>Where used:</strong> Digital scales, robotic surgical grippers, hydraulic brake
+                    pressure, smart irrigation.</div>
+                  <div>• <strong>How it outputs:</strong> Mechanical squeezing or fluid conductivity varies the
+                    circuit's analog voltage.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connecting Golden Rule Banner -->
+            <div
+              style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent-arduino); border-radius: 10px; padding: 12px 18px; margin-top: 4px; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.4rem;">💡</span>
+              <div style="font-size: 0.86rem; color: #e2e8f0; line-height: 1.5;">
+                <strong style="color: #38bdf8;">The Universal Rule of Analog Inputs:</strong>
+                Even though temperature, light, pressure, and dials seem totally different, every single one transforms
+                physical changes into <strong>one universal signal: a smooth voltage between 0V and 5V</strong>. Arduino
+                reads all of them using the exact same function: <code
+                  style="color: #38bdf8; font-weight: 700;">analogRead(A0);</code>!
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 5: Our Sensor Today - What is a Potentiometer?
+             ========================================== -->
+        <section class="slide" id="slide-5">
+          <div class="slide-header">
+            <span class="slide-tag">Our Sensor Today • The Rotary Knob</span>
+            <h2 class="slide-title">What is a Potentiometer?</h2>
+            <p class="slide-subtitle">Why we start with a potentiometer: it's a simple, hands-on 3-pin volume knob!</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <!-- What it is -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">🎛️ How It Works</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
+                  Inside the knob is a circular strip of carbon. As you turn the knob, a small metal pointer (called the
+                  <strong>wiper</strong>) slides across the strip:
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem;">
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 10px 12px; border-radius: 8px; border-left: 3px solid #ef4444;">
+                    <strong style="color: #f87171;">Pin 1:</strong> Connects to <strong>5 Volts (Power)</strong>.
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 10px 12px; border-radius: 8px; border-left: 3px solid #38bdf8;">
+                    <strong style="color: #38bdf8;">Middle Pin (Wiper):</strong> Connects to <strong>Pin A0</strong> on
+                    the Arduino. It outputs whatever voltage you pick!
+                  </div>
+                  <div
+                    style="background: rgba(30,41,59,0.7); padding: 10px 12px; border-radius: 8px; border-left: 3px solid #64748b;">
+                    <strong style="color: #cbd5e1;">Pin 3:</strong> Connects to <strong>GND (Ground / 0V)</strong>.
+                  </div>
+                </div>
+              </div>
+
+              <!-- What happens when you turn it -->
+              <div class="card highlight">
+                <div class="card-title" style="color: #fbbf24;">⚡ What the Middle Pin Sends to Arduino</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 14px;">
+                  Turning the knob smoothly divides the 5 Volts:
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                  <div
+                    style="background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #94a3b8; font-size: 0.88rem;">Turn fully left (counter-clockwise):</span>
+                    <strong style="color: #94a3b8; font-size: 1rem; font-family: var(--font-mono);">0.0 Volts</strong>
+                  </div>
+                  <div
+                    style="background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #38bdf8; font-size: 0.88rem;">Turn to the middle:</span>
+                    <strong style="color: #38bdf8; font-size: 1rem; font-family: var(--font-mono);">2.5 Volts</strong>
+                  </div>
+                  <div
+                    style="background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #34d399; font-size: 0.88rem;">Turn fully right (clockwise):</span>
+                    <strong style="color: #34d399; font-size: 1rem; font-family: var(--font-mono);">5.0 Volts</strong>
+                  </div>
+                </div>
+
+                <div style="margin-top: 14px; font-size: 0.84rem; color: var(--text-muted); line-height: 1.5;">
+                  💡 <strong>Key takeaway:</strong> The knob lets you dial in any voltage you want between 0 and 5
+                  Volts.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 6: The Translator - The ADC
+             ========================================== -->
+        <section class="slide" id="slide-6">
+          <div class="slide-header">
+            <span class="slide-tag">Inside the Arduino • The Voltage Translator</span>
+            <h2 class="slide-title">How Arduino Reads Voltage: The ADC</h2>
+            <p class="slide-subtitle">Computers only understand numbers. The ADC turns volts into numbers you can use!
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <!-- Explanation -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">🤔 What is an ADC?</div>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px;">
+                  <strong>ADC</strong> stands for <strong>Analogue-to-Digital Converter</strong>.
+                </p>
+                <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+                  The Arduino CPU cannot do math on "volts". It needs a normal integer number.
+                  The ADC measures the voltage on Pin A0 and converts it into a number between <strong>0 and
+                    1023</strong>:
+                </p>
+
+                <div
+                  style="background: #090d16; border: 1px solid #1e293b; border-radius: 8px; padding: 14px; text-align: center;">
+                  <div style="font-size: 1.3rem; font-family: var(--font-mono); color: #38bdf8; font-weight: 800;">
+                    0 Volts ➔ 0
+                  </div>
+                  <div
+                    style="font-size: 1.3rem; font-family: var(--font-mono); color: #fbbf24; font-weight: 800; margin: 6px 0;">
+                    2.5 Volts ➔ 512
+                  </div>
+                  <div style="font-size: 1.3rem; font-family: var(--font-mono); color: #34d399; font-weight: 800;">
+                    5.0 Volts ➔ 1023
+                  </div>
+                </div>
+              </div>
+
+              <!-- Why 1023? -->
+              <div class="card highlight">
+                <div class="card-title" style="color: #fbbf24;">❓ Why 0 to 1023?</div>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 14px;">
+                  The Arduino Uno uses a <strong>10-bit converter</strong>. In binary, 10 bits can store
+                  <strong>2<sup>10</sup> = 1,024</strong> different values (from 0 to 1023).
+                </p>
+
+                <div
+                  style="background: rgba(30,41,59,0.7); padding: 12px; border-radius: 8px; font-size: 0.88rem; color: #f1f5f9; line-height: 1.6;">
+                  <div>• That means the 5 Volts is chopped into <strong>1024 tiny steps</strong>.</div>
+                  <div>• Each step is about <strong>0.005 Volts (5 millivolts)</strong>.</div>
+                  <div>• This makes it very sensitive and smooth!</div>
+                </div>
+
+                <div
+                  style="margin-top: 14px; padding: 10px; background: rgba(15,23,42,0.9); border-radius: 8px; border: 1px solid var(--accent-arduino); font-size: 0.85rem; color: #38bdf8;">
+                  ✨ In your code, you get this number with one line:
+                  <div style="font-family: var(--font-mono); font-weight: 700; color: #ffffff; margin-top: 4px;">
+                    int sensorValue = analogRead(A0);
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 7: The Project Idea
+             ========================================== -->
+        <section class="slide" id="slide-7">
+          <div class="slide-header">
+            <span class="slide-tag">The Build Plan • How It Fits Together</span>
+            <h2 class="slide-title">The Project: Variable-Speed Strobe Light</h2>
+            <p class="slide-subtitle">How does reading a number make a light change speed? Here is the logic:</p>
+          </div>
+
+          <div class="slide-body">
+            <!-- 3-step logic sequence -->
+            <div class="grid-3col">
+              <div class="card" style="border-top: 4px solid var(--accent-cyan);">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">Step 1: Read
+                  Number</div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Arduino reads the knob value and saves it into <code
+                    style="color:var(--accent-cyan);">sensorValue</code> (between 0 and 1023).
+                </p>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #fbbf24;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">Step 2: Turn LED
+                  ON &amp; Wait</div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Turn the LED ON, then wait for <code style="color:#fbbf24;">delay(sensorValue)</code> milliseconds.
+                </p>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #34d399;">
+                <div style="font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">Step 3: Turn LED
+                  OFF &amp; Wait</div>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
+                  Turn the LED OFF, then wait for another <code style="color:#34d399;">delay(sensorValue)</code>
+                  milliseconds.
+                </p>
+              </div>
+            </div>
+
+            <!-- Big Notice Box -->
+            <div class="card highlight" style="margin-top: 8px; padding: 18px 22px;">
+              <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+                💡 Why does the speed change?
+              </div>
+              <div style="font-size: 0.95rem; color: #f1f5f9; line-height: 1.6;">
+                • If the knob is turned down to <strong>50</strong>, the Arduino only waits <strong>50
+                  milliseconds</strong>. The light flashes super fast! (Strobe effect)<br>
+                • If the knob is turned up to <strong>1000</strong>, the Arduino waits <strong>1 whole second</strong>
+                on and 1 whole second off. The light blinks very slowly.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 8: Interactive Lab Simulator
+             ========================================== -->
+        <section class="slide" id="slide-8">
+          <div class="slide-header">
+            <span class="slide-tag">Interactive Simulation • Try It Right Now!</span>
+            <h2 class="slide-title">Interactive Strobe &amp; Serial Monitor Simulator</h2>
+            <p class="slide-subtitle">Drag the slider or click the buttons below to see the light flash and watch live
+              data stream:</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- Left: Hardware Simulator -->
+              <div class="card strobe-sim-panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <strong style="color: #ffffff; font-size: 0.95rem;">🎛️ Virtual Hardware</strong>
+                  <span id="strobe-status-pill" class="badge-pill" style="font-size: 0.82rem;">ADC: 512 | 2.50V</span>
+                </div>
+
+                <div
+                  style="display: flex; gap: 16px; align-items: center; justify-content: space-around; margin-bottom: 14px;">
+                  <!-- Potentiometer Dial -->
+                  <div class="pot-dial-container">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #94a3b8;">TURN THE KNOB (A0)</div>
+                    <div class="pot-knob-visual" id="sim-pot-knob" title="Drag slider below">
+                      <div class="pot-pointer" id="sim-pot-pointer"></div>
+                    </div>
+                    <input type="range" id="sim-pot-slider" min="0" max="1023" value="512"
+                      style="width: 100%; accent-color: var(--accent-cyan); cursor: pointer;" />
+                    <div
+                      style="display: flex; justify-content: space-between; width: 100%; font-size: 0.74rem; font-family: var(--font-mono); color: #94a3b8;">
+                      <span>0 (Fast)</span>
+                      <span>512</span>
+                      <span>1023 (Slow)</span>
+                    </div>
+                  </div>
+
+                  <!-- Strobe Beacon LED -->
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #94a3b8;">LED LIGHT (PIN 13)</div>
+                    <div class="strobe-beacon-visual" id="sim-strobe-beacon">
+                      <span style="font-size: 0.8rem; color: #64748b; font-family: var(--font-mono);">FLASH</span>
+                    </div>
+                    <span id="sim-scope-freq"
+                      style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">f = 0.98
+                      Hz</span>
+                  </div>
+                </div>
+
+                <!-- Quick Buttons -->
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;">
+                  <button class="btn btn-secondary" onclick="window.setSimPotValue(50)"
+                    style="padding: 5px 10px; font-size: 0.8rem;">⚡ Super Fast (ADC: 50)</button>
+                  <button class="btn btn-secondary" onclick="window.setSimPotValue(512)"
+                    style="padding: 5px 10px; font-size: 0.8rem;">Medium (ADC: 512)</button>
+                  <button class="btn btn-secondary" onclick="window.setSimPotValue(1000)"
+                    style="padding: 5px 10px; font-size: 0.8rem;">🐢 Slow Blink (ADC: 1000)</button>
+                </div>
+              </div>
+
+              <!-- Right: Virtual Serial Monitor Console -->
+              <div class="card" style="padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <strong style="color: #ffffff; font-size: 0.95rem;">💻 Serial Monitor on Your Laptop</strong>
+                  <button class="btn btn-secondary" onclick="window.clearSerialTerminal()"
+                    style="padding: 3px 8px; font-size: 0.75rem;">Clear Screen</button>
+                </div>
+
+                <!-- Terminal Display -->
+                <div class="serial-terminal">
+                  <div class="serial-header">
+                    <span style="color: #94a3b8; font-size: 0.76rem;">COM3 (Arduino Uno connected at 9600 baud)</span>
+                  </div>
+                  <div class="serial-log-body" id="serial-log-container">
+                    <div class="serial-line sys">--- Serial Port Connected ---</div>
+                    <div class="serial-line sys">Rotate the knob on the left to see live values change!</div>
+                  </div>
+                </div>
+
+                <!-- Explanation Box -->
+                <div
+                  style="margin-top: 10px; background: rgba(15,23,42,0.8); border: 1px solid rgba(51,65,85,0.7); border-radius: 8px; padding: 10px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                  💡 <strong>Notice:</strong> As you drag the knob, the numbers on your simulated screen update in real
+                  time. This is exactly what you will see on your computer in the lab!
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 9: The Simple Code
+             ========================================== -->
+        <section class="slide" id="slide-9">
+          <div class="slide-header">
+            <span class="slide-tag">The Program • Clean &amp; Simple</span>
+            <h2 class="slide-title">The Arduino Code (Line by Line)</h2>
+            <p class="slide-subtitle">This short program is all you need to make the entire project work:</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <!-- Code Box -->
+              <div class="card highlight">
+                <div class="card-title" style="color: #34d399;">💻 Full Working Sketch</div>
+                <div class="code-box" style="font-size: 0.84rem;">
+                  <span class="code-hl">int</span> potPin = A0; &nbsp;<span class="code-comm">// Knob is on Pin
+                    A0</span><br>
+                  <span class="code-hl">int</span> ledPin = 13; &nbsp;<span class="code-comm">// LED is on Pin
+                    13</span><br><br>
+                  <span class="code-hl">void</span> <span class="code-fn">setup</span>() {<br>
+                  &nbsp;&nbsp;pinMode(potPin, INPUT); &nbsp;&nbsp;&nbsp;<span class="code-comm">// Configure A0 as analog input</span><br>
+                  &nbsp;&nbsp;pinMode(ledPin, OUTPUT); &nbsp;&nbsp;<span class="code-comm">// LED pin as output</span><br>
+                  &nbsp;&nbsp;Serial.begin(<span class="code-num">9600</span>); &nbsp;<span class="code-comm">// Start
+                    Serial communication</span><br>
+                  }<br><br>
+                  <span class="code-hl">void</span> <span class="code-fn">loop</span>() {<br>
+                  &nbsp;&nbsp;<span class="code-hl">int</span> sensorValue = <span
+                    class="code-fn">analogRead</span>(potPin);<br><br>
+                  &nbsp;&nbsp;Serial.print(<span class="code-hl">"ADC Value: "</span>);<br>
+                  &nbsp;&nbsp;Serial.println(sensorValue); &nbsp;<span class="code-comm">// Send number to
+                    laptop</span><br><br>
+                  &nbsp;&nbsp;digitalWrite(ledPin, HIGH); &nbsp;<span class="code-comm">// Light ON</span><br>
+                  &nbsp;&nbsp;delay(sensorValue); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="code-comm">// Wait</span><br>
+                  &nbsp;&nbsp;digitalWrite(ledPin, LOW); &nbsp;&nbsp;<span class="code-comm">// Light OFF</span><br>
+                  &nbsp;&nbsp;delay(sensorValue); &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                    class="code-comm">// Wait</span><br>
+                  }
+                </div>
+              </div>
+
+              <!-- Plain English Breakdown -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">📖 What Each Line Does</div>
+                <div
+                  style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem; color: #f1f5f9; line-height: 1.5;">
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color:#38bdf8;">setup():</strong> Runs once when Arduino turns on. It configures
+                    <code style="color: #38bdf8;">potPin</code> (A0) as an <code style="color: #38bdf8;">INPUT</code>,
+                    <code style="color: #38bdf8;">ledPin</code> as an <code style="color: #38bdf8;">OUTPUT</code>, and starts the Serial link at 9600 speed.
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color:#38bdf8;">analogRead(A0):</strong> Checks the knob right now and gets a number
+                    between 0 and 1023.
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color:#fbbf24;">Serial.println():</strong> Prints that number onto your computer
+                    screen so you can see it.
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 10px; border-radius: 6px;">
+                    <strong style="color:#34d399;">delay(sensorValue):</strong> Pauses the program for that number of
+                    milliseconds before switching the light.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 10: Why the Serial Monitor Matters
+             ========================================== -->
+        <section class="slide" id="slide-10">
+          <div class="slide-header">
+            <span class="slide-tag">Debugging Skills • Finding Faults</span>
+            <h2 class="slide-title">Why the Serial Monitor is Your Best Friend</h2>
+            <p class="slide-subtitle">It lets you see inside the Arduino's brain instead of guessing what went wrong!
+            </p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col">
+              <!-- Without Serial -->
+              <div class="card" style="border-top: 3px solid #ef4444;">
+                <div class="card-title" style="color: #f87171;">🚫 Without the Serial Monitor ("Guessing Blind")</div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <p>Imagine your LED is not flashing. You have no screen:</p>
+                  <ul style="padding-left: 18px; margin-top: 6px;">
+                    <li>Is the knob wire loose?</li>
+                    <li>Is the LED blown?</li>
+                    <li>Is the code frozen?</li>
+                    <li>Is the Arduino reading 0?</li>
+                  </ul>
+                  <p style="margin-top: 8px; color: #fca5a5;">
+                    You have no idea! You have to guess.
+                  </p>
+                </div>
+              </div>
+
+              <!-- With Serial -->
+              <div class="card highlight" style="border-top: 3px solid #10b981;">
+                <div class="card-title" style="color: #34d399;">✅ With the Serial Monitor ("Total Clarity")</div>
+                <div style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
+                  <p>You open the Serial Monitor and look at the numbers:</p>
+                  <ul style="padding-left: 18px; margin-top: 6px;">
+                    <li>If you turn the knob and the numbers change (e.g. 100 ➔ 600), <strong>the knob is 100%
+                        working</strong>!</li>
+                    <li>If the numbers are stuck at 1023, you know a ground wire came loose.</li>
+                    <li>If nothing prints, you forgot <code style="color:#38bdf8;">Serial.begin(9600)</code>.</li>
+                  </ul>
+                  <p style="margin-top: 8px; color: #a7f3d0;">
+                    You can fix the problem in 5 seconds!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pro Tip Box -->
+            <div
+              style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent-arduino); border-radius: 10px; padding: 12px 18px; margin-top: 6px;">
+              <strong style="color: #ffffff; font-size: 0.92rem;">💡 Pro Tip for the Lab:</strong>
+              <span style="font-size: 0.88rem; color: var(--text-secondary); margin-left: 6px;">
+                Make sure the bottom-right corner of your Serial Monitor window says <strong>9600 baud</strong>. If it
+                says something else, you will see weird question marks instead of numbers!
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 11: Step-by-Step Build & Test Guide
+             ========================================== -->
+        <section class="slide" id="slide-11">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">Practical Lab • 15 Minutes</span>
+                <h2 class="slide-title">15-Minute Build &amp; Test Protocol</h2>
+                <p class="slide-subtitle">Follow these 4 simple steps at your lab bench:</p>
+              </div>
+              <div class="timer-badge-container">
+                <span>⏱️</span>
+                <span class="timer-display" data-duration="900">15:00</span>
+                <button class="timer-btn timer-start-btn" style="padding: 2px 6px; font-size: 0.72rem;">Start</button>
+                <button class="timer-btn timer-reset-btn" style="padding: 2px 6px; font-size: 0.72rem;">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-4col">
+              <div class="card" style="border-top: 4px solid #38bdf8;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; margin-bottom: 4px;">STEP 1</div>
+                <div style="font-size: 0.98rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Wire the Circuit
+                </div>
+                <ul style="padding-left: 14px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                  <li>Outer knob pins ➔ <strong>5V</strong> and <strong>GND</strong>.</li>
+                  <li>Middle knob pin ➔ <strong>A0</strong>.</li>
+                  <li>LED long leg ➔ <strong>Pin 13</strong> (with 220Ω resistor). Short leg ➔ <strong>GND</strong>.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #f59e0b;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #f59e0b; margin-bottom: 4px;">STEP 2</div>
+                <div style="font-size: 0.98rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Upload the Code
+                </div>
+                <ul style="padding-left: 14px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                  <li>Type or copy the 12 lines of code.</li>
+                  <li>Click the Upload arrow (➔) in Arduino IDE.</li>
+                  <li>Check for "Done uploading".</li>
+                </ul>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #10b981;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #10b981; margin-bottom: 4px;">STEP 3</div>
+                <div style="font-size: 0.98rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Open Serial
+                  Monitor</div>
+                <ul style="padding-left: 14px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                  <li>Click the magnifying glass icon (top right).</li>
+                  <li>Verify baud rate is <strong>9600</strong>.</li>
+                  <li>Rotate the knob and watch numbers climb from 0 to 1023.</li>
+                </ul>
+              </div>
+
+              <div class="card" style="border-top: 4px solid #a855f7;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #a855f7; margin-bottom: 4px;">STEP 4</div>
+                <div style="font-size: 0.98rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Save Your
+                  Evidence</div>
+                <ul style="padding-left: 14px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+                  <li>Take a clear photo of your breadboard.</li>
+                  <li>Take a screenshot of the Serial numbers.</li>
+                  <li>Answer the 4 quick exit questions.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Discussion Questions While Building -->
+            <div
+              style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent-arduino); border-radius: 10px; padding: 12px 18px; margin-top: 6px;">
+              <strong style="color: #ffffff; font-size: 0.92rem;">💬 Questions to think about while you test:</strong>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; font-size: 0.84rem; color: var(--text-secondary);">
+                <div>• When you increase the number, does the flashing become faster or slower? Why?</div>
+                <div>• What is the lowest and highest number you saw on your Serial Monitor?</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 12: Quick 60-Second Quiz
+             ========================================== -->
+        <section class="slide" id="slide-12">
+          <div class="slide-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span class="slide-tag">Quick Check • 60 Seconds</span>
+                <h2 class="slide-title">Quick Knowledge Check</h2>
+                <p class="slide-subtitle">Click the correct answer for each of these 4 simple questions:</p>
+              </div>
+              <div class="timer-badge-container">
+                <span>⏱️</span>
+                <span class="timer-display" data-duration="60">01:00</span>
+                <button class="timer-btn timer-start-btn" style="padding: 2px 6px; font-size: 0.72rem;">Start</button>
+                <button class="timer-btn timer-reset-btn" style="padding: 2px 6px; font-size: 0.72rem;">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 14px;">
+              <!-- Question 1 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                  1. What does the Arduino ADC convert?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q1')">
+                    A) AC mains power into battery power
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, true, 'q1')">
+                    B) Continuous voltage (0–5V) into a number (0–1023)
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q1')">
+                    C) Audio sounds into light
+                  </button>
+                </div>
+              </div>
+
+              <!-- Question 2 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                  2. If the knob is turned exactly halfway (2.5V), what number do you get?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q2')">
+                    A) 100
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, true, 'q2')">
+                    B) Around 512 (half of 1023)
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q2')">
+                    C) 2.5
+                  </button>
+                </div>
+              </div>
+
+              <!-- Question 3 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                  3. Why does the LED flash SLOWER when the ADC number goes up?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option" onclick="window.checkQuiz(this, true, 'q3')">
+                    A) Because delay(sensorValue) waits for more milliseconds
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q3')">
+                    B) Because the LED bulb gets tired
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q3')">
+                    C) Because the Arduino clock slows down
+                  </button>
+                </div>
+              </div>
+
+              <!-- Question 4 -->
+              <div class="card" style="padding: 12px 16px;">
+                <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">
+                  4. Why is the Serial Monitor useful when troubleshooting?
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q4')">
+                    A) It automatically solders loose wires
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, false, 'q4')">
+                    B) It makes the LED brighter
+                  </button>
+                  <button class="quiz-option" onclick="window.checkQuiz(this, true, 'q4')">
+                    C) It shows the real numbers so you know if your sensor works
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quiz Score Banner -->
+            <div id="quiz-score-banner"
+              style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent-arduino); border-left: 4px solid var(--accent-cyan); border-radius: 8px; padding: 10px 16px; font-size: 0.86rem; color: #f1f5f9;">
+              Click each answer above to check your understanding!
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             SLIDE 13: Exit Ticket & Submission
+             ========================================== -->
+        <section class="slide" id="slide-13">
+          <div class="slide-header">
+            <span class="slide-tag">Summary &amp; Submission • Exit Ticket</span>
+            <h2 class="slide-title">Exit Ticket: The 4 Key Questions</h2>
+            <p class="slide-subtitle">Before leaving the lab, make sure you can answer these 4 core questions:</p>
+          </div>
+
+          <div class="slide-body">
+            <div class="grid-2col" style="gap: 16px;">
+              <!-- The 4 Exit Questions -->
+              <div class="card highlight">
+                <div class="card-title" style="color: #34d399;">💭 Your Exit Ticket Questions</div>
+                <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.86rem; color: #f1f5f9;">
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                    <strong>1. What does the ADC convert?</strong><br>
+                    <span style="color: var(--text-secondary);">It converts continuous voltage (0–5V) into numbers
+                      (0–1023).</span>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                    <strong>2. What range of numbers did you see?</strong><br>
+                    <span style="color: var(--text-secondary);">From 0 up to 1023.</span>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                    <strong>3. How did the knob affect the flashing?</strong><br>
+                    <span style="color: var(--text-secondary);">Higher numbers = longer delay = slower flash. Lower
+                      numbers = faster strobe.</span>
+                  </div>
+                  <div style="background: rgba(30,41,59,0.7); padding: 8px 12px; border-radius: 6px;">
+                    <strong>4. Why is the Serial Monitor useful?</strong><br>
+                    <span style="color: var(--text-secondary);">It lets you see the live numbers to check if the sensor
+                      is working properly.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Evidence & Wrap-up -->
+              <div class="card">
+                <div class="card-title" style="color: var(--accent-cyan);">📁 Lab Completion Checklist</div>
+                <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">
+                  <li><strong>Breadboard check:</strong> Potentiometer and LED wired correctly with 5V, GND, and A0.</li>
+                  <li><strong>Serial Monitor live test:</strong> Demonstrating real-time numbers changing from 0 to 1023.</li>
+                  <li><strong>Working code:</strong> Verified 12-line analog blink sketch running on your board.</li>
+                  <li><strong>Concept mastery:</strong> Understanding the 4 exit ticket questions on the left.</li>
+                </ul>
+
+                <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 8px;">
+                  <a href="../index.html" class="btn btn-primary"
+                    style="padding: 12px 20px; font-size: 0.92rem; text-decoration: none; text-align: center; font-weight: 600; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);">
+                    🏠 Return to Course Hub
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom Deck Footer -->
+      <footer class="deck-footer">
+        <div class="nav-controls">
+          <button class="nav-btn" id="prev-slide" title="Previous Slide (Left Arrow)">◀</button>
+          <button class="nav-btn" id="next-slide" title="Next Slide (Right Arrow)">▶</button>
+          <span class="slide-counter" id="slide-counter">1 / 13</span>
+        </div>
+
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;"></div>
+      </footer>
+
+    </div>
+
+    <!-- Slide Matrix / Map Modal -->
+    <div id="slide-matrix-modal" class="modal-overlay">
+      <div class="slide-matrix-card">
+        <div class="slide-matrix-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.25rem;">🗺️</span>
+            <div>
+              <h3 style="font-size: 1.1rem; color: #ffffff; margin: 0;">Session Slide Matrix</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">Click any slide card to jump directly
+                (or press 'M')</p>
+            </div>
+          </div>
+          <button id="close-slide-matrix" class="drawer-close-btn" style="padding: 6px 12px;">✕ Close</button>
+        </div>
+        <div id="slide-matrix-grid" class="slide-matrix-grid">
+          <!-- Populated dynamically by PresentationEngine -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility & Inclusion Drawer Backdrop -->
+    <div id="a11y-backdrop"></div>
+
+    <!-- Accessibility & Neurodiversity Side-Drawer -->
+    <aside id="a11y-drawer">
+      <div class="a11y-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">⚙️</span>
+          <h3 style="font-size: 1.05rem; color: #ffffff; margin: 0;">Accessibility &amp; Inclusion</h3>
+        </div>
+        <button id="close-a11y-drawer" class="drawer-close-btn" style="padding: 4px 10px;">✕</button>
+      </div>
+
+      <div class="a11y-body">
+        <!-- Speech Synthesis (TTS) -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔊 Web Speech Slide Narration</span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="a11y-speak-active-slide" class="btn btn-secondary"
+              style="flex: 1; padding: 8px 12px; font-size: 0.86rem;">
+              🔊 Read Slide Aloud
+            </button>
+            <button id="a11y-stop-speech" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.86rem;">
+              ⏹️ Stop
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Narration Speed:</span>
+            <span id="a11y-speech-rate-val"
+              style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan);">1.0x</span>
+          </div>
+          <input type="range" id="a11y-speech-rate" min="0.75" max="1.5" step="0.05" value="1.0" class="a11y-slider" />
+        </div>
+
+        <!-- Bionic Reading Mode -->
+        <div class="a11y-switch-row">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem; color: #ffffff;">⚡ Bionic Fast-Scan</div>
+            <div style="font-size: 0.76rem; color: var(--text-muted);">Bold first letters for faster reading</div>
+          </div>
+          <input type="checkbox" id="a11y-bionic-toggle"
+            style="width: 20px; height: 20px; accent-color: var(--accent-cyan); cursor: pointer;" />
+        </div>
+
+        <!-- Typography & Dyslexia Toolbar -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>📖 Font Family</span>
+          </div>
+          <select id="a11y-font-select" class="a11y-select">
+            <option value="default">Inter (Default Crisp)</option>
+            <option value="opendyslexic">OpenDyslexic (Dyslexia Friendly)</option>
+            <option value="system">System UI (Clean Sans-Serif)</option>
+          </select>
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🔠 Font Size</span>
+            <span id="a11y-font-size-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">100%</span>
+          </div>
+          <input type="range" id="a11y-font-size" min="90" max="130" step="5" value="100" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↕️ Line Spacing</span>
+            <span id="a11y-line-height-val" style="font-family: var(--font-mono); color: var(--accent-cyan);">1.6</span>
+          </div>
+          <input type="range" id="a11y-line-height" min="1.4" max="2.0" step="0.1" value="1.6" class="a11y-slider" />
+        </div>
+
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>↔️ Letter Spacing</span>
+            <span id="a11y-letter-spacing-val"
+              style="font-family: var(--font-mono); color: var(--accent-cyan);">0px</span>
+          </div>
+          <input type="range" id="a11y-letter-spacing" min="0" max="3" step="0.5" value="0" class="a11y-slider" />
+        </div>
+
+        <!-- Contrast & Colorblind Themes -->
+        <div class="a11y-group">
+          <div class="a11y-label">
+            <span>🎨 Contrast &amp; Colorblind Themes</span>
+          </div>
+          <select id="a11y-theme-select" class="a11y-select">
+            <option value="default">Dark Engineering (Default)</option>
+            <option value="high-contrast-gold">High Contrast Black &amp; Gold</option>
+            <option value="clean-light">Clean Light Mode</option>
+            <option value="colorblind-safe">Colorblind-Safe Circuit Palette</option>
+          </select>
+        </div>
+
+        <button id="a11y-reset-prefs" class="btn btn-secondary"
+          style="padding: 8px; font-size: 0.82rem; margin-top: 10px; width: 100%;">
+          🔄 Reset to Default Theme
+        </button>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Shared JavaScript Engines -->
+  <script src="../shared/js/accessibility-engine.js"></script>
+  <script src="../shared/js/presentation-engine.js"></script>
+  <script src="../shared/js/self-check.js"></script>
+  <script src="../shared/js/timer.js"></script>
+
+  <!-- Week 5 Interactive Laboratory Logic -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ==========================================
+      // 1. Signal Sorter (Analogue vs Digital)
+      // ==========================================
+      const pool = document.getElementById('sort-items-pool');
+      const bAnalogue = document.getElementById('bucket-analogue');
+      const bDigital = document.getElementById('bucket-digital');
+      const anaCount = document.getElementById('analogue-count');
+      const digCount = document.getElementById('digital-count');
+      const poolCount = document.getElementById('pool-count');
+      const sortFb = document.getElementById('sort-feedback');
+      const btnReveal = document.getElementById('btn-reveal-sort');
+      const sortItems = document.querySelectorAll('.sort-item');
+
+      let draggedItem = null;
+      let selectedItem = null;
+
+      function updateSortCounts() {
+        const pCount = pool ? pool.querySelectorAll('.sort-item').length : 0;
+        const aCount = bAnalogue ? bAnalogue.querySelectorAll('.sort-item').length : 0;
+        const dCount = bDigital ? bDigital.querySelectorAll('.sort-item').length : 0;
+        if (poolCount) poolCount.textContent = `${pCount} remaining`;
+        if (anaCount) anaCount.textContent = `${aCount} placed`;
+        if (digCount) digCount.textContent = `${dCount} placed`;
+      }
+
+      sortItems.forEach(item => {
+        item.addEventListener('dragstart', function (e) {
+          draggedItem = item;
+          item.classList.add('dragging');
+          item.classList.remove('selected-for-move');
+          selectedItem = null;
+          e.dataTransfer.setData('text/plain', item.id);
+          e.dataTransfer.effectAllowed = 'move';
+        });
+
+        item.addEventListener('dragend', function () {
+          item.classList.remove('dragging');
+          draggedItem = null;
+          document.querySelectorAll('.sort-bucket').forEach(b => b.classList.remove('drag-over'));
+        });
+
+        // Touch & keyboard selection
+        item.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (selectedItem === item) {
+            item.classList.remove('selected-for-move');
+            selectedItem = null;
+          } else {
+            sortItems.forEach(i => i.classList.remove('selected-for-move'));
+            item.classList.add('selected-for-move');
+            selectedItem = item;
+          }
+        });
+      });
+
+      const dropZones = [pool, bAnalogue, bDigital];
+      dropZones.forEach(zone => {
+        if (!zone) return;
+
+        zone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          zone.classList.add('drag-over');
+        });
+
+        zone.addEventListener('dragleave', function () {
+          zone.classList.remove('drag-over');
+        });
+
+        zone.addEventListener('drop', function (e) {
+          e.preventDefault();
+          zone.classList.remove('drag-over');
+          if (draggedItem) {
+            zone.appendChild(draggedItem);
+            draggedItem.classList.remove('correct', 'wrong', 'selected-for-move');
+            draggedItem.textContent = draggedItem.getAttribute('data-label');
+            updateSortCounts();
+          }
+        });
+
+        zone.addEventListener('click', function () {
+          if (selectedItem) {
+            zone.appendChild(selectedItem);
+            selectedItem.classList.remove('correct', 'wrong', 'selected-for-move');
+            selectedItem.textContent = selectedItem.getAttribute('data-label');
+            selectedItem = null;
+            updateSortCounts();
+          }
+        });
+      });
+
+      window.checkSortClassification = function () {
+        const anaPlaced = bAnalogue ? bAnalogue.querySelectorAll('.sort-item') : [];
+        const digPlaced = bDigital ? bDigital.querySelectorAll('.sort-item') : [];
+        const poolRem = pool ? pool.querySelectorAll('.sort-item') : [];
+
+        let correctCount = 0;
+
+        anaPlaced.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          if (type === 'analogue') {
+            item.className = 'sort-item correct';
+            item.innerHTML = `✓ ${baseLabel}`;
+            correctCount++;
+          } else {
+            item.className = 'sort-item wrong';
+            item.innerHTML = `✗ ${baseLabel}`;
+          }
+        });
+
+        digPlaced.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          if (type === 'digital') {
+            item.className = 'sort-item correct';
+            item.innerHTML = `✓ ${baseLabel}`;
+            correctCount++;
+          } else {
+            item.className = 'sort-item wrong';
+            item.innerHTML = `✗ ${baseLabel}`;
+          }
+        });
+
+        if (sortFb) {
+          sortFb.style.display = 'block';
+          if (poolRem.length > 0) {
+            sortFb.style.borderLeftColor = '#f59e0b';
+            sortFb.innerHTML = `<strong>⚠️ Incomplete:</strong> Placed ${anaPlaced.length + digPlaced.length} of 6 components (${poolRem.length} remaining). Correct so far: <strong>${correctCount} / 6</strong>.`;
+            if (btnReveal) btnReveal.style.display = 'inline-flex';
+          } else if (correctCount === 6) {
+            sortFb.style.borderLeftColor = '#10b981';
+            sortFb.innerHTML = `<strong>🎉 Perfect 6/6!</strong> Great job! You correctly sorted smooth Analogue signals from 2-state Digital signals!`;
+            if (btnReveal) btnReveal.style.display = 'none';
+          } else {
+            sortFb.style.borderLeftColor = '#ef4444';
+            sortFb.innerHTML = `<strong>🎯 Score: ${correctCount} / 6</strong>. Some items are in the wrong box. Try swapping them or click Reveal Solution!`;
+            if (btnReveal) btnReveal.style.display = 'inline-flex';
+          }
+        }
+      };
+
+      window.revealSortAnswers = function () {
+        if (!pool || !bAnalogue || !bDigital) return;
+        const allItems = document.querySelectorAll('.sort-item');
+        allItems.forEach(item => {
+          const type = item.getAttribute('data-type');
+          const baseLabel = item.getAttribute('data-label');
+          item.className = 'sort-item correct';
+          item.innerHTML = `✓ ${baseLabel}`;
+          if (type === 'analogue') {
+            bAnalogue.appendChild(item);
+          } else {
+            bDigital.appendChild(item);
+          }
+        });
+        updateSortCounts();
+        if (btnReveal) btnReveal.style.display = 'none';
+        if (sortFb) {
+          sortFb.style.display = 'block';
+          sortFb.style.borderLeftColor = '#38bdf8';
+          sortFb.innerHTML = `
+            <strong>💡 Answer Guide:</strong><br>
+            • <strong>Analogue:</strong> Potentiometer, Temperature Sensor, Sunlight Sensor (all smooth and variable).<br>
+            • <strong>Digital:</strong> Pushbutton Switch, LED Light, Computer Numbers (only ON or OFF, 1 or 0).
+          `;
+        }
+      };
+
+      window.resetSortActivity = function () {
+        if (!pool || !bAnalogue || !bDigital) return;
+        document.querySelectorAll('.sort-item').forEach(item => {
+          item.className = 'sort-item';
+          item.textContent = item.getAttribute('data-label');
+          pool.appendChild(item);
+        });
+        selectedItem = null;
+        draggedItem = null;
+        if (btnReveal) btnReveal.style.display = 'none';
+        if (sortFb) sortFb.style.display = 'none';
+        updateSortCounts();
+      };
+
+      // ==========================================
+      // 2. Strobe & Telemetry Simulator
+      // ==========================================
+      const potSlider = document.getElementById('sim-pot-slider');
+      const potPointer = document.getElementById('sim-pot-pointer');
+      const strobeBeacon = document.getElementById('sim-strobe-beacon');
+      const statusPill = document.getElementById('strobe-status-pill');
+      const scopeFreq = document.getElementById('sim-scope-freq');
+      const serialContainer = document.getElementById('serial-log-container');
+
+      let currentAdc = 512;
+      let ledState = false;
+      let strobeTimeout = null;
+      let serialTimer = null;
+
+      function updatePotentiometer(val) {
+        currentAdc = Math.max(0, Math.min(1023, Math.round(val)));
+        if (potSlider) potSlider.value = currentAdc;
+
+        // Angle: 0 to 270 deg (pointer rotation)
+        const angle = -135 + (currentAdc / 1023) * 270;
+        if (potPointer) potPointer.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+        // Voltage: 0.00 to 5.00 V
+        const voltage = (currentAdc * 5.0) / 1023.0;
+
+        // Effective delay & frequency (clamp to minimum 25ms for browser animation)
+        const effectiveDelay = Math.max(25, currentAdc);
+        const freqHz = 1000 / (2 * effectiveDelay);
+
+        if (statusPill) {
+          statusPill.textContent = `ADC: ${currentAdc} | ${voltage.toFixed(2)}V`;
+        }
+        if (scopeFreq) {
+          scopeFreq.textContent = `Flash Speed: ${freqHz.toFixed(1)} times / sec`;
+        }
+      }
+
+      window.setSimPotValue = function (val) {
+        updatePotentiometer(val);
+      };
+
+      if (potSlider) {
+        potSlider.addEventListener('input', function () {
+          updatePotentiometer(parseFloat(potSlider.value));
+        });
+      }
+
+      // Flash Loop
+      function runStrobeCycle() {
+        const effectiveDelay = Math.max(25, currentAdc);
+        ledState = !ledState;
+
+        if (strobeBeacon) {
+          if (ledState) {
+            strobeBeacon.classList.add('flash-on');
+          } else {
+            strobeBeacon.classList.remove('flash-on');
+          }
+        }
+
+        strobeTimeout = setTimeout(runStrobeCycle, effectiveDelay);
+      }
+
+      runStrobeCycle();
+
+      // Virtual Serial Telemetry Streaming
+      function emitSerialLine() {
+        if (!serialContainer) return;
+
+        const lineEl = document.createElement('div');
+        lineEl.className = 'serial-line';
+        lineEl.textContent = `ADC Value: ${currentAdc}`;
+
+        serialContainer.appendChild(lineEl);
+
+        // Keep maximum 30 lines
+        while (serialContainer.children.length > 25) {
+          serialContainer.removeChild(serialContainer.firstChild);
+        }
+
+        serialContainer.scrollTop = serialContainer.scrollHeight;
+      }
+
+      serialTimer = setInterval(emitSerialLine, 750);
+
+      window.clearSerialTerminal = function () {
+        if (serialContainer) serialContainer.innerHTML = '';
+      };
+
+      // ==========================================
+      // 3. Simple Micro-Quiz Engine
+      // ==========================================
+      const quizResults = { q1: null, q2: null, q3: null, q4: null };
+
+      window.checkQuiz = function (btn, isCorrect, qId) {
+        const parent = btn.parentElement;
+        if (!parent) return;
+
+        parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('correct', 'wrong'));
+
+        if (isCorrect) {
+          btn.classList.add('correct');
+          quizResults[qId] = true;
+        } else {
+          btn.classList.add('wrong');
+          quizResults[qId] = false;
+        }
+
+        const answered = Object.values(quizResults).filter(v => v !== null).length;
+        const score = Object.values(quizResults).filter(v => v === true).length;
+        const banner = document.getElementById('quiz-score-banner');
+
+        if (banner) {
+          if (answered === 4) {
+            if (score === 4) {
+              banner.innerHTML = '<strong>🎉 Perfect 4/4!</strong> Fantastic job! You understand how the potentiometer, ADC, and Serial Monitor work together!';
+              banner.style.borderLeftColor = '#10b981';
+            } else {
+              banner.innerHTML = `<strong>🎯 Score: ${score}/4.</strong> Almost there! Review any red answers above.`;
+              banner.style.borderLeftColor = '#f59e0b';
+            }
+          } else {
+            banner.innerHTML = `<strong>Current Score: ${score}/${answered}</strong> (${4 - answered} questions left)`;
+          }
+        }
+      };
+
+      // Initialise default state
+      updatePotentiometer(512);
+
+    })();
+  </script>
+</body>
+
+</html>
